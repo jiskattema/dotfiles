@@ -1,0 +1,33 @@
+set completion-ignore-case On
+set completion-map-case On
+set show-all-if-ambiguous On
+set editing-mode vi
+set expand-tilde Off
+set mark-directories On
+set mark-modified-lines Off
+set match-hidden-files Off
+set menu-complete-display-prefix On
+set revert-all-at-newline On
+set skip-completed-text On
+set visible-stats On
+
+# don't set the keymap: 
+# for some reason the key definitions below stop working
+# set keymap vi
+
+# get back some of the usefull standard key-combo's
+
+# C-l to clear screen
+# bind -m vi-insert "\C-l":clear-screen
+"\C-l": clear-screen
+
+# C-p to complete from history
+# bind -m vi-insert "\C-p":dynamic-complete-history
+"\C-p": dynamic-complete-history
+
+# alt-. for the last argument
+"\e.": yank-last-arg
+
+## search / navigate history on current text (prefix)
+#"\e[A": history-search-backward
+#"\e[B": history-search-forward

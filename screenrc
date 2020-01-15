@@ -1,0 +1,33 @@
+# no startup message
+startup_message off
+
+# default title
+shelltitle bash
+
+# nice windowlist and hardstatus
+windowlist title "Num Name%=Flags"
+windowlist string "%{Wb} %3n %t%=%f"
+
+hardstatus on
+hardstatus alwayslastline "%{= bW} %-w%{= Wb}[%n %t]%{= bW}%+w %{= bW} %= %D %d/%m %Y %c"
+
+caption splitonly
+caption string "%?%F%{=u Fk}%:%{=u Fb}%? %=(%n %t)%?%F*%: %?"
+
+# bigger history
+defscrollback 4048
+
+# custom keybindings
+bind w windowlist -b
+bind ^w windowlist -b
+bind l focus right
+bind h focus left
+bind j focus down
+bind k focus up
+bind + resize +10
+bind ^+ resize +10
+bind - resize -10
+bind ^- resize -10
+
+bind N screen -t note vim
+bind C screen -t calc bc -l
