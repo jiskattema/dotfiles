@@ -26,7 +26,7 @@ Normal mode:
 * Open the buffer explorer window '<Leader>b' (jlanzarotta/bufexplorer)
 * Open the file browser widnow '<Leader>f' (netrw)
 * Open the register window (clipboard) '"' (for insert mode '<C-r>', junegunn/vim-peekaboo)
-* Open the mark window ''' (Yilin-Yang/vim-markbar)
+* Open the mark window '<Leader>'' (Yilin-Yang/vim-markbar)
 * Open the git window '<Leader>g' (jreybert/vimagit)
 * Go the next linter issue '<Leader>n'; for previous use '<Leader>p' (w0rp/ale)
 * Delete inside brackets 'di' and then the bracket '}' and similar actions (welle/targets.vim)
@@ -39,12 +39,24 @@ Normal mode:
 * Increase / decrease numbers with <C-c> and <C-x>
 * Continue editing where you last left INSERT mode 'gi', with the location marked '^'
 
+Toggle in NORMAL mode:
+* Linewrap '<Leader>w'
+* Ignorecase '<Leader>c'
+* Spelling (rotates between Dutch, English, both and off) '<Leader>s'
+* Autocomplete '<Leader>m'
+
 Insert Mode:
 * Increase / decrease indentation of current line with '<C-t> and '<C-d>'
 * Open the register window (clipboard) '<C-r>' (for normal mode '"', junegunn/vim-peekaboo)
 * Exit insert mode for a single normal mode command '<C-o>'
 * XML template expansion '<Leader>,' (mattn/emmet-vim)
 * Exit insert mode '<Esc>', '<C-[>'
+
+DIFF mode:
+* Go to next/previous '[]c'
+* Open diff mode '<Leader>d', or as pop-up '<Leader>v'
+* Put hunk '<Leader><CR>'
+* Get hunk '<Leader>\'
 
 Ex mode(':'):
 * show key name: <C-k> <key>
