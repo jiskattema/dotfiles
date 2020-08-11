@@ -184,7 +184,7 @@ set showmatch
 set mat=5
 
 " Ctl-L rotates through cursor line/column highlight mode
-"au WinLeave * set nocursorline nocursorcolumn
+" au WinLeave * set nocursorline nocursorcolumn
 function! HighLightToggle()
   if &cursorcolumn
     if &cursorline
@@ -315,14 +315,14 @@ end
 
 " U opens undo window
 nnoremap <Leader>u :UndotreeToggle<CR>:UndotreeFocus<CR>
+let g:undotree_WindowLayout = 1
 
 " emmet-vim
-" Type abbreviation as 'div>p#foo$*3>a' and type '<BS>,'.
+" Type abbreviation as 'div>p#foo$*3>a' and type '<C-y>,'.
 " let g:user_emmet_leader_key = '<BS>e'
 
 " ALE
 let g:ale_sign_column_always = 1
-highlight SignColumn ctermbg=white
 nmap <silent> <Leader>n :ALENextWrap<CR>
 nmap <silent> <Leader>p :ALEPreviousWrap<CR>
 
@@ -347,12 +347,11 @@ set belloff+=ctrlg
 let g:mucomplete#enable_auto_at_startup = 1
 " let g:mucomplete#completion_delay = 1
 
-"\ 'default' : ['omni', 'tags', 'keyp'],
 let g:mucomplete#chains = {
     \ 'default' : ['omni', 'tags', 'keyp', 'dict', 'path', 'uspl'],
     \ }
 
-" pressing right (left) after a completion completes with the next occuring word
+" pressing right (left) after a completion completes with the next occurring word
 imap <expr> <right> mucomplete#extend_fwd("\<right>")
 imap <expr> <left> mucomplete#extend_bwd("\<left>")
 
@@ -375,14 +374,14 @@ autocmd User MUcompletePmenu call ColorfulMessages()
 " re-set the ale completer after running ftplugins
 autocmd User * set omnifunc=ale#completion#OmniFunc
 
-" Markbar
-let g:markbar_num_lines_context = 1
-let g:markbar_peekaboo_width = 50
-let g:markbar_peekaboo_marks_to_display = '''[]^.abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+" Turn off autocompletion if it is too slow
+nmap <Leader>m :MUcompleteAutoToggle<CR>
 
-" Uncomment next 2 lines for a delay before opening, to allow immediate '' jump.
-let g:markbar_explicitly_remap_mark_mappings = v:true
-set timeoutlen=500
+" Markbar
+map <Leader>' <Plug>ToggleMarkbar
+let g:markbar_enable_peekaboo = v:false 
+let g:markbar_markbar_width = 50
+let g:markbar_marks_to_display = '''``[]<>^. abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ 01'
 
 " vim-sneak
 let g:sneak#map_netrw = 0
@@ -422,7 +421,7 @@ if $BACKGROUND == "light"
   set background=light
   highlight clear
   hi Comment term=bold ctermbg=1 guibg=LightBlue
-  hi SignColumn term=NONE cterm=NONE guifg=DarkBlue guibg=NONE
+  hi SpellBad guifg=White guibg=Red
 else
   set background=dark
   let ayucolor="dark"
@@ -430,18 +429,21 @@ else
   hi Comment guifg=#EEEEEE
 endif
 
+hi SpellCap term=NONE cterm=NONE guifg=red guibg=white
 hi Visual term=NONE cterm=NONE guifg=#ffffff guibg=#c678dd
 hi VisualNOS term=NONE cterm=NONE guifg=#ffffff guibg=#c678dd
 hi CursorLine term=NONE cterm=NONE guibg=Grey90
 hi ColorColumn term=NONE cterm=NONE guibg=Grey90
-
-" Lineage
-map <silent> <Leader>] :<C-U>call Lineage(v:count, 'next')<CR>
-map <silent> <Leader>= :<C-U>call Lineage(v:count, 'prev')<CR>
+hi SignColumn ctermbg=NONE cterm=NONE guibg=NONE gui=NONE
+hi link SignifySignAdd             Normal
+hi link SignifySignChange          Normal
+hi link SignifySignDelete          Normal
+hi link SignifySignDeleteFirstLine Normal
 
 set thesaurus+=/home/jiska/.vim/thesaurus/thesaurus.txt
 
 " Diff mode
+map <Leader>d :SignifyDiff!<CR>
+map <Leader>v :SignifyHunkDiff<CR>
 map <Leader><CR> :diffput<CR>
 map <Leader>\ :diffget<CR>
-

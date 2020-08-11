@@ -2,20 +2,39 @@
 startup_message off
 
 # default title
+defdynamictitle off
 shelltitle bash
 
-# nice windowlist and hardstatus
-windowlist title "Num Name%=Flags"
-windowlist string "%{Wb} %3n %t%=%f"
+# Colors and their names
+#
+# k black
+# r red
+# g green
+# y yellow
+# b blue
+# m magenta
+# c cyan
+# w white
+# d default color
+# .  leave color unchanged
 
+# nice windowlist and hardstatus
+windowlist title "%{#FFFFFF;#000000}Num Name%=Flags"
+windowlist string "%?%F%{#FFFFFF;#000000}%:%{#000000;#FFFFFF}%? %3n %t%=%f"
+
+# alwayslastline alwaysfirstline
 hardstatus on
-hardstatus alwayslastline "%{= bW} %-w%{= Wb}[%n %t]%{= bW}%+w %{= bW} %= %D %d/%m %Y %c"
+hardstatus alwaysfirstline "%{#FFFFFF;#000000} %-w%{#000000;#FFFFFF}[%n %t]%{#FFFFFF;#000000}%+w %{#FFFFFF;#000000} %="
 
 caption splitonly
-caption string "%?%F%{=u Fk}%:%{=u Fb}%? %=(%n %t)%?%F*%: %?"
+caption string "%{#FFFFFF;#000000}%=(%n %t)%?%F*%: %?"
 
 # bigger history
 defscrollback 4048
+
+# Needs screen from master
+truecolor on
+utf8 on
 
 # custom keybindings
 bind w windowlist -b

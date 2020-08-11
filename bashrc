@@ -31,9 +31,13 @@ export PROMPT_DIRTRIM=3
 # defaults
 export EDITOR=/usr/bin/vim
 export PAGER=less
+# export PAGER='vim -c ":AnsiEsc" -R -'
+export PAGER=less
 
 # fix TTY fonts
 alias FIXFONT="setfont ter-132n.psf.gz"
 
 # force screen to use colors
 alias screen="screen -T xterm-256color"
+
+alias venv='. env/bin/activate'
