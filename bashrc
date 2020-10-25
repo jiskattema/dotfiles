@@ -9,7 +9,7 @@ umask 022
 
 function last_exit_status {
 if [ $? -eq 0 -o "`kill -l $? 2>/dev/null`" = TSTP ]; then
-  echo -n '.'
+  echo -n ' '
 else
   echo -n 'x'
 fi

@@ -28,35 +28,44 @@ Normal mode:
 * Open the register window (clipboard) '"' (for insert mode '<C-r>', junegunn/vim-peekaboo)
 * Open the mark window '<Leader>'' (Yilin-Yang/vim-markbar)
 * Open the git window '<Leader>g' (jreybert/vimagit)
+* Go to the next/previous location <C-o>, <C-i> (built-in jump list)
+* Go to the next/previous change in the file 'g;' and 'g,' (built-in changes list)
+* Go to the start/end of the last selection "'<" and "'>"
+* Go to the start/end of the last change "'[" and "']"
+* Go to the position of last insert 'gi'.
 * Go the next linter issue '<Leader>n'; for previous use '<Leader>p' (w0rp/ale)
+* Move the cursor to a window 'C-w hjkl', or move the window 'C-w HJKL'
 * Delete inside brackets 'di' and then the bracket '}' and similar actions (welle/targets.vim)
-* Delete all with current indentation 'dii' and similar actions (michaeljsmith/vim-indent-object)
-* Change surrounding qoutes from single to double 'cs'"' (tpope/vim-surround)
-* Hightlight cursor line '<C-l>'
-* Toggle spelling correction '<Leader>s'
-* Toggle line wrap '<Leader>w'
-* Toggle case sensitive search '<Leader>c'
+* Delete with indentation 'dii' and similar actions (michaeljsmith/vim-indent-object)
+* Change surrounding quotes from single to double 'cs'"' (tpope/vim-surround)
 * Increase / decrease numbers with <C-c> and <C-x>
 * Continue editing where you last left INSERT mode 'gi', with the location marked '^'
+* Resize the current window to N lines 'zN<Cr>'
 
 Toggle in NORMAL mode:
 * Linewrap '<Leader>w'
 * Ignorecase '<Leader>c'
 * Spelling (rotates between Dutch, English, both and off) '<Leader>s'
 * Autocomplete '<Leader>m'
+* Highlight cursor line and/or column '<C-l>'
 
 Insert Mode:
-* Increase / decrease indentation of current line with '<C-t> and '<C-d>'
+* Increase / decrease indentation of current line with '<C-t>' and '<C-d>'
 * Open the register window (clipboard) '<C-r>' (for normal mode '"', junegunn/vim-peekaboo)
 * Exit insert mode for a single normal mode command '<C-o>'
 * XML template expansion '<Leader>,' (mattn/emmet-vim)
 * Exit insert mode '<Esc>', '<C-[>'
 
+Visual Mode:
+* Select block with the same indentation 'ii'
+* Go to the other end of the selection o and O
+* Select in all in/around () {} <> [] <tag></tag> ` '' "" with ia followed by bB<['"`t
+
 DIFF mode:
-* Go to next/previous '[]c'
+* Go to next/previous '[]c' (also when current file is in a git repo)
 * Open diff mode '<Leader>d', or as pop-up '<Leader>v'
-* Put hunk '<Leader><CR>'
-* Get hunk '<Leader>\'
+* Put chunk '<Leader><CR>'
+* Get chunk '<Leader>\'
 
 Ex mode(':'):
 * show key name: <C-k> <key>

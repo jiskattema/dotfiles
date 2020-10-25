@@ -16,3 +16,4 @@ for i in bashrc inputrc screenrc toprc vimrc vim; do
   esac
 
 done
+vim -c ':VundleInstall<CR>'

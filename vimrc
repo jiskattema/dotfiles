@@ -19,9 +19,14 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
-Plugin 'ayu-theme/ayu-vim'
+"Plugin 'ayu-theme/ayu-vim'
+Plugin 'jiskattema/new-moon.vim'
 
 Plugin 'powerman/vim-plugin-AnsiEsc'
+
+" Add as line 93:
+" exe ":sign define ". name ." text=". a:mark
+Plugin 'tumbler/highlightmarks'
 
 Plugin 'maximbaz/lightline-ale'
 Plugin 'w0rp/ale'
@@ -52,6 +57,9 @@ Plugin 'lifepillar/vim-mucomplete'
 
 Plugin 'jiskattema/vim-lineage'
 
+" This overwrites some NERDcommenter keybindings
+Plugin 'BlueCatMe/TempKeyword'
+
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -74,6 +82,11 @@ set fillchars+=vert:┃
 " allow hidden buffers (ie. multiple open files with changes)
 set hidden
 
+" sticky shift key
+"command-bang Q :q
+"command-bang Wq :wq
+"command-bang WQ :wq
+
 " syntax highlighting
 syntax on
 
@@ -89,15 +102,30 @@ set cmdheight=3
 " keep some lines at the top and bottom when scrolling
 set scrolloff=8
 
+" dont autoformat (manual invoke format on selection with gq)
+set textwidth=80
+set formatoptions+=jqnl
+
 " W to set linewrap
+set nowrap
 nmap <Leader>w :set wrap!<CR>
 
 " Toggle case sensitive searching
 nmap <Leader>c :set ignorecase!<CR>
 set ignorecase
+set smartcase
+
+" I dont like Ex mode..
+nnoremap Q <nop>
 
 " Use C-x / C-c to increase / decrease numbers
 nmap <C-c> <C-a>
+
+" Dont jump ahead when searching
+set noincsearch
+       
+" default to English and Dutch
+set spelllang=en,nl
 
 " lightline
 set noshowmode
@@ -115,13 +143,14 @@ let g:lightline = {
       \ },
   \'active' : {
       \   'left': [ [ 'mode', 'paste', 'spell', 'modified', 'readonly' ],
-      \             [ 'gitbranch', 'filename', 'linter_checking', 'linter_errors', 'linter_warnings' ] ],
+      \             [ 'gitbranch', 'filename', 'linter_checking', 'linter_errors', 'linter_warnings', 'signify-stats' ] ],
       \   'right': [ [ 'lineinfo' ],
       \              [ 'percent' ],
       \              [ 'fileformat', 'fileencoding', 'filetype', 'charvaluehex' ] ]
       \ },
   \ 'component_function': {
-      \   'gitbranch': 'fugitive#head'
+      \   'gitbranch': 'fugitive#head',
+      \   'signify-stats': 'sy#repo#get_stats_decorated'
       \ },
   \ 'component' : {
       \   'charvaluehex': '0x%2B'
@@ -131,6 +160,7 @@ let g:lightline = {
 
 " backspace key to toggle highlight off
 nnoremap <silent> <BS> :noh<CR>
+nmap <Leader>` :RemoveMarkHighlights<CR>
 
 " f to open a file browser:
 " gn Prune tree
@@ -165,8 +195,8 @@ set shiftwidth=2
 " replace tab by spaces,type Ctrl-V<Tab> for real tabs
 set expandtab
 
-" match all tabs as error with Visual
-match Visual /[\t]/
+" highlight tabs
+match CursorLine /[\t]/
 
 " Normal mode
 " (shift) tab moves through the buffers
@@ -205,8 +235,16 @@ function! HighLightToggle()
   :redraw!
 endfunction
 
+let g:highlightMarks_useSigns = 1
+let g:highlightMarks_colors = ['#505060 guifg=White']
+
 " gnome-terminal escapes meta keys instead of setting the 8th bit
 " set <M-l>=\el
+
+" Navigate the jumplist with <M-i> instead of <C-i> with is Tab.
+" I've configured my terminal to send <M-i> for when i press <C-i>
+noremap i <C-i>
+
 " hide cursor line for inactive windows
 " au WinLeave * set nocursorline nocursorcolumn
 nmap <C-l> :call HighLightToggle()<CR>
@@ -217,26 +255,26 @@ nmap <C-l> :call HighLightToggle()<CR>
 
 " s rotates between english, dutch and english+dutch spell checking
 function! SpellToggle()
-      if &spell
-        if &spelllang == "en"
-          " en -> nl
-          execute "set spelllang=nl"
-          echo "Spell checking for nl."
-        elseif &spelllang == "nl"
-          " nl -> nl+en
-          execute "set spelllang=nl,en"
-          echo "Spell checking for nl, en."
-        else
-          " nl+en -> off
-          execute "set nospell"
-          echo "Spell checking off"
-        endif
-      else
-        " off -> en
-        execute "set spell"
-        execute "set spelllang=en"
-        echo "Spell checking for en."
-      endif
+  if &spell
+    if &spelllang == "en,nl"
+      " nl+en -> en
+      execute "set spelllang=en"
+      echo "Spell checking for en."
+    elseif &spelllang == "en"
+      " en -> nl
+      execute "set spelllang=nl"
+      echo "Spell checking for nl."
+    else
+      " nl -> off
+      execute "set nospell"
+      echo "Spell checking off"
+    endif
+  else
+    " off -> nl+en
+    execute "set spell"
+    execute "set spelllang=en,nl"
+    echo "Spell checking for en,nl."
+  endif
 endfunction
 nmap <Leader>s :call SpellToggle()<CR>
 
@@ -313,6 +351,13 @@ end
 " set undofile
 " set undodir^=~/.vim/undodir//
 
+function PruneViminfo()
+  " Dont read/write the jumplist to the .viminfo file
+  clearjumps
+endfunction
+autocmd VimLeavePre * call PruneViminfo()
+autocmd VimEnter * call PruneViminfo()
+
 " U opens undo window
 nnoremap <Leader>u :UndotreeToggle<CR>:UndotreeFocus<CR>
 let g:undotree_WindowLayout = 1
@@ -329,10 +374,10 @@ nmap <silent> <Leader>p :ALEPreviousWrap<CR>
 let g:ale_linters = {
   \   'python': ['flake8', 'mypy', 'pylint', 'pyls'],
   \}
+let g:ale_fixers = ['remove_trailing_lines', 'trim_whitespace']
 
 " Conceal things when possible
 " set conceallevel=3
-
 
 " MUComplete
 set infercase
@@ -348,7 +393,7 @@ let g:mucomplete#enable_auto_at_startup = 1
 " let g:mucomplete#completion_delay = 1
 
 let g:mucomplete#chains = {
-    \ 'default' : ['omni', 'tags', 'keyp', 'dict', 'path', 'uspl'],
+    \ 'default' : ['omni', 'tags', 'incl', 'path', 'uspl']
     \ }
 
 " pressing right (left) after a completion completes with the next occurring word
@@ -359,8 +404,7 @@ fun! ColorfulMessages()
   echohl Label
   unsilent echo "Completing from  "
   echohl Special
-  unsilent echon get(g:mucomplete#msg#methods,
-      \ get(g:, 'mucomplete_current_method', ''))
+  unsilent echon get(g:mucomplete#msg#methods, get(g:, 'mucomplete_current_method', ''))
   echohl None
   " Force updating the cursor
   let &ro=&ro
@@ -376,6 +420,7 @@ autocmd User * set omnifunc=ale#completion#OmniFunc
 
 " Turn off autocompletion if it is too slow
 nmap <Leader>m :MUcompleteAutoToggle<CR>
+nmap <Leader>= :let g:mucomplete#chains = {'default' : ['omni', 'tags', 'incl', 'path', 'uspl', 'thes']}<CR>
 
 " Markbar
 map <Leader>' <Plug>ToggleMarkbar
@@ -417,33 +462,35 @@ set termguicolors
 execute "set t_8f=\e[38;2;%lu;%lu;%lum"
 execute "set t_8b=\e[48;2;%lu;%lu;%lum"
 
-if $BACKGROUND == "light"
-  set background=light
-  highlight clear
-  hi Comment term=bold ctermbg=1 guibg=LightBlue
-  hi SpellBad guifg=White guibg=Red
-else
-  set background=dark
-  let ayucolor="dark"
-  colorscheme ayu
-  hi Comment guifg=#EEEEEE
-endif
-
-hi SpellCap term=NONE cterm=NONE guifg=red guibg=white
-hi Visual term=NONE cterm=NONE guifg=#ffffff guibg=#c678dd
-hi VisualNOS term=NONE cterm=NONE guifg=#ffffff guibg=#c678dd
-hi CursorLine term=NONE cterm=NONE guibg=Grey90
-hi ColorColumn term=NONE cterm=NONE guibg=Grey90
-hi SignColumn ctermbg=NONE cterm=NONE guibg=NONE gui=NONE
-hi link SignifySignAdd             Normal
-hi link SignifySignChange          Normal
-hi link SignifySignDelete          Normal
-hi link SignifySignDeleteFirstLine Normal
+colorscheme new-moon
 
 set thesaurus+=/home/jiska/.vim/thesaurus/thesaurus.txt
 
 " Diff mode
+function DiffGetOrUndo()
+  if &diff
+    execute(':diffget')
+  else
+    execute(':SignifyHunkUndo')
+  endif
+endfunction
+
 map <Leader>d :SignifyDiff!<CR>
 map <Leader>v :SignifyHunkDiff<CR>
 map <Leader><CR> :diffput<CR>
-map <Leader>\ :diffget<CR>
+map <Leader>\ :call DiffGetOrUndo()<CR>
+
+let g:signify_sign_add               = '▌'
+let g:signify_sign_delete            = '▌'
+let g:signify_sign_delete_first_line = '▌'
+let g:signify_sign_change            = '▌'
+
+"function! SynStack ()
+"    for i1 in synstack(line("."), col("."))
+"        let i2 = synIDtrans(i1)
+"        let n1 = synIDattr(i1, "name")
+"        let n2 = synIDattr(i2, "name")
+"        echo n1 "->" n2
+"    endfor
+"endfunction
+"map gm :call SynStack()<CR>
