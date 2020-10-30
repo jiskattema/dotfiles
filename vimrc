@@ -485,6 +485,10 @@ let g:signify_sign_delete            = '▌'
 let g:signify_sign_delete_first_line = '▌'
 let g:signify_sign_change            = '▌'
 
+"Use the external wl-clipboard tool to integrate with Wayland clipboard
+xnoremap "+y y:call system("wl-copy", @")<cr>
+nnoremap "+p :let @"=substitute(system("wl-paste --no-newline"), '<C-v><C-m>', '', 'g')<cr>p
+nnoremap "*p :let @"=substitute(system("wl-paste --no-newline --primary"), '<C-v><C-m>', '', 'g')<cr>p
 "function! SynStack ()
 "    for i1 in synstack(line("."), col("."))
 "        let i2 = synIDtrans(i1)
