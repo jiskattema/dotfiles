@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
 for i in bashrc inputrc screenrc toprc vimrc vim; do
-  read -r -p "Copy %i ? [y/N] " answer 
+  read -r -p "Copy $i ? [y/N] " answer 
    
   case $answer in
       [yY][eE][sS]|[yY])

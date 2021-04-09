@@ -5,6 +5,13 @@ Personal preferences and configuration
 
 My bashrc, inputrc, and screenrc files.
 
+FZF integration (better search and completion):
+* '<C-r>' search history
+* '<C-t>' search file
+* '<M-c>' cd to directory
+* stop FZF: '<C-d>' and '<C-c>'
+* next '<Tab>' or '<C-j>' and previous '<S-Tab>' or '<C-k>'
+
 ## Vim (Editor configuration)
 
 My vimrc and some helper scripts to generate tag files:
@@ -21,19 +28,19 @@ Some standard tools:
 This is a list of key bindings that I find useful, but keep forgetting. (this list assumes you are using all of the configuration above)
 
 Normal mode:
+* Open menu bar '<space><space>'
 * Open the tagbar window '<Leader>t'
 * Open the undotree window '<Leader>u'
 * Open the buffer explorer window '<Leader>b' (jlanzarotta/bufexplorer)
-* Open the file browser widnow '<Leader>f' (netrw)
+* Open the file browser window '-' (vim-vinegar / netrw)
 * Open the register window (clipboard) '"' (for insert mode '<C-r>', junegunn/vim-peekaboo)
-* Open the mark window '<Leader>'' (Yilin-Yang/vim-markbar)
+* Open the mark window '<Leader>m' (Yilin-Yang/vim-markbar)
 * Open the git window '<Leader>g' (jreybert/vimagit)
 * Go to the next/previous location <C-o>, <C-i> (built-in jump list)
 * Go to the next/previous change in the file 'g;' and 'g,' (built-in changes list)
 * Go to the start/end of the last selection "'<" and "'>"
 * Go to the start/end of the last change "'[" and "']"
 * Go to the position of last insert 'gi'.
-* Go the next linter issue '<Leader>n'; for previous use '<Leader>p' (w0rp/ale)
 * Move the cursor to a window 'C-w hjkl', or move the window 'C-w HJKL'
 * Delete inside brackets 'di' and then the bracket '}' and similar actions (welle/targets.vim)
 * Delete with indentation 'dii' and similar actions (michaeljsmith/vim-indent-object)
@@ -41,35 +48,37 @@ Normal mode:
 * Increase / decrease numbers with <C-c> and <C-x>
 * Continue editing where you last left INSERT mode 'gi', with the location marked '^'
 * Resize the current window to N lines 'zN<Cr>'
+* Add keyword under cursor to a temporary highlight group '<Leader>#', where # is a number
+* Clear highlight group # '<Leader>c#'
+* Clear all temporary hightlight groups '<Leader>-'
 
-Toggle in NORMAL mode:
-* Linewrap '<Leader>w'
-* Ignorecase '<Leader>c'
-* Spelling (rotates between Dutch, English, both and off) '<Leader>s'
-* Autocomplete '<Leader>m'
-* Highlight cursor line and/or column '<C-l>'
 
 Insert Mode:
 * Increase / decrease indentation of current line with '<C-t>' and '<C-d>'
 * Open the register window (clipboard) '<C-r>' (for normal mode '"', junegunn/vim-peekaboo)
 * Exit insert mode for a single normal mode command '<C-o>'
-* XML template expansion '<Leader>,' (mattn/emmet-vim)
+* XML template expansion '<C-y>,' (mattn/emmet-vim) also does snippets and
+  lorem-ipsum text generation via 'lorem<C-y>,' or 'lorem100<C-y>,'
 * Exit insert mode '<Esc>', '<C-[>'
+
 
 Visual Mode:
 * Select block with the same indentation 'ii'
 * Go to the other end of the selection o and O
 * Select in all in/around () {} <> [] <tag></tag> ` '' "" with ia followed by bB<['"`t
 
-DIFF mode:
+
+Diff mode:
 * Go to next/previous '[]c' (also when current file is in a git repo)
 * Open diff mode '<Leader>d', or as pop-up '<Leader>v'
-* Put chunk '<Leader><CR>'
-* Get chunk '<Leader>\'
+* Put chunk dp
+* Get (obtain) chunk do 
+
 
 Ex mode(':'):
 * show key name: <C-k> <key>
 * show where a variable was last set: verbose set <variable>
+
 
 Completing use a chained set of completors (lifepillar/vim-mucomplete):
 * next / previous entry <C-n>, <C-p>, and <Tab>, <S-Tab>
@@ -77,10 +86,43 @@ Completing use a chained set of completors (lifepillar/vim-mucomplete):
 * Cancel <C-e>, Accept <C-y>
 * Some vim built-in completers: dictionary (K), thesaurus (T), keyword (I), tags (]), files (F)
 
+
 Netrw file browser:
+* '-' go to directory containing current file
 * 'gn' set directory as the tree root
 * 'gh' show or hide dotfiles
 * 'v' / 'o' open file in split buffer
 
+
 Git:
-  :Gvdiffsplit! HEAD~2
+* Do a diff against older versions  :Gvdiffsplit! HEAD~2
+
+
+# Office productivity setup
+
+Make an App password for Office365 https://account.activedirectory.windowsazure.com/AppPasswords.aspx
+Make an App password for GMail
+
+Setup dovecot for a local IMAP server, providing offline email, and easier
+
+backup.
+
+## Email
+
+aerc for browsing IMAP servers: GMail, Office365 for Business, and dovecot
+
+You can find the IMAP and SMTP settings on the webmail site:
+outlook.office365.com:993 with TLS/SSL
+smtp.office365.com:587 with STARTLS
+
+aerc knows the default server settings for GMail.
+
+
+## Calendar and Contacts
+
+Use davmail to connect to the Office365 for Business server.
+Use vdirsync to sync calendars and contacts to a local store.
+
+calcurse calender viewer
+khadr contact book
+
