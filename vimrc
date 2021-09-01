@@ -1,568 +1,282 @@
-" Setup plugin managment using Vudle
-" git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-set nocompatible              " be iMproved, required
-filetype off                  " required
+"{{{ Settings
 
-"let mapleader = "\<BS>"
+" Enable syntax highlighting.
+"
+syntax on
+"filetype off                  " required
 let mapleader = "\\"
 
-" Enable completion where available.
-" This setting must be set before ALE is loaded.
+" Vim options.
 "
-" You should not turn this setting on if you wish to use ALE as a completion
-" source for other completion plugins, like Deoplete.
-"let g:ale_completion_enabled = 1
+set hidden                     " Allow hidden buffers
+set scrolloff=5                " Keep space around the cursor line
+set spelllang=en,nl            " default to English and Dutch
+set thesaurus+=/home/jiska/.vim/thesaurus/thesaurus.txt
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
-
-Plugin 'jiskattema/new-moon.vim'
-
-Plugin 'powerman/vim-plugin-AnsiEsc'
-
-" Add as line 93:
-" exe ":sign define ". name ." text=". a:mark
-Plugin 'tumbler/highlightmarks'
-
-Plugin 'maximbaz/lightline-ale'
-Plugin 'w0rp/ale'
-Plugin 'itchyny/lightline.vim'
-
-Plugin 'jlanzarotta/bufexplorer'
-Plugin 'mbbill/undotree'
-Plugin 'majutsushi/tagbar'
-
-Plugin 'junegunn/vim-peekaboo'
-Plugin 'Yilin-Yang/vim-markbar'
-
-Plugin 'wellle/targets.vim'
-Plugin 'michaeljsmith/vim-indent-object'
-Plugin 'tpope/vim-surround'
-Plugin 'justinmk/vim-sneak'
-
-Plugin 'tpope/vim-fugitive'
-Plugin 'jreybert/vimagit'
-Plugin 'mhinz/vim-signify'
-
-Plugin 'tpope/vim-unimpaired'
-Plugin 'tpope/vim-commentary'
-Plugin 'tpope/vim-vinegar'
-Plugin 'tpope/vim-characterize'
-Plugin 'tpope/vim-speeddating'
-
-Plugin 'preservim/nerdcommenter'
-Plugin 'elzr/vim-json'
-Plugin 'mattn/emmet-vim'
-Plugin 'alvan/vim-closetag'
-
-Plugin 'hrsh7th/vim-vsnip'
-Plugin 'hrsh7th/vim-vsnip-integ'
-Plugin 'craigmac/vim-vsnip-snippets'
-
-Plugin 'lifepillar/vim-mucomplete'
-
-" This overwrites some NERDcommenter keybindings
-Plugin 'BlueCatMe/TempKeyword'
-
-Plugin 'joanrivera/vim-zimwiki-syntax'
-
-Plugin 'kana/vim-fakeclip'
-
-Plugin 'gillyb/stable-windows'
-
-Plugin 'skywind3000/vim-quickui'
-
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
-
-" Vertical split windows are separated by:
-set fillchars+=vert:┃
-
-" allow hidden buffers (ie. multiple open files with changes)
-set hidden
-
-" syntax highlighting
-syntax on
-
-" turn on wild menu
-set wildmenu
-
-" always show status line
-set laststatus=2
-
-" increase space for messages to make longer message more readable
-set cmdheight=3
-
-" keep some lines at the top and bottom when scrolling
-"set scrolloff=8
-
-" dont autoformat (manual invoke format on selection with gq)
-set textwidth=80
-set formatoptions+=jqnlro
+set autoindent                 " Indented text
+set noautoread                 " Pick up external changes to files
+set noautowrite                " Write files when navigating with :next/:previous
+set background=dark            " Dark background by default
+set backspace=indent,eol,start
+set belloff=all                " Bells are annoying
+set breakindent                " Wrap long lines *with* indentation
+set breakindentopt=shift:2
+set clipboard=unnamed,unnamedplus
+set colorcolumn=81,82          " Highlight 81 and 82 columns                                                          
+set conceallevel=0             " Always show text normally
+set complete=.,w,b,u,t,i       " Sources for term and line completions
+set completeopt=menu,menuone,noinsert,noselect
+set dictionary=/usr/share/dict/words
+set expandtab                  " Use spaces instead of tabs
+set foldlevelstart=20
+set foldmethod=indent          " Simple and fast
+set formatoptions+=cqjnlro     " Default format options
 set formatoptions-=tc
+set history=200                " Keep 200 changes of undo history
+set infercase                  " Smart casing when completing
+set ignorecase                 " Search in case-insensitively
+set noincsearch                " Dont go to search results immediately
+set laststatus=0               " Dont need a statusline
+set cmdheight=1                " More room for the status line
+set matchtime=5                " blink matching brackets for 5 tenths of a second
+set matchpairs=(:),{:},[:]
+set mouse=""                   " No mouse support in the terminal
+set mousehide                  " Hide mouse when typing text
+set nobackup                   " No backup files
+set nocompatible               " No Vi support
+set noexrc                     " Disable reading of working directory vimrc files
+set hlsearch                   " Don't highlight search results by default
+set noshowmatch                " No jumping jumping cursors when matching pairs
+set showmode                   " No to showing mode in bottom-left corner
+set noswapfile                 " No backup files
+set wrapscan                   " Don't wrap searches around
+set nonumber                   " No line numbers
+set path=**                    
+set pumheight=20               " Height of complete list
+set norelativenumber           " No relative numbers
+set noruler                    " No ruler with column, row, percentage
+set shiftwidth=2               " Default indentation amount
+set shortmess+=c               " Don't show insert mode completion messages
+set shortmess+=I               " Don't show intro message
+set showmatch                  " show matching brackets
+set signcolumn=number          " Render signs in the number column
+set showbreak=↳                " Use this to wrap long lines
+set smartcase                  " Case-smart searching
+set smarttab                   " Tab at the start of line inserts blanks
+set showtabline=0              " We dont need a tab line
+set spelloptions=camel         " When spell checking, assume word boundaries include 'CamelCasing'.
+set splitbelow                 " Split below current window
+set splitright                 " Split window to the right
+set tabstop=4                  " Tab width
+set termguicolors              " Enable 24-bit color support for terminal Vim
+set textwidth=80               " Standard width before breaking
+set undodir^=~/.vim/undo//
+set undofile                   " Maintain undo history
+set updatetime=1000            " Certain plugins use this for CursorHold event triggering
+set viminfo=                   " No backups
+set wildcharm=<Tab>            " Defines the trigger for 'wildmenu' in mappings
+set wildmenu                   " Nice command completions
+set wildmode=longest,full      " Complete the next full match
+set nowrap                     " Do not wrap long lines
+set cryptmethod=blowfish2
+set listchars=eol:$,tab:>-,trail:-
+set nocursorline
+set cursorlineopt=both         " line number and buffer line
+set keywordprg=:DictPrg
+" }}}
 
-" conceal things: (0) never (3) whenever possible
-set conceallevel=0
+"{{{ Functions
+function StylePrg()
+  %y
+  new
+  normal p
+  setlocal nobuflisted
+  setlocal buftype=nofile
+  setlocal bufhidden=hide
+  setlocal noswapfile
+  %!style
+endfunction
 
-" dont wrap lines (wrap [ow ]ow yow) 
-set nowrap
+function! DictPrg(lookup)
+  new
+  execute 'silent read !dict -d english ' . a:lookup
+  setlocal nobuflisted
+  setlocal buftype=nofile
+  setlocal bufhidden=hide
+  setlocal noswapfile
+  normal gg
+endfunction
+command -nargs=1 DictPrg call DictPrg(<f-args>)
 
-" Toggle case sensitive searching ([oi ]oi yoi)
-set ignorecase
-set smartcase
+function! InsertZimHeader()
+  let curr_date=strftime('%F', localtime())
+  let curr_time=strftime('%T', localtime())
+  let title=strftime('%A, %d. %B %Y', localtime())
+  exec "normal! ggiContent-Type: text/x-zim-wiki\<CR>Wiki-Format: zim 0.4\<CR>Creation-Date: ".curr_date."T".curr_time."\<CR>\<CR>==== ".title." ====\<CR>" 
+  set filetype=zimwiki
+endfunction
 
-" I dont like Ex mode..
-nnoremap Q <nop>
+function! PruneViminfo()
+  " Dont read/write the jumplist to the .viminfo file
+  clearjumps
+endfunction
 
-" Use C-x / C-c to increase / decrease numbers
-nmap <C-c> <C-a>
+function AutoReplyCommand(pattern) abort
+  let aliases =
+    \ { 'cn' : 'cnext'
+    \ , 'cp' : 'cprevious'
+    \ , 'g'  : 'global'
+    \ , 's'  : 'substitute'
+    \ , 'v'  : 'vglobal'
+    \ }
 
-" Dont jump ahead when searching
-set noincsearch
-       
-" default to English and Dutch
-set spelllang=en,nl
+  " if the command is more complex, ie. has [], it will not be a valid pattern
+  " for getcompletion. Luckily, we also do not need any autocommands then.
+  if a:pattern =~ "["
+    return ''
+  endif
 
-" a tab is 2 spaces
-set tabstop=2
-set shiftwidth=2
+  if &ignorecase
+    set noignorecase
+    let completion = getcompletion(a:pattern, 'command')
+    set ignorecase
+  else
+    let completion = getcompletion(a:pattern, 'command')
+  endif
 
-" replace tab by spaces,type Ctrl-V<Tab> for real tabs
-set expandtab
+  let completion = len(completion) == 1 ? join(completion) : ''
 
-" gnome-terminal escapes meta keys instead of setting the 8th bit
-" set <M-l>=\el
+  return get(aliases, a:pattern, completion)
+endfunction
+" }}}
+
+"{{{ Mappings
+nmap <Leader>a :ALEToggle<CR>
+nmap <Leader>g :MagitOnly<CR>
+nmap <Leader>d :SignifyDiff!<CR>
+nmap <Leader>h :SignifyHunkDiff<CR>
+nmap <Leader>s :SignifyToggle<CR>
+nmap <silent><Leader>z :call InsertZimHeader()<CR>
+nmap yoe :set invruler<CR>
+
+" hit space twice to open menu
+noremap <space><space> :call quickui#menu#open()<cr>
 
 " Navigate the jumplist with <M-i> instead of <C-i> with is Tab.
 " I've configured my terminal to send <M-i> for when i press <C-i>
 noremap i <C-i>
+" }}}
 
-" ***********************
-"    Highlighting and colors
-" ***********************
+"{{{ Plugins
 
-" highlight tabs
-match CursorLine /[\t]/
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
 
-" backspace key to toggle (search) highlight off
-"nnoremap <silent> <BS><BS> :noh<CR>
+call vundle#begin()
+  Plugin 'BlueCatMe/TempKeyword'
+  Plugin 'dense-analysis/ale'
+  Plugin 'jiskattema/new-moon.vim'
+  Plugin 'joanrivera/vim-zimwiki-syntax'
+  Plugin 'jreybert/vimagit'
+  Plugin 'kana/vim-fakeclip'
+  Plugin 'mhinz/vim-signify'
+  Plugin 'michaeljsmith/vim-indent-object'
+  Plugin 'natebosch/vim-lsc'
+  Plugin 'skywind3000/vim-quickui'
+  Plugin 'tommcdo/vim-ninja-feet'
+  Plugin 'tpope/vim-characterize'
+  Plugin 'tpope/vim-commentary'
+  Plugin 'tpope/vim-repeat'
+  Plugin 'tpope/vim-speeddating'
+  Plugin 'tpope/vim-surround'
+  Plugin 'tpope/vim-unimpaired'
+  Plugin 'tpope/vim-vinegar'
+  Plugin 'wellle/targets.vim'
+call vundle#end()
 
-" show matching brackets
-set showmatch
+" Load up the match it plugin which provides smart % XML/HTML matching.
+runtime macros/matchit.vim
+let g:closetag_filenames = '*.html,*.xhtml,*.phtml'
 
-" how many tenths of a second to blink matching brackets for
-set mat=5
+" Markdown
+let g:markdown_folding = 1
 
-" highlight marks
-nmap <Leader>` :RemoveMarkHighlights<CR>
-let g:highlightMarks_useSigns = 1
-let g:highlightMarks_colors = ['#505060 guifg=White']
-
-" hide cursor line for inactive windows
-" au WinLeave * set nocursorline nocursorcolumn
-
-" set Vim-specific sequences for RGB colors
-set termguicolors
-execute "set t_8f=\e[38;2;%lu;%lu;%lum"
-execute "set t_8b=\e[48;2;%lu;%lu;%lum"
-
-colorscheme new-moon
-
-set thesaurus+=/home/jiska/.vim/thesaurus/thesaurus.txt
-
-" ***************************
-"       Lightline
-" ***************************
-set noshowmode
-let g:lightline = {
-  \'colorscheme': 'one',
-  \'component_expand' : {
-      \   'linter_checking': 'lightline#ale#checking',
-      \   'linter_warnings': 'lightline#ale#warnings',
-      \   'linter_errors': 'lightline#ale#errors',
-      \ },
-  \'component_type' : {
-      \   'linter_checking': 'left',
-      \   'linter_warnings': 'warning',
-      \   'linter_errors': 'error',
-      \ },
-  \'active' : {
-      \   'left': [ [ 'mode', 'paste', 'spell', 'modified', 'readonly' ],
-      \             [ 'gitbranch', 'filename', 'linter_checking', 'linter_errors', 'linter_warnings', 'signify-stats' ] ],
-      \   'right': [ [ 'lineinfo' ],
-      \              [ 'percent' ],
-      \              [ 'fileformat', 'fileencoding', 'filetype' ] ]
-      \ },
-  \ 'component_function': {
-      \   'gitbranch': 'fugitive#head',
-      \   'signify-stats': 'sy#repo#get_stats_decorated'
-      \ },
-  \ 'subseparator' : { 'left': '', 'right': '' }
-  \ }
-
-
-" ****************************************
-"       File browser
-" gn Prune tree
-" gh / mh Toggle hiden dotfiles / by suffix / by type
-" v / o open file in split buffer
-" p preview file (do not leave netrw)
-" ****************************************
+" NetRW
 let g:netrw_altv = 1
 let g:netrw_winsize = 20
-let g:netrw_browsex_viewer = 'xdg-open'
 let g:netrw_preview = 1
+let g:netrw_list_hide= netrw_gitignore#Hide().'\(^\|\s\s\)\zs\.\S\+'
 
+" Signify
+let g:signify_disable_by_default = 0
 
-" ****************************************
-"       Buffer explorer
-" <Leader>b to open
-" ****************************************
-nmap <Leader>b :BufExplorer<CR>
-let g:bufExplorerDefaultHelp=1
-let g:bufExplorerDisableDefaultKeyMapping=1
+" ALE
+let g:ale_disable_lsp = 1
+let g:ale_set_signs = 0
 
+" vim-lsc
+let g:lsc_auto_map = v:true   " Use all the defaults
 
-" ****************************************
-"       version control / Magit + fugitive
-" <Leader>g to open
-" ****************************************
-nmap <Leader>g :MagitOnly<CR>
+let g:lsc_server_commands = {
+    \ 'python': 'pyls',
+    \ }
+" }}}
 
-" dont do anything with vim-fugitive
-" (but the functions will stay available)
-let g:fugitive_no_maps=1
-
-
-" *****************************
-"     Spelling
-" 
-" on/off/toggle:   [os ]os yos
-" next/prev:       [s  ]s
-" *****************************
-set spelllang=en,nl
-
-" T opens/closes Tagbar window
-nmap <Leader>t :TagbarToggle<CR>
-
-" The window should be on the right
-let Tlist_Use_Right_Window = 1
-
-
-" **********************
-" Custom tag generators
-" **********************
-
-" https://github.com/jszakmeister/markdown2ctags
-" Add support for markdown files in tagbar.
-let g:tagbar_type_markdown = {
-    \ 'ctagstype': 'markdown',
-    \ 'ctagsbin' : '~/.vim/scripts/markdown2ctags.py',
-    \ 'ctagsargs' : '-f - --sort=yes --sro=»',
-    \ 'kinds' : [
-        \ 's:sections',
-        \ 'i:images'
-    \ ],
-    \ 'sro' : '»',
-    \ 'kind2scope' : {
-        \ 's' : 'section',
-    \ },
-    \ 'sort': 0,
-\ }
-
-" https://github.com/jszakmeister/rst2ctags
-" Add support for reStructuredText files in tagbar.
-let g:tagbar_type_rst = {
-    \ 'ctagstype': 'rst',
-    \ 'ctagsbin' : '~/.vim/scripts/rst2ctags.py',
-    \ 'ctagsargs' : '-f - --sort=yes --sro=»',
-    \ 'kinds' : [
-        \ 's:sections',
-        \ 'i:images'
-    \ ],
-    \ 'sro' : '»',
-    \ 'kind2scope' : {
-        \ 's' : 'section',
-    \ },
-    \ 'sort': 0,
-\ }
-
-" **************************
-"       Backup / Undo / Swap
-" https://begriffs.com/posts/2019-07-19-history-use-vim.html#backups-and-undo
-" mkdir ~/.vim/{swap,undodir,backup}
-" **************************
-
-" Protect changes between writes. Default values of
-" updatecount (200 keystrokes) and updatetime
-" (4 seconds) are fine
-" set swapfile
-" set directory^=~/.vim/swap//
-
-" protect against crash-during-write
-" set writebackup
-
-" but do not persist backup after successful write
-" set nobackup
-
-" use rename-and-write-new method whenever safe
-" set backupcopy=auto
-
-" patch required to honor double slash at end
-" if has("patch-8.1.0251")
-"   " consolidate the writebackups -- not a big
-"   " deal either way, since they usually get deleted
-"   set backupdir^=~/.vim/backup//
-" end
-
-" persist the undo tree for each file
-" set undofile
-" set undodir^=~/.vim/undodir//
-
-function PruneViminfo()
-  " Dont read/write the jumplist to the .viminfo file
-  clearjumps
-endfunction
+"{{{ Autocommands
 autocmd VimLeavePre * call PruneViminfo()
 autocmd VimEnter * call PruneViminfo()
 
-" ***********************
-"       Undo window
-" <Leader>u to open
-" ***********************
-nnoremap <Leader>u :UndotreeToggle<CR>:UndotreeFocus<CR>
-let g:undotree_WindowLayout = 1
+augroup AutoReply
+  autocmd!
+  autocmd CmdlineLeave :
+    \ execute 'silent doautocmd AutoReply User'
+    \          AutoReplyCommand(getcmdline())
 
-" emmet-vim
-" Type abbreviation as 'div>p#foo$*3>a' and type '<C-y>,'.
-" let g:user_emmet_leader_key = '<BS>e'
+  autocmd User marks     call feedkeys(':normal!`', 'n')
+  autocmd User oldfiles  call feedkeys(':edit#<',   'n')
 
-" ***********************
-"       ALE - linter and completion source
-" ***********************
-let g:ale_sign_column_always = 1
+  autocmd User buffers   call feedkeys(':buffer'      . "\<Space>",  'n')
+  autocmd User files     call feedkeys(':buffer'      . "\<Space>",  'n')
+  autocmd User ls        call feedkeys(':buffer'      . "\<Space>",  'n')
 
-" pyls
-let g:ale_linters = {
-  \   'python': ['flake8', 'mypy', 'pylint', 'pyls'],
-  \}
-let g:ale_fixers = ['remove_trailing_lines', 'trim_whitespace']
+  autocmd User tabs      call feedkeys(':normal! gt'  . "\<S-Left>", 'n')
 
-" FileType plugins sometimes overwrite the omnifunc, in my case for python3 
-" re-set the ale completer after running ftplugins
-" autocmd User * set omnifunc=ale#completion#OmniFunc
+  autocmd User clist     call feedkeys(':silent cc'   . "\<Space>",  'n')
+  autocmd User llist     call feedkeys(':silent ll'   . "\<Space>",  'n')
+  autocmd User registers call feedkeys(':silent put'  . "\<Space>",  'n')
+  autocmd User tags      call feedkeys(':tjump'       . "\<Space>",  'n')
+  autocmd User undolist  call feedkeys(':silent undo' . "\<Space>",  'n')
 
-" ***********************
-"       vsnip / snippets 
-" ***********************
-let g:vsnip_snippet_dir="~/.vim/bundle/vim-vsnip-snippets/snippets/"
+  autocmd User changes   call feedkeys(':normal! g;'  . "\<S-Left>", 'n')
+  autocmd User jumps     call feedkeys(':normal! '  . "\<S-Left>", 'n')
 
-" Expand or jump
-imap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
-smap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
-
-imap <expr> <C-k> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<C-k>'
-smap <expr> <C-k> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<C-k>'
-
-
-" ***********************
-"       MUComplete
-" ***********************
-set infercase
-set complete=
-set completeopt+=menuone,noinsert,noselect,popup
-set completepopup=align:menu,border:off
-
-" Shut off completion messages
-set shortmess+=cmnrxT
-set shortmess-=S
-
-" If Vim beeps during completion
-set belloff+=ctrlg
-
-let g:mucomplete#enable_auto_at_startup = 1
-" let g:mucomplete#completion_delay = 1
-
-"let g:mucomplete#can_complete = {}
-"let g:mucomplete#can_complete.default = {
-"    \  'omni': {
-"    \     t -> g:mucomplete_with_key
-"    \   }
-"    \ }
-let g:mucomplete#chains = {
-    \ 'default' : ['tags', 'incl', 'path', 'uspl', 'vsnip', 'omni']
-    \ }
-
-
-" pressing right (left) after a completion completes with the next occurring word
-imap <expr> <right> mucomplete#extend_fwd("\<right>")
-imap <expr> <left> mucomplete#extend_bwd("\<left>")
-
-fun! ColorfulMessages()
-  echohl Label
-  unsilent echo "Completing from  "
-  echohl Special
-  unsilent echon get(g:mucomplete#msg#methods, get(g:, 'mucomplete_current_method', ''))
-  echohl None
-  " Force updating the cursor
-  let &ro=&ro
-endfun
-autocmd User MUcompletePmenu call ColorfulMessages()
-
-" Clear the command line when the menu is dismissed
-autocmd CompleteDone * echo "\r"
-
-" Turn on/off/toggle autocompletion
-nmap [om :MUcompleteAutoOn<CR>
-nmap ]om :MUcompleteAutoOff<CR>
-nmap yom :MUcompleteAutoToggle<CR>
-
-" Turn on/off/toggle linting
-nmap [oa let b:ale_enabled = 1<CR>
-nmap ]oa let b:ale_enabled = 0<CR>
-nmap yoa let b:ale_enabled = ! b:ale_enabled<CR>
-
-" Reset to default completion chains
-nmap <Leader>= :let g:mucomplete#chains = {
-      \ 'default' : ['tags', 'incl', 'path', 'uspl', 'thes', 'vsnip', 'omni']
-      \ }<CR>
-
-" ***********************
-"       Markbar
-" <Leader>m to open
-" ***********************
-map <Leader>m <Plug>ToggleMarkbar
-let g:markbar_enable_peekaboo = v:false 
-let g:markbar_markbar_width = 50
-let g:markbar_marks_to_display = '''``[]<>^. abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ 01'
-
-
-" ***********************
-"       vim-sneak
-" ***********************
-let g:sneak#map_netrw = 0
-let g:sneak#label = 1
-let g:sneak#prompt = 'sneak > '
-
-" 1-character enhanced 'f'
-nmap f <Plug>Sneak_f
-nmap F <Plug>Sneak_F
-
-" visual-mode
-xmap f <Plug>Sneak_f
-xmap F <Plug>Sneak_F
-
-" operator-pending-mode
-omap f <Plug>Sneak_f
-omap F <Plug>Sneak_F
-
-" 1-character enhanced 't'
-nmap t <Plug>Sneak_t
-nmap T <Plug>Sneak_T
-
-" visual-mode
-xmap t <Plug>Sneak_t
-xmap T <Plug>Sneak_T
-
-" operator-pending-mode
-omap t <Plug>Sneak_t
-omap T <Plug>Sneak_T
-
-
-" ********************
-"       Signify - diff mode
-" ********************
-map <Leader>d :SignifyDiff!<CR>
-map <Leader>h :SignifyHunkDiff<CR>
-
-let g:signify_sign_add               = '▌'
-let g:signify_sign_delete            = '▌'
-let g:signify_sign_delete_first_line = '▌'
-let g:signify_sign_change            = '▌'
-
-
-" ***************************
-"       Clipboard
-" ***************************
-let g:fakeclip_provide_clipboard_key_mappings = 1
-let g:fakeclip_terminal_multiplexer_type = "gnuscreen"
-
-
-" ***************************
-"       Debug
-" ***************************
-"function! SynStack ()
-"    for i1 in synstack(line("."), col("."))
-"        let i2 = synIDtrans(i1)
-"        let n1 = synIDattr(i1, "name")
-"        let n2 = synIDattr(i2, "name")
-"        echo n1 "->" n2
-"    endfor
-"endfunction
-"map gm :call SynStack()<CR>
-
-
-" ***************************
-"       Grep
-" By default, do 'git grep'
-" https://vi.stackexchange.com/questions/21566/dont-capture-stderr-for-git-grep-as-grepprg
-" ***************************
-let &grepprg="git --no-pager grep --no-color -n $*"                                                                                  
-let &grepformat="%f:%l:%m,%m %f match%ts"  
-
-" Grep integration: https://gist.github.com/romainl/56f0c28ef953ffc157f36cc495947ab3
-" use ag for search (a faster grep, from the the_silver_searcher package on fedora)
-function! Grep(...)
-  return system('ag --vimgrep ' . join(a:000, ' '))
-endfunction
-command! -nargs=+ -complete=file_in_path -bar Grep  cgetexpr Grep(<f-args>)
-command! -nargs=+ -complete=file_in_path -bar LGrep lgetexpr Grep(<f-args>)
-augroup quickfix
-    autocmd!
-    autocmd QuickFixCmdPost cgetexpr cwindow
-    autocmd QuickFixCmdPost lgetexpr lwindow
+  autocmd User chistory
+    \ if getqflist({'nr' : '$'}).nr > 1
+    \ |   call feedkeys(':silent chistory | copen',  'n')
+    \ |   call feedkeys("\<Home>\<S-Right>\<Right>", 'n')
+    \ | endif
 augroup END
+" }}}
 
+"{{{ Quick menu
 
-" ***************************
-"       Zim desktop wiki
-" Function to insert a header in the Zim wiki style
-" Key mapping to insert a Zim Wiki header 
-" taken from vim script https://www.vim.org/scripts/script.php?script_id=3703
-" ***************************
-function! InsertZimHeader()
-   let curr_date=strftime('%F', localtime())
-   let curr_time=strftime('%T', localtime())
-   let title=strftime('%A, %d. %B %Y', localtime())
-   exec "normal! ggiContent-Type: text/x-zim-wiki\<CR>Wiki-Format: zim 0.4\<CR>Creation-Date: ".curr_date."T".curr_time."\<CR>\<CR>==== ".title." ====\<CR>" 
-   set filetype=zimwiki
-endfunction
-map <silent><Leader>z :call InsertZimHeader()<CR>
-
-" clear all the menus
-nmap <Leader>f :call quickui#tools#list_function()<CR>
 call quickui#menu#reset()
 let g:quickui_border_style = 2
-"let g:quickui_color_scheme = 'papercol_light'
-"let g:quickui_color_scheme = 'gruvbox'
-
-" use [text, command] to represent an item.
+let g:quickui_color_scheme = 'papercol_dark'
 
 " items containing tips, tips will display in the cmdline
 call quickui#menu#install('&Plugins', [
-     \ [ "&Buffers\t\\b", 'execute "normal \\b"' ],
-     \ [ "&Tags\t\\t", 'execute "normal \\t"' ],
-     \ [ "&Undo\t\\u", 'execute "normal \\u"' ],
-     \ [ "&Functions\t\\f", 'call quickui#tools#list_function()' ],
-     \ [ "Fil&es\t-", 'Ex' ],
-     \ [ "&Diff file\t\\d", 'SignifyDiff' ],
-     \ [ "Diff &hunk\t\\h", 'SignifyHunkDiff' ],
-     \ [ "&Git\t\\g", 'execute "normal \\g"' ],
+     \ [ "&ALE toggle\t\\a", 'ALEToggle', 'Toggle automatic linting' ],
+     \ ['--', '', '' ],
+     \ [ "&Signify toggle\t\\s", 'SignifyToggle', 'Show linechanges in the gutter' ],
+     \ [ "&Diff file\t\\d", 'SignifyDiff', 'Show diff in diff mode' ],
+     \ [ "Diff &hunk\t\\h", 'SignifyHunkDiff', 'Show diff in a popup' ],
+     \ ['--',''],
+     \ [ "&Git\t\\g", 'execute "normal \\g"', 'Open Magit window' ],
+     \ ['--','', '' ],
+     \ [ "&Clear keywords\t\\ca", 'call clearmatches()', 'Set keywords using \\#' ],
+     \ ['--', '', ''],
+     \ ['Text stat&istics', 'call StylePrg()', 'runs GNU style on the current buffer' ],
      \ ])
 
 " script inside %{...} will be evaluated and expanded in the string
@@ -581,45 +295,29 @@ call quickui#menu#install("&Options", [
      \ [ "&Relativenumber\tyor", 'execute "normal yor"' ],
      \ [ "&Spell\tyos", 'execute "normal yos"' ],
      \ [ "&Virtualedit\tyov", 'execute "normal yov"' ],
-     \ [ "&Ale\tyoa", 'let g:ale_enabled = ! g:ale_enabled' ],
-     \ [ "&Mucomplete\tyom", 'execute "normal yom"' ],
+     \ [ "Rul&er\tyoe", 'set invruler' ],
      \ [ "All options", 'options' ],
      \ ])
 
 " register HELP menu with weight 10000
 call quickui#menu#install('H&elp', [
+     \ ["LS&C bindings", 'help lsc-default-map', ''],
      \ ["&Cheatsheet", 'help index', ''],
      \ ['T&ips', 'help tips', ''],
-     \ ['All &mappings', 'call ShowMappings()' ],
      \ ['--',''],
      \ ["&Tutorial", 'help tutor', ''],
-     \ ['&Quick Reference', 'help quickref', ''],
+     \ ['Quick &reference', 'help quickref', ''],
      \ ['&Summary', 'help summary', ''],
      \ ], 10000)
 
-"hi! QuickBG ctermfg=0 ctermbg=7 guifg=black guibg=gray
-"hi! QuickSel cterm=bold ctermfg=0 ctermbg=2 gui=bold guibg=brown guifg=gray
-"hi! QuickKey term=bold ctermfg=9 gui=bold guifg=#f92772
-"hi! QuickOff ctermfg=59 guifg=#75715e
-"hi! QuickHelp ctermfg=247 guifg=#959173
+" }}}
 
-hi! QuickBG guifg=#080808 guibg=#94C7B5
-hi! QuickKey guifg=#ffeead guibg=#94C7B5
-hi! QuickSel guifg=#ffeead guibg=#080808
-hi! QuickOff guifg=#ffffff
+"{{{ Colors
+execute "set t_8f=\e[38;2;%lu;%lu;%lum"
+execute "set t_8b=\e[48;2;%lu;%lu;%lum"
+set termguicolors
 
-function ShowMappings()
-  let all_mappings = split(
-        \ substitute(
-        \     execute("map"),
-        \     '&', '🙴', 'g'),
-        \ '\n')
-  let show_mappings = filter(all_mappings, 'v:val !~ "^[nosvx ] *<Plug>"')
-  call sort(show_mappings)
+colorscheme new-moon
+"}}}
 
-  call quickui#listbox#open(show_mappings, {})
-endfunction
-
-" hit space twice to open menu
-noremap <space><space> :call quickui#menu#open()<cr>
-
+" vim: fdm=marker foldlevel=0

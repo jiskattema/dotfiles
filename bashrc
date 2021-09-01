@@ -5,6 +5,11 @@ if [ -f /etc/bashrc ]; then
   . /etc/bashrc
 fi
 
+# Source .profile (as .bashrc is ignored for non-interactive sessions)
+# https://superuser.com/a/183980 
+if [ -r ~/.profile ]; then
+  . ~/.profile
+fi
 umask 022
 
 function last_exit_status {
@@ -37,10 +42,24 @@ export PAGER=less
 export LESS_TERMCAP_so=$'\E[30;43m'
 export LESS_TERMCAP_se=$'\E[39;49m'
 
+
+# enable FZF
+source /usr/share/fzf/shell/key-bindings.bash
+export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git --ignore env --ignore node_modules -g ""'
+
+# keep history
+shopt -s histappend
+HISTCONTROL=erasedups:ignorespace
+
 # fix TTY fonts
 alias FIXFONT="setfont ter-132n.psf.gz"
 
 # force screen to use colors
 alias screen="screen -T xterm-256color"
 
-alias venv='. env/bin/activate'
+alias venv='source env/bin/activate'
+
+alias alahup='nohup ~/Code/alacritty/target/release/alacritty &'
+
+# fix tab completion due to broken jedi
+alias tab='pip install jedi==0.17.2'

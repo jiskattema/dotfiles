@@ -1,6 +1,9 @@
 # no startup message
 startup_message off
 
+# Use <C-Q> insted of <C-A>
+escape ^Qq
+
 # default title
 defdynamictitle off
 shelltitle bash
@@ -20,11 +23,11 @@ shelltitle bash
 
 # nice windowlist and hardstatus
 windowlist title "%{#FFFFFF;#000000}Num Name%=Flags"
-windowlist string "%?%F%{#FFFFFF;#000000}%:%{#000000;#FFFFFF}%? %3n %t%=%f"
+windowlist string "%?%F%{.w.}%?%3n %t%=%f"
 
 # alwayslastline alwaysfirstline
-hardstatus on
-hardstatus alwaysfirstline "%{#FFFFFF;#000000} %-w%{#000000;#FFFFFF}[%n %t]%{#FFFFFF;#000000}%+w %{#FFFFFF;#000000} %="
+# hardstatus alwaysfirstline "%{#FFFFFF;#000000} %-w%{#000000;#FFFFFF}[%n %t]%{#FFFFFF;#000000}%+w %{#FFFFFF;#000000} %="
+hardstatus off
 
 caption splitonly
 caption string "%{#FFFFFF;#000000}%=(%n %t)%?%F*%: %?"
