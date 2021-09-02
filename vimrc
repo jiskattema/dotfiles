@@ -3,7 +3,6 @@
 " Enable syntax highlighting.
 "
 syntax on
-"filetype off                  " required
 let mapleader = "\\"
 
 " Vim options.
@@ -11,7 +10,7 @@ let mapleader = "\\"
 set hidden                     " Allow hidden buffers
 set scrolloff=5                " Keep space around the cursor line
 set spelllang=en,nl            " default to English and Dutch
-set thesaurus+=/home/jiska/.vim/thesaurus/thesaurus.txt
+set thesaurus+=/home/jiska/.vim/thesaurus/english.txt
 
 set autoindent                 " Indented text
 set noautoread                 " Pick up external changes to files
@@ -169,6 +168,10 @@ noremap i <C-i>
 
 "{{{ Plugins
 
+" Vundle is changing the runtime paths. vim will need to re-scan and cache
+" everything after vundle is finished.
+filetype off
+
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 
@@ -179,6 +182,7 @@ call vundle#begin()
   Plugin 'joanrivera/vim-zimwiki-syntax'
   Plugin 'jreybert/vimagit'
   Plugin 'kana/vim-fakeclip'
+  Plugin 'tmhedberg/SimpylFold'
   Plugin 'mhinz/vim-signify'
   Plugin 'michaeljsmith/vim-indent-object'
   Plugin 'natebosch/vim-lsc'
@@ -193,6 +197,9 @@ call vundle#begin()
   Plugin 'tpope/vim-vinegar'
   Plugin 'wellle/targets.vim'
 call vundle#end()
+
+" Re-enable filetype auto-detection and have vim pickup vundle's changes
+filetype plugin indent on
 
 " Load up the match it plugin which provides smart % XML/HTML matching.
 runtime macros/matchit.vim
