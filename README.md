@@ -16,19 +16,12 @@ My vimrc and some helper scripts to generate tag files:
 Some standard tools:
   * toprc
 
-FZF integration (better search and completion):
-* '<C-r>' search history
-* '<C-t>' search file
-* '<M-c>' cd to directory
-* stop FZF: '<C-d>' and '<C-c>'
-* next '<Tab>' or '<C-j>' and previous '<S-Tab>' or '<C-k>'
-
 # Vim cheat-sheet
 
 This is a list of key bindings that I find useful, but keep forgetting. (this list assumes you are using all of the configuration above)
 
 Normal mode:
-* Open menu bar '<space><space>'
+* Open menu bar '<Leader><Leader>'
 * Open the file browser window '-' (vim-vinegar / netrw)
 * Open the git window '<Leader>g' (jreybert/vimagit)
 * Go to the next/previous location <C-o>, <C-i> (built-in jump list)
@@ -111,4 +104,75 @@ Use vdirsync to sync calendars and contacts to a local store.
 
 calcurse calender viewer
 khadr contact book
+
+
+# Git
+
+
+```
+git log --graph --pretty=format:'%h - %d %s (%cr) <%an>' | vim -R -c 'set filetype=git nowrap' -
+```
+
+
+# Pagers, Pipes, and Colors
+
+When used in pipes, color often is lost.
+This because programs detect they connected to a pipe instead of a TTY, and do
+not produce any colors.  Depending on the program, you force colorized output:
+```
+grep --color=always
+git grep --color=always
+jq -C
+```
+
+Secondly, colors are lost and the output is garbled.  Assuming the terminal
+supports color, this happens because final step in the pipe does not pass on the
+escape sequences in raw format.
+You can force less to do that using:
+```
+less -R
+```
+
+Finally, some pagers add colors themselves.  The color scheme is based on an
+argument, because due to the pipe there is no filename, no extentions and hence
+no filetype.
+```
+bat -l md
+```
+
+
+# terminal / ncursus tools
+
+## actually in use
+
+cmus     - music
+jq       - query (grep) json
+mdn      - markdown pager using pandoc/w3m 
+ncdu     - disc usage analyzer
+tmux     - terminal multiplexer
+vifm     - file browser
+
+## used somewhat
+
+aerc     - email
+hxselect - query XML / HTML
+sc-im    - spread sheet
+w3m      - terminal webbrowser
+
+## could be useful
+
+bat      - cat replacement
+btop     - system monitor
+calcurse - calendar
+feh      - image viewer
+fzf      - fuzzy file finder
+googler  - search using Google
+pspg     - pager for tabular data
+toilet   - big text using ascii art
+
+
+# Resources
+
+[Bash arrays tips and tricks](https://www.shell-tips.com/bash/arrays/)
+
 
