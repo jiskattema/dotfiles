@@ -1,0 +1,31 @@
+set completion-ignore-case On
+set completion-map-case On
+set show-all-if-ambiguous On
+set expand-tilde Off
+set mark-directories On
+set mark-modified-lines Off
+set match-hidden-files Off
+set menu-complete-display-prefix On
+set revert-all-at-newline On
+set skip-completed-text On
+set visible-stats On
+
+set colored-completion-prefix Off
+set colored-stats On
+
+set editing-mode vi
+
+set keymap vi-insert
+"\C-a": beginning-of-line
+"\C-b": backward-char
+"\C-e": end-of-line
+"\C-f": forward-char
+"\C-g": abort
+"\C-k": kill-line
+"\C-l": clear-screen
+"\C-n": history-search-forward
+"\C-p": history-search-backward
+"\C-_": vi-yank-arg
+
+# alt-. for the last argument
+"\e.": yank-last-arg
