@@ -8,6 +8,10 @@ escape ^Qq
 defdynamictitle off
 shelltitle bash
 
+# enables the alternative screen to draw on, so on exit the original terminal
+# window and text are undisturbed
+altscreen on
+
 # Colors and their names
 #
 # k black
@@ -53,3 +57,5 @@ bind ^- resize -10
 
 bind N screen -t note vim
 bind C screen -t calc bc -l
+
+bind e screen -t vifm vifm

@@ -1,10 +1,9 @@
 "{{{ Settings
 
-" Enable syntax highlighting.
-"
-set nocompatible               " No Vi support
-syntax on
 let mapleader = "\\"
+set nocompatible               " No Vi support
+filetype plugin indent on
+syntax on
 
 " Vim options.
 "
@@ -21,7 +20,7 @@ set backspace=indent,eol,start
 set belloff=all                " Bells are annoying
 set breakindent                " Wrap long lines *with* indentation
 set breakindentopt=shift:2
-set clipboard=unnamed,unnamedplus
+"set clipboard=unnamed,unnamedplus
 set colorcolumn=81,82          " Highlight 81 and 82 columns                                                          
 set conceallevel=0             " Always show text normally
 set complete=.,w,b,u,t         " Sources for term and line completions
@@ -85,6 +84,11 @@ set listchars=eol:$,tab:>-,trail:-
 set nocursorline
 set cursorlineopt=both         " line number and buffer line
 set keywordprg=:DictPrg
+
+" bug fix where elvish shell needs a space around the redirect, and bash accepts
+" both. Fixes netrw-gx command
+set shellredir=\ \>\ 
+set shell=/usr/bin/sh          " Use something POSIX compattible
 " }}}
 
 "{{{ Functions
@@ -109,14 +113,6 @@ function! DictPrg(lookup)
   normal gg
 endfunction
 command -nargs=1 DictPrg call DictPrg(<f-args>)
-
-function! InsertZimHeader()
-  let curr_date=strftime('%F', localtime())
-  let curr_time=strftime('%T', localtime())
-  let title=strftime('%A, %d. %B %Y', localtime())
-  exec "normal! ggiContent-Type: text/x-zim-wiki\<CR>Wiki-Format: zim 0.4\<CR>Creation-Date: ".curr_date."T".curr_time."\<CR>\<CR>==== ".title." ====\<CR>" 
-  set filetype=zimwiki
-endfunction
 
 function AutoReplyCommand(pattern) abort
   let aliases =
@@ -158,14 +154,6 @@ func GitGrep(...)
 endfun
 command -nargs=? G call GitGrep(<f-args>)
 
-augroup send_to_term
-  autocmd!
-  autocmd TerminalOpen * if &buftype ==# 'terminal' |
-        \   let t:send_to_term = +expand('<abuf>') |
-        \ endif
-augroup END
-
-
 function! s:op(type, ...)
   let [sel, rv, rt] = [&selection, @@, getregtype('"')]
   let &selection = "inclusive"
@@ -197,15 +185,24 @@ function! s:send_to_term(keys)
   endif
 endfunction
 
-command! -range -bar SendToTerm call s:send_to_term(join(getline(<line1>, <line2>), "\n"))
-nmap <script> <Plug>(send-to-term-line) :<c-u>SendToTerm<cr>
-nmap <script> <Plug>(send-to-term) :<c-u>set opfunc=<SID>op<cr>g@
-xmap <script> <Plug>(send-to-term) :<c-u>call <SID>op(visualmode(), 1)<cr>
+function NetrwNewNamedFile()
+  call inputsave()
+  call feedkeys(strftime("%Y%m%d.txtODODODOD"))
+  let fname = input('Enter vorg filename: ')
+  call inputrestore()
+  execute "NetrwKeepj e ".fnameescape(b:netrw_curdir."/".fname)
+endfunction
 
-nmap yrr <Plug>(send-to-term-line)
-nmap yr <Plug>(send-to-term)
-xmap R <Plug>(send-to-term)
-
+function! s:complete_snippets() abort
+  let word_to_complete = matchstr(strpart(getline('.'), 0, col('.') - 1), '\S\+$')
+  let candidates = vsnip#get_complete_items(bufnr('%'))
+  let candidates = filter(candidates, 'stridx(v:val.word, word_to_complete)>=0')
+  let from_where = col('.') - len(word_to_complete)
+  if !empty(candidates)
+    call complete(from_where, candidates)
+  endif
+  return ''
+endfunction 
 " }}}
 
 "{{{ Mappings
@@ -217,10 +214,9 @@ nmap <Leader>h :SignifyHunkDiff<CR>
 nmap <Leader>s :SignifyToggle<CR>
 nmap <Leader>b :TagbarToggle<CR>
 
-nmap <C-bslash><C-bslash> :ls<CR>
-nmap <silent> \| :call quickui#tools#list_buffer('e')<CR>
+nmap <silent> \| :ls<CR>
+nmap <silent> <C-_> :call quickui#tools#list_buffer('e')<CR>
 
-nmap <silent><Leader>z :call InsertZimHeader()<CR>
 nmap yoe :set invruler<CR>
 nmap yof :if &fo =~ 'a' \| set fo-=at \| else \| set fo+=at \| endif<CR>
 nmap <silent> <S-CR> za
@@ -236,62 +232,45 @@ noremap <Leader><Leader> :call quickui#menu#open()<cr>
 " I've configured my terminal to send <M-i> for when i press <C-i>
 noremap i <C-i>
 
+" Open a terminal with C-z (elvish terminal doesnt do backgrounding anyways)
+noremap  :terminal /home/jiska/go/bin/elvish<CR>
+
 " Use <C-K> to delete to the end of the line, unless we're at the end
 " then use it to enter a digraph
 inoremap <expr> <C-K> col('.')>strlen(getline('.'))?"\<Lt>C-K>":"\<Lt>C-O>d$"
+
+" Close the preview window from insert mode
+inoremap <C-g><C-g> <Esc>:pclose<CR>gi
+
+" :terminal bindings
+command! -range -bar SendToTerm call s:send_to_term(join(getline(<line1>, <line2>), "\n"))
+nmap <script> <Plug>(send-to-term-line) :<c-u>SendToTerm<cr>
+nmap <script> <Plug>(send-to-term) :<c-u>set opfunc=<SID>op<cr>g@
+xmap <script> <Plug>(send-to-term) :<c-u>call <SID>op(visualmode(), 1)<cr>
+
+nmap yrr <Plug>(send-to-term-line)
+nmap yr <Plug>(send-to-term)
+xmap R <Plug>(send-to-term)
+
+" vsnip: Expand or jump
+imap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+smap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+
+" vsnip: Jump forward or backward
+imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+
+inoremap <silent> <C-x><C-x> <C-r>=<SID>complete_snippets()<cr>
+
+nmap <F12> :set ft=vorg<CR>
 " }}}
 
-"{{{ Plugins
-
-" Vundle is changing the runtime paths. vim will need to re-scan and cache
-" everything after vundle is finished.
-filetype off
-
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-
-call vundle#begin()
-  Plugin 'BlueCatMe/TempKeyword'
-  Plugin 'andymass/vim-matchup'
-  Plugin 'brtastic/vim-vorg'
-  Plugin 'cohama/agit.vim'
-  Plugin 'dense-analysis/ale'
-  Plugin 'jeetsukumaran/vim-indentwise'
-  Plugin 'jiskattema/new-moon.vim'
-  Plugin 'joanrivera/vim-zimwiki-syntax'
-  Plugin 'jreybert/vimagit'
-  Plugin 'junegunn/limelight.vim'
-  Plugin 'junegunn/vim-easy-align'
-  Plugin 'preservim/tagbar'
-  Plugin 'kana/vim-fakeclip'
-  Plugin 'mhinz/vim-signify'
-  Plugin 'michaeljsmith/vim-indent-object'
-  Plugin 'natebosch/vim-lsc'
-  Plugin 'pbrisbin/vim-mkdir'
-  Plugin 'skywind3000/vim-quickui'
-  Plugin 'tommcdo/vim-ninja-feet'
-  Plugin 'tpope/vim-characterize'
-  Plugin 'tpope/vim-commentary'
-  Plugin 'tpope/vim-repeat'
-  Plugin 'tpope/vim-rsi'
-  Plugin 'tpope/vim-speeddating'
-  Plugin 'tpope/vim-surround'
-  Plugin 'tpope/vim-unimpaired'
-  Plugin 'tpope/vim-vinegar'
-
-  Plugin 'mattn/emmet-vim'
-  Plugin 'hrsh7th/vim-vsnip'
-  Plugin 'rafamadriz/friendly-snippets'
-
-  Plugin 'sillybun/vim-repl'
-call vundle#end()
-
-" Re-enable filetype auto-detection and have vim pickup vundle's changes
-filetype plugin indent on
+"{{{ Configure plugins
 
 " Load packages
 packadd! cfilter
-
 
 " Markdown
 let g:markdown_folding = 1
@@ -313,8 +292,10 @@ let g:ale_set_signs = 0
 let g:lsc_auto_map = v:true   " Use all the defaults
 
 let g:lsc_server_commands = {
-    \ 'python': 'pyls',
-    \ }
+  \ 'python': 'pyls',
+  \ 'go': 'gopls',
+  \ 'elvish': '/home/jiska/go/bin/elvish -lsp',
+  \ }
 
 " vim-indentwise
 let g:indentwise_equal_indent_skips_contiguous = 0
@@ -326,44 +307,46 @@ let g:user_emmet_leader_key = '<C-\>,'
 let g:vsnip_snippet_dir = '~/.vim/bundle/friendly-snippets/snippets'
 let g:vsnip_snippet_dirs = ['~/.vim/bundle/friendly-snippets/snippets/python']
 
-" Expand or jump
-imap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
-smap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
-
-" Jump forward or backward
-imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
-smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
-imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
-smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
-
-"" Select or cut text to use as $TM_SELECTED_TEXT in the next snippet.
-"" See https://github.com/hrsh7th/vim-vsnip/pull/50
-"nmap        s   <Plug>(vsnip-select-text)
-"xmap        s   <Plug>(vsnip-select-text)
-"nmap        S   <Plug>(vsnip-cut-text)
-"xmap        S   <Plug>(vsnip-cut-text)
-
-inoremap <silent> <C-x><C-x> <C-r>=<SID>complete_snippets()<cr>
-function! s:complete_snippets() abort
-  let word_to_complete = matchstr(strpart(getline('.'), 0, col('.') - 1), '\S\+$')
-  let candidates = vsnip#get_complete_items(bufnr('%'))
-  let candidates = filter(candidates, 'stridx(v:val.word, word_to_complete)>=0')
-  let from_where = col('.') - len(word_to_complete)
-  if !empty(candidates)
-    call complete(from_where, candidates)
-  endif
-  return ''
-endfunction 
-
-"" vim-repl
-let g:sendtorepl_invoke_key = "<F9>"
-autocmd Filetype python nnoremap <F10> <Esc>:REPLPDBN<Cr>
-autocmd Filetype python nnoremap <F11> <Esc>:REPLPDBS<Cr>
-autocmd Filetype python nnoremap <F12> <Esc>:REPLToggle<Cr>
-"autocmd Filetype python nnoremap <F12> <Esc>:REPLDebugStopAtCurrentLine<Cr>
-
 " vim readline in inputmode
 "let g:rsi_no_meta = 1
+"
+
+let g:gutentags_define_advanced_commands = 1
+
+let g:tagbar_type_vorg = {
+\ 'sort' : 0, 
+\ 'sro' : '""',
+\ 'kind2scope' : {
+\   'c' : 'chapter',
+\   's' : 'section',
+\   'S' : 'subsection',
+\   't' : 'subsubsection',
+\   'T' : 'l3subsection',
+\   'u' : 'l4subsection',
+\   'f' : 'tag',
+\   'D' : 'document tag',
+\ },
+\ 'scope2kind' : {
+\   'chapter'       : 'c',
+\   'section'       : 's',
+\   'subsection'    : 'S',
+\   'subsubsection' : 't',
+\   'l3subsection'  : 'T',
+\   'l4subsection'  : 'u',
+\   'tag'           : 'f',
+\   'document tag'  : 'D',
+\ },
+\ 'kinds' : [
+\   'D:document',
+\   'c:chapter:0:1',
+\   's:section:0:1',
+\   'S:subsection:0:1',
+\   't:subsubsection:0:1',
+\   'T:l3subsection:0:1',
+\   'u:l4subsection:0:1',
+\   'f:tag',
+\ ]
+\ }
 " }}}
 
 "{{{ Autocommands
@@ -397,6 +380,18 @@ augroup AutoReply
     \ |   call feedkeys("\<Home>\<S-Right>\<Right>", 'n')
     \ | endif
 augroup END
+
+augroup netrw_mapping
+  autocmd!
+  autocmd FileType netrw nnoremap <buffer> & :call NetrwNewNamedFile()<CR>
+augroup END
+
+augroup send_to_term
+  autocmd!
+  autocmd TerminalOpen * if &buftype ==# 'terminal' |
+        \   let t:send_to_term = +expand('<abuf>') |
+        \ endif
+augroup END
 " }}}
 
 "{{{ Quick menu
@@ -407,62 +402,52 @@ let g:quickui_color_scheme = 'papercol_dark'
 
 " items containing tips, tips will display in the cmdline
 call quickui#menu#install('&Plugins', [
-     \ [ "&ALE toggle\t\\a", 'ALEToggle', 'Toggle automatic linting' ],
-     \ ['--', '', '' ],
-     \ [ "&Signify toggle\t\\s", 'SignifyToggle', 'Show linechanges in the gutter' ],
-     \ [ "&Diff file\t\\d", 'SignifyDiff', 'Show diff in diff mode' ],
-     \ [ "Diff &hunk\t\\h", 'SignifyHunkDiff', 'Show diff in a popup' ],
-     \ ['--',''],
-     \ [ "Ma&git\t\\g", 'execute "normal \\g"', 'Open Magit window (commit)' ],
-     \ [ "Agi&t\t\\t", 'execute "normal \\t"', 'Open Agit window (log)' ],
-     \ ['--','', '' ],
-     \ [ "&Clear keywords\t\\ca", 'call clearmatches()', 'Set keywords using \\#' ],
-     \ ['--', '', ''],
-     \ ['Text stat&istics', 'call StylePrg()', 'runs GNU style on the current buffer' ],
-     \ ['Li&melight', 'Limelight!!', 'Toggle limelight' ],
-     \ ])
+   \ [ "&ALE toggle\t\\a", 'ALEToggle', 'Toggle automatic linting' ],
+   \ ['--', '', '' ],
+   \ [ "&Signify toggle\t\\s", 'SignifyToggle', 'Show linechanges in the gutter' ],
+   \ [ "&Diff file\t\\d", 'SignifyDiff', 'Show diff in diff mode' ],
+   \ [ "Diff &hunk\t\\h", 'SignifyHunkDiff', 'Show diff in a popup' ],
+   \ ['--',''],
+   \ [ "Ma&git\t\\g", 'execute "normal \\g"', 'Open Magit window (commit)' ],
+   \ [ "Agi&t\t\\t", 'execute "normal \\t"', 'Open Agit window (log)' ],
+   \ ['--','', '' ],
+   \ [ "&Clear keywords\t\\ca", 'call clearmatches()', 'Set keywords using \\#' ],
+   \ ['--', '', ''],
+   \ ['Text stat&istics', 'call StylePrg()', 'runs GNU style on the current buffer' ],
+   \ ['Li&melight', 'Limelight!!', 'Toggle limelight' ],
+   \ ])
 
 " script inside %{...} will be evaluated and expanded in the string
 call quickui#menu#install("&Options", [
-     \ [ "&Paste\tyop", 'set invpaste'],
-     \ [ "&Wrap\tyow", 'execute "normal yow"' ],
-     \ [ "&Cursorline\tyoc", 'execute "normal yoc"' ],
-     \ [ "C&ursorcolumn\tyou", 'execute "normal you"' ],
-     \ [ "&Xrosshairs\tyox", 'execute "normal yox"' ],
-     \ [ "&Background\tyob", 'execute "normal yob"' ],
-     \ [ "&Hlsearch\tyoh", 'execute "normal yoh"' ],
-     \ [ "&Ignorecase\tyoi", 'execute "normal yoi"' ],
-     \ [ "&Diff\tyod", 'execute "normal yod"' ],
-     \ [ "&List\tyol", 'execute "normal yol"' ],
-     \ [ "&Number\tyon", 'execute "normal yon"' ],
-     \ [ "&Relativenumber\tyor", 'execute "normal yor"' ],
-     \ [ "&Spell\tyos", 'execute "normal yos"' ],
-     \ [ "&Virtualedit\tyov", 'execute "normal yov"' ],
-     \ [ "Rul&er\tyoe", 'set invruler' ],
-     \ [ "\Auto format\tyof", "if &fo =~ 't' | set fo-=t | else | set fo+=t | endif"],
-     \ [ "All options", 'options' ],
-     \ ])
-
-" register HELP menu with weight 10000
-call quickui#menu#install('&REPL', [
-     \ ["&Toggle REPL\tF12", 'REPLToggle'],
-     \ ["&Send to REPL\tF9", 'normal [20~'],
-     \ ['--', '', ''],
-     \ ["Start debugger and run till &cursor", 'REPLDebugStopAtCurrentLine' ],
-     \ ["Debug step &line\tF10", 'REPLPDBN'],
-     \ ["Debug step &function\tF11", 'REPLPDBS'],
-     \ ])
+   \ [ "&Paste\tyop", 'set invpaste'],
+   \ [ "&Wrap\tyow", 'execute "normal yow"' ],
+   \ [ "&Cursorline\tyoc", 'execute "normal yoc"' ],
+   \ [ "C&ursorcolumn\tyou", 'execute "normal you"' ],
+   \ [ "&Xrosshairs\tyox", 'execute "normal yox"' ],
+   \ [ "&Background\tyob", 'execute "normal yob"' ],
+   \ [ "&Hlsearch\tyoh", 'execute "normal yoh"' ],
+   \ [ "&Ignorecase\tyoi", 'execute "normal yoi"' ],
+   \ [ "&Diff\tyod", 'execute "normal yod"' ],
+   \ [ "&List\tyol", 'execute "normal yol"' ],
+   \ [ "&Number\tyon", 'execute "normal yon"' ],
+   \ [ "&Relativenumber\tyor", 'execute "normal yor"' ],
+   \ [ "&Spell\tyos", 'execute "normal yos"' ],
+   \ [ "&Virtualedit\tyov", 'execute "normal yov"' ],
+   \ [ "Rul&er\tyoe", 'set invruler' ],
+   \ [ "\Auto format\tyof", "if &fo =~ 't' | set fo-=t | else | set fo+=t | endif"],
+   \ [ "All options", 'options' ],
+   \ ])
 
 " register HELP menu with weight 10000
 call quickui#menu#install('H&elp', [
-     \ ["LS&C bindings", 'help lsc-default-map', ''],
-     \ ["&Cheatsheet", 'help index', ''],
-     \ ['T&ips', 'help tips', ''],
-     \ ['--',''],
-     \ ["&Tutorial", 'help tutor', ''],
-     \ ['Quick &reference', 'help quickref', ''],
-     \ ['&Summary', 'help summary', ''],
-     \ ], 10000)
+   \ ["LS&C bindings", 'help lsc-default-map', ''],
+   \ ["&Cheatsheet", 'help index', ''],
+   \ ['T&ips', 'help tips', ''],
+   \ ['--',''],
+   \ ["&Tutorial", 'help tutor', ''],
+   \ ['Quick &reference', 'help quickref', ''],
+   \ ['&Summary', 'help summary', ''],
+   \ ], 10000)
 
 " }}}
 
@@ -473,5 +458,10 @@ set termguicolors
 
 colorscheme new-moon
 "}}}
+
+"execute "set <xUp>=\<Esc>[@;*A"
+"execute "set <xDown>=\<Esc>[@;*B"
+"execute "set <xRight>=\<Esc>[@;*C"
+"execute "set <xLeft>=\<Esc>[@;*D"
 
 " vim: fdm=marker foldlevel=0
