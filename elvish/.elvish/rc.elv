@@ -100,6 +100,7 @@ set edit:navigation:binding[Enter]  = $edit:navigation:insert-selected-and-quit~
 set edit:navigation:binding[Ctrl-k] = $edit:navigation:insert-selected~
 set edit:navigation:binding[Ctrl-h] = $edit:navigation:left~
 set edit:navigation:binding[Ctrl-l] = $edit:navigation:right~
+set edit:navigation:binding[Alt-h] = $edit:navigation:trigger-shown-hidden~
 
 ## history mode Ctrl-r
 set edit:history:binding[Ctrl-n] = $edit:history:down~  # dont enter navigation mode from history

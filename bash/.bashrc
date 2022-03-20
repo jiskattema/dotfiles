@@ -17,6 +17,7 @@ fi
 if [ -r ~/.profile ]; then
   . ~/.profile
 fi
+
 umask 022
 
 # do not freeze terminal on <C-s> (btw, unfreezing is via <C-q>) <C-s> is a
@@ -50,14 +51,42 @@ if [ -n "${VIRTUAL_ENV}" ]; then
 fi
 }
 
+function i {
+  echo
+  # working directory
+  echo -e ' \uf115  ' `pwd`
+
+  # git information
+  branch=$(git symbolic-ref HEAD 2> /dev/null)
+  if [ "${branch}" ]; then
+  echo -e ' \uf09b  ' ${branch#refs/heads/}
+  fi
+
+  if [ "${VIRTUAL_ENV}" ]; then
+  echo -e ' \uf820  ' ${VIRTUAL_ENV%%env}
+  fi
+  echo -e ' \uf5ef  ' `date "+%Y-%m-%d %H:%M (%s)"`
+
+  SLINE=""
+  if [ "${STY}" ]; then
+  SLINE="${SLINE} \uf879  ${WINDOW}"
+  fi
+  SLINE="${SLINE} \ufc0c $(jobs | grep 'Running' | wc -l)"
+  SLINE="${SLINE} \u23fe $(jobs | grep 'Stopped' | wc -l)"
+  SLINE="${SLINE} \uf11c $(history | wc -c)"
+  echo -e "${SLINE}"
+  echo
+  jobs
+  echo
+}
+
 # nicer prompt
 export PS1="\$(last_exit_status) \$(parse_git_branch) \w \$ "
 export PROMPT_DIRTRIM=3
 
 # defaults
 export EDITOR=/usr/bin/vim
-# export PAGER='vim -c ":AnsiEsc" -R -'
-export PAGER=less
+
 # make sure less uses color for standout highlighting
 # https://unix.stackexchange.com/questions/179173/make-less-highlight-search-patterns-instead-of-italicizing-them
 export LESS_TERMCAP_so=$'\E[30;43m'
@@ -89,9 +118,6 @@ export VIRTUAL_ENV_DISABLE_PROMPT=1
 alias clock='date "+%Y-%m-%d %H:%m" | toilet  -W --filter metal -f smmono9.tlf'
 
 export PATH=/home/jiska/.local/bin:$PATH
-
-alias alahup='nohup ~/Code/alacritty/target/release/alacritty &'
-
 
 
 select_files() {
