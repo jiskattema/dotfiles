@@ -16,6 +16,11 @@ My vimrc and some helper scripts to generate tag files:
 Some standard tools:
   * toprc
 
+## SD Card
+```bash
+watch -d grep -e Dirty: -e Writeback: /proc/meminfo
+```
+
 # Vim cheat-sheet
 
 This is a list of key bindings that I find useful, but keep forgetting. (this list assumes you are using all of the configuration above)
@@ -150,10 +155,10 @@ jq       - query (grep) json
 mdn      - markdown pager using pandoc/w3m 
 ncdu     - disc usage analyzer
 tmux     - terminal multiplexer
-vifm     - file browser
 
 ## used somewhat
 
+vifm     - file browser
 aerc     - email
 hxselect - query XML / HTML
 sc-im    - spread sheet

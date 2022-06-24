@@ -27,7 +27,7 @@ set complete=.,w,b,u,t         " Sources for term and line completions
 set completeopt=menu,menuone,noinsert,noselect
 set dictionary=/usr/share/dict/words
 set expandtab                  " Use spaces instead of tabs
-set fillchars+=vert:│,fold:⎯
+"set fillchars+=vert:│,fold:⎯
 set foldlevelstart=20
 set foldmethod=indent          " Simple and fast
 set formatoptions=qjnlro       " Format options
@@ -43,7 +43,7 @@ set mouse=""                   " No mouse support in the terminal
 set mousehide                  " Hide mouse when typing text
 set nobackup                   " No backup files
 set noexrc                     " Disable reading of working directory vimrc files
-set hlsearch                   " Don't highlight search results by default
+set hlsearch                   " Highlight search results by default
 set noshowmatch                " No jumping jumping cursors when matching pairs
 set showmode                   " No to showing mode in bottom-left corner
 set showcmd                    " Show keypresses in bottom-right
@@ -58,7 +58,7 @@ set pumheight=20               " Height of complete list
 set norelativenumber           " No relative numbers
 set noruler                    " No ruler with column, row, percentage
 set shiftwidth=2               " Default indentation amount
-set shortmess=finxToOcImrw     " So dont use SlstWAqF
+set shortmess=finxToOcImrwsS   " So dont use SlstWAqF
 set showmatch                  " show matching brackets
 set signcolumn=number          " Render signs in the number column
 set showbreak=↳\               " Use this to wrap long lines
@@ -77,7 +77,8 @@ set updatetime=1000            " Certain plugins use this for CursorHold event t
 set viminfo=                   " No backups
 set wildcharm=<Tab>            " Defines the trigger for 'wildmenu' in mappings
 set wildmenu                   " Nice command completions
-set wildmode=longest,list      " Complete the next full match
+set wildmode=longest:full
+set wildoptions=tagfile
 set nowrap                     " Do not wrap long lines
 set cryptmethod=blowfish2
 set listchars=eol:$,tab:>-,trail:-
@@ -214,6 +215,7 @@ nmap <Leader>h :SignifyHunkDiff<CR>
 nmap <Leader>s :SignifyToggle<CR>
 nmap <Leader>b :TagbarToggle<CR>
 
+nmap <silent>  :ls<CR>
 nmap <silent> \| :ls<CR>
 nmap <silent> <C-_> :call quickui#tools#list_buffer('e')<CR>
 
@@ -224,6 +226,8 @@ nmap <silent> <S-CR> za
 vmap <Enter> <Plug>(EasyAlign)
 
 nnoremap Q :q<CR>
+
+nnoremap <expr> gb '`[' . strpart(getregtype(), 0, 1) . '`]'
 
 " hit leader twice to open menu
 noremap <Leader><Leader> :call quickui#menu#open()<cr>
@@ -264,7 +268,17 @@ smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-T
 
 inoremap <silent> <C-x><C-x> <C-r>=<SID>complete_snippets()<cr>
 
+" vorg
 nmap <F12> :set ft=vorg<CR>
+
+" matchup
+nmap <Leader>? :MatchupWhereAmI?<CR>
+
+" vim-highlighter
+nmap [h :Hi {<CR>
+nmap ]h :Hi }<CR>
+nmap [H :Hi <<CR>
+nmap ]H :Hi ><CR>
 " }}}
 
 "{{{ Configure plugins
@@ -289,10 +303,10 @@ let g:ale_disable_lsp = 1
 let g:ale_set_signs = 0
 
 " vim-lsc
-let g:lsc_auto_map = v:true   " Use all the defaults
-
+let g:lsc_auto_map = {'defaults': v:true, 'NextReference': '', 'PreviousReference': ''}
+let g:lsc_reference_highlights = v:false
 let g:lsc_server_commands = {
-  \ 'python': 'pyls',
+  \ 'python': 'pylsp',
   \ 'go': 'gopls',
   \ 'elvish': '/home/jiska/go/bin/elvish -lsp',
   \ }
@@ -308,8 +322,8 @@ let g:vsnip_snippet_dir = '~/.vim/bundle/friendly-snippets/snippets'
 let g:vsnip_snippet_dirs = ['~/.vim/bundle/friendly-snippets/snippets/python']
 
 " vim readline in inputmode
-"let g:rsi_no_meta = 1
-"
+" Disable META mappings because they break i_<Esc> timeouts for me
+let g:rsi_no_meta = 1
 
 let g:gutentags_define_advanced_commands = 1
 
@@ -459,9 +473,10 @@ set termguicolors
 colorscheme new-moon
 "}}}
 
-"execute "set <xUp>=\<Esc>[@;*A"
-"execute "set <xDown>=\<Esc>[@;*B"
-"execute "set <xRight>=\<Esc>[@;*C"
-"execute "set <xLeft>=\<Esc>[@;*D"
+" Make modified arrow keys (<C-Left> etc.) work in alacritty 
+execute "set <xUp>=\<Esc>[@;*A"
+execute "set <xDown>=\<Esc>[@;*B"
+execute "set <xRight>=\<Esc>[@;*C"
+execute "set <xLeft>=\<Esc>[@;*D"
 
 " vim: fdm=marker foldlevel=0
