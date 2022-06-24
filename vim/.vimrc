@@ -36,7 +36,7 @@ set infercase                  " Smart casing when completing
 set ignorecase                 " Search in case-insensitively
 set noincsearch                " Dont go to search results immediately
 set laststatus=0               " Dont need a statusline
-set cmdheight=1                " More room for the status line
+set cmdheight=2                " More room for the status line
 set matchtime=5                " blink matching brackets for 5 tenths of a second
 set matchpairs=(:),{:},[:]
 set mouse=""                   " No mouse support in the terminal
@@ -61,7 +61,7 @@ set shiftwidth=2               " Default indentation amount
 set shortmess=finxToOcImrwsS   " So dont use SlstWAqF
 set showmatch                  " show matching brackets
 set signcolumn=number          " Render signs in the number column
-set showbreak=â†³\               " Use this to wrap long lines
+"set showbreak=ªª \
 set smartcase                  " Case-smart searching
 set smarttab                   " Tab at the start of line inserts blanks
 set showtabline=0              " We dont need a tab line
@@ -71,10 +71,11 @@ set splitright                 " Split window to the right
 set tabstop=4                  " Tab width
 set termguicolors              " Enable 24-bit color support for terminal Vim
 set textwidth=80               " Standard width before breaking
-"set undofile                  " Maintain undo history
-"set undodir^=~/.vim/undo//
+set undofile                   " Maintain undo history
+set undodir^=~/.vim/undo//
 set updatetime=1000            " Certain plugins use this for CursorHold event triggering
-set viminfo=                   " No backups
+set viminfo=%,'50,/50,:50
+set viminfofile=.git/viminfo
 set wildcharm=<Tab>            " Defines the trigger for 'wildmenu' in mappings
 set wildmenu                   " Nice command completions
 set wildmode=longest:full
