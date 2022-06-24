@@ -40,7 +40,6 @@ Normal mode:
 * Increase / decrease numbers with <C-a> and <C-x>
 * Continue editing where you last left INSERT mode 'gi', with the location marked '^'
 * Resize the current window to N lines 'zN<Cr>'
-* Add keyword under cursor to a temporary highlight group '<Leader>#', where # is a number
 
 
 Insert Mode:
@@ -155,6 +154,7 @@ jq       - query (grep) json
 mdn      - markdown pager using pandoc/w3m 
 ncdu     - disc usage analyzer
 tmux     - terminal multiplexer
+exa      - ls alternative
 
 ## used somewhat
 
