@@ -9,9 +9,9 @@ set edit:max-height = 10
 
 ## prompt
 set edit:rprompt = {
-  git:status | {
-    var a = (one)
-    put $a[branch-name]
+  var info = ( git:status )
+  if (!=s $info[branch-name] '') {
+    put $info[branch-name] ' '
   }
 }  
 
@@ -19,7 +19,8 @@ set edit:rprompt = {
 fn match {|seed|
     var inputs = [(all)]
     var results = []
-    for matcher [$edit:match-prefix~ $edit:match-substr~ $edit:match-subseq~] {
+    for matcher [$edit:match-prefix~] {
+    # for matcher [$edit:match-prefix~ $edit:match-substr~ $edit:match-subseq~] {
         set results = [(put $@inputs | $matcher &smart-case $seed)]
         if (or $@results) {
             put $@results
@@ -32,7 +33,8 @@ fn match {|seed|
 set edit:completion:matcher[''] = $match~
 
 # Aliasses
-fn ls {|@a| e:ls --color $@a }
+# fn ls {|@a| e:ls --color $@a }
+fn ls {|@a| e:exa --icons $@a }
 
 fn from-yaml { yj -yj | from-json }
 fn from-toml { yj -tj | from-json }
@@ -113,3 +115,18 @@ set paths = [ /home/jiska/go/bin /home/jiska/.cargo/bin $@paths ]
 
 # Completion
 eval (carapace _carapace elvish | slurp)
+
+# Virtual python environment (python -m venv)
+var venv = { |&p=env| 
+  # convert argument to absolute path
+  var pabs = ( readlink -f $p )
+
+  # remove possible value of PYTHONHOME
+  if (has-env PYTHONHOME) {
+    unset-env PYTHONHOME
+  }
+
+  # prepend to path and set VIRTUAL_ENV
+  set paths = [ $pabs/bin $@paths ]
+  set-env VIRTUAL_ENV $pabs
+}
