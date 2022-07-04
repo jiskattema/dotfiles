@@ -33,8 +33,7 @@ fn match {|seed|
 set edit:completion:matcher[''] = $match~
 
 # Aliasses
-# fn ls {|@a| e:ls --color $@a }
-fn ls {|@a| e:exa --icons $@a }
+set edit:command-abbr['ls'] = 'exa'
 
 fn from-yaml { yj -yj | from-json }
 fn from-toml { yj -tj | from-json }
@@ -53,7 +52,7 @@ set edit:insert:binding[Ctrl-/] = $edit:location:start~
 set edit:insert:binding[Ctrl-n] = $edit:navigation:start~
 set edit:insert:binding['Ctrl-['] = $edit:command:start~
 
-## command mode : vi-like mode for insert
+## command more : vi-like mode for insert
 set edit:command:binding['Enter'] = $edit:smart-enter~
 set edit:command:binding[a] = { $edit:move-dot-right~ ; $edit:close-mode~ }
 set edit:command:binding[A] = { $edit:move-dot-eol~ ; $edit:close-mode~ }
