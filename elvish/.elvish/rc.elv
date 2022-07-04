@@ -53,34 +53,7 @@ set edit:insert:binding[Ctrl-/] = $edit:location:start~
 set edit:insert:binding[Ctrl-n] = $edit:navigation:start~
 set edit:insert:binding['Ctrl-['] = $edit:command:start~
 
-# set edit:insert:binding[Ctrl-n] = {
-#   set E:elvish_oldpwd = $pwd
-#   set edit:navigation:binding[Enter] = {
-#       # # insert full path
-#       # $edit:insert-at-dot~ (pwd)
-#       # $edit:insert-at-dot~ /
-#       # # this doesnt work because insert-selected adds a space
-#       $edit:navigation:insert-selected-and-quit~
-#       cd $E:elvish_oldpwd
-#   }
-#   set edit:navigation:binding[Ctrl-k] = {
-#       # # insert full path
-#       # $edit:insert-at-dot~ (pwd)
-#       # $edit:insert-at-dot~ /
-#       # # this doesnt work because insert-selected adds a space
-#       $edit:navigation:insert-selected~
-#       $edit:insert-at-dot~ ' '
-#   }
-#   set edit:navigation:binding[Ctrl-g] = {
-#       $edit:close-mode~
-#       cd $E:elvish_oldpwd
-#   }
-#   $edit:navigation:start~
-# }
-
-
-## command more : vi-like mode for insert
-# set edit:command:binding['Enter'] = $edit:return-line~
+## command mode : vi-like mode for insert
 set edit:command:binding['Enter'] = $edit:smart-enter~
 set edit:command:binding[a] = { $edit:move-dot-right~ ; $edit:close-mode~ }
 set edit:command:binding[A] = { $edit:move-dot-eol~ ; $edit:close-mode~ }
