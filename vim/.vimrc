@@ -238,7 +238,7 @@ noremap <Leader><Leader> :call quickui#menu#open()<cr>
 noremap i <C-i>
 
 " Open a terminal with C-z (elvish terminal doesnt do backgrounding anyways)
-noremap  :terminal /home/jiska/go/bin/elvish<CR>
+noremap  :terminal ++close /home/jiska/.local/bin/elvish<CR>
 
 " Use <C-K> to delete to the end of the line, unless we're at the end
 " then use it to enter a digraph
