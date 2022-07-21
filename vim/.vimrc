@@ -27,7 +27,7 @@ set complete=.,w,b,u,t         " Sources for term and line completions
 set completeopt=menu,menuone,noinsert,noselect
 set dictionary=/usr/share/dict/words
 set expandtab                  " Use spaces instead of tabs
-"set fillchars+=vert:│,fold:⎯
+set fillchars+=vert:│
 set foldlevelstart=20
 set foldmethod=indent          " Simple and fast
 set formatoptions=qjnlro       " Format options
@@ -61,7 +61,7 @@ set shiftwidth=2               " Default indentation amount
 set shortmess=finxToOcImrwsS   " So dont use SlstWAqF
 set showmatch                  " show matching brackets
 set signcolumn=number          " Render signs in the number column
-"set showbreak=�� \
+set showbreak=∙
 set smartcase                  " Case-smart searching
 set smarttab                   " Tab at the start of line inserts blanks
 set showtabline=0              " We dont need a tab line
@@ -480,4 +480,4 @@ execute "set <xDown>=\<Esc>[@;*B"
 execute "set <xRight>=\<Esc>[@;*C"
 execute "set <xLeft>=\<Esc>[@;*D"
 
-" vim: fdm=marker foldlevel=0
+" vim: fdm=marker foldlevel=0 fileencoding=utf-8
