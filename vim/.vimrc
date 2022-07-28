@@ -430,6 +430,7 @@ call quickui#menu#install('&Plugins', [
    \ ['--', '', ''],
    \ ['Text stat&istics', 'call StylePrg()', 'runs GNU style on the current buffer' ],
    \ ['Li&melight', 'Limelight!!', 'Toggle limelight' ],
+   \ ['&Unicoder', 'Unicoder', 'Use abbreviations to insert unicode characters'],
    \ ])
 
 " script inside %{...} will be evaluated and expanded in the string
