@@ -89,7 +89,7 @@ set paths = [ /home/jiska/go/bin /home/jiska/.cargo/bin $@paths ]
 eval (carapace _carapace elvish | slurp)
 
 # Virtual python environment (python -m venv)
-var venv = { |&p=env| 
+fn venv { |&p=env| 
   # convert argument to absolute path
   var pabs = ( readlink -f $p )
 
