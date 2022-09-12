@@ -215,6 +215,7 @@ nmap <Leader>d :SignifyDiff!<CR>
 nmap <Leader>h :SignifyHunkDiff<CR>
 nmap <Leader>s :SignifyToggle<CR>
 nmap <Leader>b :TagbarToggle<CR>
+nmap <Leader>= :ALEFix <Tab><C-n>
 
 nmap <silent>  :ls<CR>
 nmap <silent> \| :ls<CR>
@@ -238,7 +239,7 @@ noremap <Leader><Leader> :call quickui#menu#open()<cr>
 noremap i <C-i>
 
 " Open a terminal with C-z (elvish terminal doesnt do backgrounding anyways)
-noremap  :terminal ++close /home/jiska/.local/bin/elvish<CR>
+noremap  :execute "terminal ++close " . $GOPATH . "/bin/elvish"<CR>
 
 " Use <C-K> to delete to the end of the line, unless we're at the end
 " then use it to enter a digraph
@@ -294,7 +295,8 @@ let g:markdown_folding = 1
 let g:netrw_altv = 1
 let g:netrw_winsize = 20
 let g:netrw_preview = 1
-let g:netrw_list_hide= netrw_gitignore#Hide().'\(^\|\s\s\)\zs\.\S\+'
+let g:netrw_list_hide='\(^\|\s\s\)\zs\.\S\+'
+"let g:netrw_list_hide.=netrw_gitignore#Hide()
 
 " Signify
 let g:signify_disable_by_default = 0
@@ -308,8 +310,8 @@ let g:lsc_auto_map = {'defaults': v:true, 'NextReference': '', 'PreviousReferenc
 let g:lsc_reference_highlights = v:false
 let g:lsc_server_commands = {
   \ 'python': 'pylsp',
-  \ 'go': 'gopls',
-  \ 'elvish': '/home/jiska/go/bin/elvish -lsp',
+  \ 'go': $GOPATH . '/bin/gopls',
+  \ 'elvish': $GOPATH . '/bin/elvish -lsp',
   \ }
 
 " vim-indentwise
