@@ -281,6 +281,20 @@ nmap [h :Hi {<CR>
 nmap ]h :Hi }<CR>
 nmap [H :Hi <<CR>
 nmap ]H :Hi ><CR>
+
+" ex-showmarks
+let g:showmarks_enable = 0
+let showmarks_include = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+" Ignore help, quickfix, non-modifiable buffers
+let showmarks_ignore_type = "hqm"
+
+let g:showmarks_textlower="unicode"
+let g:showmarks_textupper="unicode"
+
+" Hilight lower & upper marks
+let showmarks_hlline_lower = 1
+let showmarks_hlline_upper = 1 
 " }}}
 
 "{{{ Configure plugins
@@ -431,8 +445,9 @@ call quickui#menu#install('&Plugins', [
    \ [ "&Clear keywords\t\\ca", 'call clearmatches()', 'Set keywords using \\#' ],
    \ ['--', '', ''],
    \ ['Text stat&istics', 'call StylePrg()', 'runs GNU style on the current buffer' ],
-   \ ['Li&melight', 'Limelight!!', 'Toggle limelight' ],
+   \ ['&Limelight', 'Limelight!!', 'Toggle limelight' ],
    \ ['&Unicoder', 'Unicoder', 'Use abbreviations to insert unicode characters'],
+   \ ['Show &Marks', 'ShowMarksToggle', 'Highlight marks'],
    \ ])
 
 " script inside %{...} will be evaluated and expanded in the string

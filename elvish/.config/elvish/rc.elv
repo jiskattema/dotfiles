@@ -1,5 +1,6 @@
 # Settings
 
+use str
 use github.com/muesli/elvish-libs/git
 
 # Editor
@@ -13,24 +14,15 @@ set edit:rprompt = {
   if (!=s $info[branch-name] '') {
     put $info[branch-name] ' '
   }
-}  
-
-## matcher
-fn match {|seed|
-    var inputs = [(all)]
-    var results = []
-    for matcher [$edit:match-prefix~] {
-    # for matcher [$edit:match-prefix~ $edit:match-substr~ $edit:match-subseq~] {
-        set results = [(put $@inputs | $matcher &smart-case $seed)]
-        if (or $@results) {
-            put $@results
-            return
-        }
-    }
-    put $@results
+  if (!=s $E:VIRTUAL_ENV '') {
+     var env_root = (str:trim-suffix $E:VIRTUAL_ENV '/env')
+     if (str:has-prefix $pwd $env_root) {
+       put '  '
+     } else {
+       put '  '
+     }
+   } 
 }
-
-set edit:completion:matcher[''] = $match~
 
 # Aliasses
 set edit:command-abbr['ls'] = 'exa'
@@ -66,27 +58,36 @@ set edit:completion:binding = ( $edit:binding-table~ [
   &Tab=   $edit:completion:down-cycle~
   &S-Tab= $edit:completion:up-cycle~
   &' '=   $edit:completion:accept~
-  &Enter= $edit:completion:accept~
+  &Enter= { $edit:completion:accept~ ; $edit:smart-enter~ }
+  &Ctrl-y={ $edit:completion:accept~ ; $edit:completion:start~ }
 ])
 
 ## navigation mode Ctrl-n
-set edit:navigation:binding[Enter]  = $edit:navigation:insert-selected-and-quit~
-set edit:navigation:binding[Ctrl-k] = $edit:navigation:insert-selected~
 set edit:navigation:binding[Ctrl-h] = $edit:navigation:left~
 set edit:navigation:binding[Ctrl-l] = $edit:navigation:right~
+set edit:navigation:binding[Ctrl-y] = { $edit:navigation:insert-selected~ ; $edit:navigation:down~ }
 set edit:navigation:binding[Alt-h] = $edit:navigation:trigger-shown-hidden~
 
 ## history mode Ctrl-r
 set edit:history:binding[Ctrl-n] = $edit:history:down~  # dont enter navigation mode from history
 
+# Environment
 
-# Paths
+## Go
+set E:GOROOT = $E:HOME/Code/go/goroot
+set E:GOPATH = $E:HOME/Code/go/gopath
+set paths = [ $E:GOROOT/bin $E:GOPATH/bin $@paths ]
+
+## Paths
 set E:LD_LIBRARY_PATH = "/home/jiska/.local/lib:"$E:LD_LIBRARY_PATH
 set E:MANPATH = "/home/jiska/.local/share/man:"$E:MANPATH
-set paths = [ /home/jiska/go/bin /home/jiska/.cargo/bin $@paths ]
+set paths = [ /home/jiska/.cargo/bin $@paths ]
 
-# Completion
+# Completion candidates
 eval (carapace _carapace elvish | slurp)
+
+# Completion matching
+set edit:completion:matcher[argument] = {|seed| edit:match-prefix $seed &ignore-case=$true }
 
 # Virtual python environment (python -m venv)
 fn venv { |&p=env| 
