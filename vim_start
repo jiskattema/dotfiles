@@ -27,3 +27,5 @@ vim-vorg git@github.com:jiskattema/vim-vorg-md.git
 vim-vsnip https://github.com/hrsh7th/vim-vsnip.git
 vim-zimwiki-syntax https://github.com/joanrivera/vim-zimwiki-syntax.git
 vimagit https://github.com/jreybert/vimagit.git
+vim-showmarks git@github.com:jiskattema/vim-showmarks.git
+vim-unicoder git@github.com:jiskattema/vim-unicoder.git
