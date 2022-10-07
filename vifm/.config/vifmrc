@@ -1,0 +1,535 @@
+" vim: filetype=vifm :
+
+set cpoptions-=t
+
+" Command used to edit files in various contexts.
+set vicmd=vim
+
+" Use internal file commands
+set syscalls
+
+" Automatically resolve symbolic links on l or Enter.
+set nofollowlinks
+
+" Natural sort of (version) numbers within text.
+set sortnumbers
+
+" Use Vim's format of help file (has highlighting and "hyperlinks").
+set vimhelp
+
+" See man date or man strftime for details.
+set timefmt=%Y-%m-%d\ %H:%M
+
+" Show list of matches on tab completion in command-line mode
+set wildmenu
+
+" Display completions in a form of popup with descriptions of the matches
+set wildstyle=popup
+
+" Display suggestions in normal, visual and view modes for keys, marks and
+" registers (at most 5 files).  In other view, when available.
+set suggestoptions=normal,visual,view,otherpane,keys,marks,registers
+
+" Ignore case in search patterns unless it contains at least one uppercase
+" letter
+set ignorecase
+set smartcase
+
+" Don't highlight search results automatically
+set nohlsearch
+
+" Use increment searching (search while typing)
+set incsearch
+
+" Try to leave some space from cursor to upper/lower border in lists
+set scrolloff=4
+
+" Don't do too many requests to slow file systems
+if !has('win')
+    set slowfs=curlftpfs
+endif
+
+" Set custom status line look
+set statusline="%A %10u:%-7g %15s %20d %E"
+
+fileviewer {*.pdf},<application/pdf> pdftotext -nopgbrk %"c -
+fileviewer {*.mp3},<audio/mpeg> mp3info
+fileviewer {*.flac},<audio/flac> soxi
+fileviewer {*.avi,*.mp4,*.wmv,*.dat,*.3gp,*.ogv,*.mkv,*.mpg,*.mpeg,*.vob,
+           \*.fl[icv],*.m2v,*.mov,*.webm,*.ts,*.mts,*.m4v,*.r[am],*.qt,*.divx,
+           \*.as[fx]},
+           \<video/*>
+           \ ffprobe -pretty %"c 2>&1
+
+fileviewer {*.html,*.htm},<text/html> w3m
+fileviewer {*.o},<application/x-object> nm %f | less
+fileviewer {*.[1-8]},<text/troff> man ./%c
+fileviewer {*.jpg,*.jpeg,*.png,*.gif},<image/*> catimg -t -w 80 %"c
+fileviewer {*.bmp,*.xpm},<image/*> identify %f
+
+" MD5
+filetype *.md5
+       \ {Check MD5 hash sum}
+       \ md5sum -c %f %S,
+
+" SHA1
+filetype *.sha1
+       \ {Check SHA1 hash sum}
+       \ sha1sum -c %f %S,
+
+" SHA256
+filetype *.sha256
+       \ {Check SHA256 hash sum}
+       \ sha256sum -c %f %S,
+
+" SHA512
+filetype *.sha512
+       \ {Check SHA512 hash sum}
+       \ sha512sum -c %f %S,
+
+" GPG signature
+filetype {*.asc},<application/pgp-signature>
+       \ {Check signature}
+       \ !!gpg --verify %"c,
+
+" FuseZipMount
+filetype {*.zip,*.jar,*.war,*.ear,*.oxt,*.apkg},
+        \<application/zip,application/java-archive>
+        \ {Mount with fuse-zip}
+        \ FUSE_MOUNT|fuse-zip %SOURCE_FILE %DESTINATION_DIR,
+        \ {View contents}
+        \ zip -sf %"c | less,
+        \ {Extract here}
+        \ tar -xf %"c,
+fileviewer *.zip,*.jar,*.war,*.ear,*.oxt zip -sf %"c
+
+" ArchiveMount
+filetype {*.tar,*.tar.bz2,*.tbz2,*.tgz,*.tar.gz,*.tar.xz,*.txz,*.tar.zst,*.tzst},
+        \<application/x-tar>
+        \ {Mount with archivemount}
+        \ FUSE_MOUNT|archivemount %SOURCE_FILE %DESTINATION_DIR,
+fileviewer *.tgz,*.tar.gz tar -tzf %"c
+fileviewer *.tar.bz2,*.tbz2 tar -tjf %"c
+fileviewer *.tar.xz,*.txz tar -tJf %"c
+fileviewer *.tar.zst,*.tzst tar -t --zstd -f %"c
+fileviewer {*.tar},<application/x-tar> tar -tf %"c
+
+" Rar2FsMount and rar archives
+filetype {*.rar},<application/x-rar>
+       \ {Mount with rar2fs}
+       \ FUSE_MOUNT|rar2fs %SOURCE_FILE %DESTINATION_DIR,
+fileviewer {*.rar},<application/x-rar> unrar v %"c
+
+" IsoMount
+filetype {*.iso},<application/x-iso9660-image>
+       \ {Mount with fuseiso}
+       \ FUSE_MOUNT|fuseiso %SOURCE_FILE %DESTINATION_DIR,
+
+" SshMount
+filetype *.ssh
+       \ {Mount with sshfs}
+       \ FUSE_MOUNT2|sshfs %PARAM %DESTINATION_DIR %FOREGROUND,
+
+" FtpMount
+filetype *.ftp
+       \ {Mount with curlftpfs}
+       \ FUSE_MOUNT2|curlftpfs -o ftp_port=-,,disable_eprt %PARAM %DESTINATION_DIR %FOREGROUND,
+
+" Fuse7z and 7z archives
+filetype {*.7z},<application/x-7z-compressed>
+       \ {Mount with fuse-7z}
+       \ FUSE_MOUNT|fuse-7z %SOURCE_FILE %DESTINATION_DIR,
+fileviewer {*.7z},<application/x-7z-compressed> 7z l %"c
+
+" Office files
+filextype {*.odt,*.doc,*.docx,*.xls,*.xlsx,*.odp,*.pptx,*.ppt},
+         \<application/vnd.openxmlformats-officedocument.*,
+          \application/msword,
+          \application/vnd.ms-excel>
+        \ libreoffice %f &
+fileviewer {*.doc},<application/msword> catdoc %"c
+fileviewer {*.docx},
+          \<application/
+           \vnd.openxmlformats-officedocument.wordprocessingml.document>
+         \ docx2txt.pl %f -
+
+filextype <text/*> vim %"c
+
+" Syntax highlighting in preview
+"
+" Explicitly set highlight type for some extensions
+"
+" 256-color terminal
+" fileviewer *.[ch],*.[ch]pp highlight -O xterm256 -s dante --syntax c %"c
+" fileviewer Makefile,Makefile.* highlight -O xterm256 -s dante --syntax make %"c
+"
+" 16-color terminal
+" fileviewer *.c,*.h highlight -O ansi -s dante %"c
+"
+" Or leave it for automatic detection
+"
+fileviewer *[^/] pygmentize -O style=monokai -f console256 -g %"c
+
+filetype * xdg-open
+
+" ------------------------------------------------------------------------------
+
+" What should be saved automatically between vifm sessions.  Drop "savedirs"
+" value if you don't want vifm to remember last visited directories for you.
+set vifminfo=dhistory,chistory,state,tui,shistory,
+    \phistory,fhistory,dirstack,registers,bookmarks,bmarks
+
+
+" Start shell in current directory
+"nnoremap s :!screen -t %d<cr>
+nnoremap s :!tmux new-window -c %d<cr>
+
+" Display sorting dialog
+nnoremap S :sort<cr>
+
+" Toggle visibility of preview window
+nnoremap w :view<cr>
+vnoremap w :view<cr>gv
+
+nnoremap W :vsplit<cr>:view<cr>
+
+
+" Yank current directory path into the clipboard
+nnoremap yd :!echo %d | wl-copy<cr>
+" Yank current file path into the clipboard
+nnoremap yf :!echo %c:p | wl-copy<cr>
+
+set nowrap
+nnoremap - gh
+colorscheme palenight
+only
+nnoremap ~ 'h
+nnoremap <M-i> :histnext<cr>
+nnoremap Q :quit!<cr>
+
+" :mark mark /full/directory/path [filename]
+
+mark D ~/Documents
+mark d ~/Downloads
+mark l ~/Documents/Zim NLeSC
+mark c ~/Code
+
+" ------------------------------------------------------------------------------
+
+"set classify='  :dir:'
+"set classify+='🏃 :exe:'
+"set classify+=' :link:' " link
+"set classify+=' ::*.css::' " CSS
+"set classify+=' ::*.go::' " Go
+"set classify+=' ::*.html::' " HTML
+"set classify+=' ::*.java::' " Java
+"set classify+=' ::*.js::' " JavaScript
+"set classify+=' ::*.md::' " Markdown
+"set classify+=' ::*.py::' " Python
+"set classify+=' ::*.rb::' " Ruby
+"set classify+=' ::*.rs::' " Rust
+"set classify+=' ::*.sass::' " Sass
+
+
+
+set classify=' :dir:, :link:'
+
+set classify+=' ::.Trash::'
+set classify+=' ::.atom::'
+set classify+=' ::.bashprofile::'
+set classify+=' ::.bashrc::'
+set classify+=' ::.git::'
+set classify+=' ::.gitattributes::'
+set classify+=' ::.gitconfig::'
+set classify+=' ::.github::'
+set classify+=' ::.gitignore::'
+set classify+=' ::.gitmodules::'
+set classify+=' ::.rvm::'
+set classify+=' ::.vimrc::'
+set classify+=' ::.vscode::'
+set classify+=' ::.zshrc::'
+set classify+=' ::Cargo.lock::'
+set classify+=' ::bin::'
+set classify+=' ::config::'
+set classify+=' ::docker-compose.yml::'
+set classify+=' ::Dockerfile::'
+set classify+=' ::ds_store::'
+set classify+=' ::gitignore_global::'
+set classify+=' ::go.mod::'
+set classify+=' ::go.sum::'
+set classify+=' ::gradle::'
+set classify+=' ::gruntfile.coffee::'
+set classify+=' ::gruntfile.js::'
+set classify+=' ::gruntfile.ls::'
+set classify+=' ::gulpfile.coffee::'
+set classify+=' ::gulpfile.js::'
+set classify+=' ::gulpfile.ls::'
+set classify+=' ::hidden::'
+set classify+=' ::include::'
+set classify+=' ::lib::'
+set classify+=' ::localized::'
+set classify+=' ::Makefile::'
+set classify+=' ::node_modules::'
+set classify+=' ::npmignore::'
+set classify+=' ::PKGBUILD::'
+set classify+=' ::rubydoc::'
+set classify+=' ::yarn.lock::'
+
+set classify+=' ::*.ai::'
+set classify+=' ::*.android::'
+set classify+=' ::*.apk::'
+set classify+=' ::*.apple::'
+set classify+=' ::*.avi::'
+set classify+=' ::*.avif::'
+set classify+=' ::*.avro::'
+set classify+=' ::*.awk::'
+set classify+=' ::*.bash::'
+set classify+=' ::*.bash_history::'
+set classify+=' ::*.bash_profile::'
+set classify+=' ::*.bashrc::'
+set classify+=' ::*.bat::'
+set classify+=' ::*.bats::'
+set classify+=' ::*.bmp::'
+set classify+=' ::*.bz::'
+set classify+=' ::*.bz2::'
+set classify+=' ::*.c::'
+set classify+=' ::*.c++::'
+set classify+=' ::*.cab::'
+set classify+=' ::*.cc::'
+set classify+=' ::*.cfg::'
+set classify+=' ::*.class::'
+set classify+=' ::*.clj::'
+set classify+=' ::*.cljs::'
+set classify+=' ::*.cls::'
+set classify+=' ::*.cmd::'
+set classify+=' ::*.coffee::'
+set classify+=' ::*.conf::'
+set classify+=' ::*.cp::'
+set classify+=' ::*.cpio::'
+set classify+=' ::*.cpp::'
+set classify+=' ::*.cs::'
+set classify+=' ::*.csh::'
+set classify+=' ::*.cshtml::'
+set classify+=' ::*.csproj::'
+set classify+=' ::*.css::'
+set classify+=' ::*.csv::'
+set classify+=' ::*.csx::'
+set classify+=' ::*.cxx::'
+set classify+=' ::*.d::'
+set classify+=' ::*.dart::'
+set classify+=' ::*.db::'
+set classify+=' ::*.deb::'
+set classify+=' ::*.diff::'
+set classify+=' ::*.djvu::'
+set classify+=' ::*.dll::'
+set classify+=' ::*.doc::'
+set classify+=' ::*.docx::'
+set classify+=' ::*.ds_store::'
+set classify+=' ::*.DS_store::'
+set classify+=' ::*.dump::'
+set classify+=' ::*.ebook::'
+set classify+=' ::*.ebuild::'
+set classify+=' ::*.editorconfig::'
+set classify+=' ::*.ejs::'
+set classify+=' ::*.elm::'
+set classify+=' ::*.env::'
+set classify+=' ::*.eot::'
+set classify+=' ::*.epub::'
+set classify+=' ::*.erb::'
+set classify+=' ::*.erl::'
+set classify+=' ::*.ex::'
+set classify+=' ::*.exe::'
+set classify+=' ::*.exs::'
+set classify+=' ::*.fish::'
+set classify+=' ::*.flac::'
+set classify+=' ::*.flv::'
+set classify+=' ::*.font::'
+set classify+=' ::*.fs::'
+set classify+=' ::*.fsi::'
+set classify+=' ::*.fsx::'
+set classify+=' ::*.gdoc::'
+set classify+=' ::*.gem::'
+set classify+=' ::*.gemfile::'
+set classify+=' ::*.gemspec::'
+set classify+=' ::*.gform::'
+set classify+=' ::*.gif::'
+set classify+=' ::*.git::'
+set classify+=' ::*.gitattributes::'
+set classify+=' ::*.gitignore::'
+set classify+=' ::*.gitmodules::'
+set classify+=' ::*.go::'
+set classify+=' ::*.gradle::'
+set classify+=' ::*.groovy::'
+set classify+=' ::*.gsheet::'
+set classify+=' ::*.gslides::'
+set classify+=' ::*.guardfile::'
+set classify+=' ::*.gz::'
+set classify+=' ::*.h::'
+set classify+=' ::*.hbs::'
+set classify+=' ::*.hpp::'
+set classify+=' ::*.hs::'
+set classify+=' ::*.htm::'
+set classify+=' ::*.html::'
+set classify+=' ::*.hxx::'
+set classify+=' ::*.ico::'
+set classify+=' ::*.image::'
+set classify+=' ::*.img::'
+set classify+=' ::*.iml::'
+set classify+=' ::*.ini::'
+set classify+=' ::*.ipynb::'
+set classify+=' ::*.iso::'
+set classify+=' ::*.j2c::'
+set classify+=' ::*.j2k::'
+set classify+=' ::*.jad::'
+set classify+=' ::*.jar::'
+set classify+=' ::*.java::'
+set classify+=' ::*.jfi::'
+set classify+=' ::*.jfif::'
+set classify+=' ::*.jif::'
+set classify+=' ::*.jl::'
+set classify+=' ::*.jmd::'
+set classify+=' ::*.jp2::'
+set classify+=' ::*.jpe::'
+set classify+=' ::*.jpeg::'
+set classify+=' ::*.jpg::'
+set classify+=' ::*.jpx::'
+set classify+=' ::*.js::'
+set classify+=' ::*.json::'
+set classify+=' ::*.jsx::'
+set classify+=' ::*.jxl::'
+set classify+=' ::*.ksh::'
+set classify+=' ::*.latex::'
+set classify+=' ::*.less::'
+set classify+=' ::*.lhs::'
+set classify+=' ::*.license::'
+set classify+=' ::*.localized::'
+set classify+=' ::*.lock::'
+set classify+=' ::*.log::'
+set classify+=' ::*.lua::'
+set classify+=' ::*.lz::'
+set classify+=' ::*.lz4::'
+set classify+=' ::*.lzh::'
+set classify+=' ::*.lzma::'
+set classify+=' ::*.lzo::'
+set classify+=' ::*.m::'
+set classify+=' ::*.mm::'
+set classify+=' ::*.m4a::'
+set classify+=' ::*.markdown::'
+set classify+=' ::*.md::'
+set classify+=' ::*.mjs::'
+set classify+=' ::*.mk::'
+set classify+=' ::*.mkd::'
+set classify+=' ::*.mkv::'
+set classify+=' ::*.mobi::'
+set classify+=' ::*.mov::'
+set classify+=' ::*.mp3::'
+set classify+=' ::*.mp4::'
+set classify+=' ::*.msi::'
+set classify+=' ::*.mustache::'
+set classify+=' ::*.nix::'
+set classify+=' ::*.node::'
+set classify+=' ::*.npmignore::'
+set classify+=' ::*.odp::'
+set classify+=' ::*.ods::'
+set classify+=' ::*.odt::'
+set classify+=' ::*.ogg::'
+set classify+=' ::*.ogv::'
+set classify+=' ::*.otf::'
+set classify+=' ::*.part::'
+set classify+=' ::*.patch::'
+set classify+=' ::*.pdf::'
+set classify+=' ::*.php::'
+set classify+=' ::*.pl::'
+set classify+=' ::*.plx::'
+set classify+=' ::*.pm::'
+set classify+=' ::*.png::'
+set classify+=' ::*.pod::'
+set classify+=' ::*.ppt::'
+set classify+=' ::*.pptx::'
+set classify+=' ::*.procfile::'
+set classify+=' ::*.properties::'
+set classify+=' ::*.ps1::'
+set classify+=' ::*.psd::'
+set classify+=' ::*.pxm::'
+set classify+=' ::*.py::'
+set classify+=' ::*.pyc::'
+set classify+=' ::*.r::'
+set classify+=' ::*.rakefile::'
+set classify+=' ::*.rar::'
+set classify+=' ::*.razor::'
+set classify+=' ::*.rb::'
+set classify+=' ::*.rdata::'
+set classify+=' ::*.rdb::'
+set classify+=' ::*.rdoc::'
+set classify+=' ::*.rds::'
+set classify+=' ::*.readme::'
+set classify+=' ::*.rlib::'
+set classify+=' ::*.rmd::'
+set classify+=' ::*.rpm::'
+set classify+=' ::*.rs::'
+set classify+=' ::*.rspec::'
+set classify+=' ::*.rspec_parallel::'
+set classify+=' ::*.rspec_status::'
+set classify+=' ::*.rss::'
+set classify+=' ::*.rtf::'
+set classify+=' ::*.ru::'
+set classify+=' ::*.rubydoc::'
+set classify+=' ::*.sass::'
+set classify+=' ::*.scala::'
+set classify+=' ::*.scss::'
+set classify+=' ::*.sh::'
+set classify+=' ::*.shell::'
+set classify+=' ::*.slim::'
+set classify+=' ::*.sln::'
+set classify+=' ::*.so::'
+set classify+=' ::*.sql::'
+set classify+=' ::*.sqlite3::'
+set classify+=' ::*.sty::'
+set classify+=' ::*.styl::'
+set classify+=' ::*.stylus::'
+set classify+=' ::*.svg::'
+set classify+=' ::*.swift::'
+set classify+=' ::*.t::'
+set classify+=' ::*.tar::'
+set classify+=' ::*.taz::'
+set classify+=' ::*.tbz::'
+set classify+=' ::*.tbz2::'
+set classify+=' ::*.tex::'
+set classify+=' ::*.tgz::'
+set classify+=' ::*.tiff::'
+set classify+=' ::*.tlz::'
+set classify+=' ::*.toml::'
+set classify+=' ::*.torrent::'
+set classify+=' ::*.ts::'
+set classify+=' ::*.tsv::'
+set classify+=' ::*.tsx::'
+set classify+=' ::*.ttf::'
+set classify+=' ::*.twig::'
+set classify+=' ::*.txt::'
+set classify+=' ::*.txz::'
+set classify+=' ::*.tz::'
+set classify+=' ::*.tzo::'
+set classify+=' ::*.video::'
+set classify+=' ::*.vim::'
+set classify+='﵂ ::*.vue::'
+set classify+=' ::*.war::'
+set classify+=' ::*.wav::'
+set classify+=' ::*.webm::'
+set classify+=' ::*.webp::'
+set classify+=' ::*.windows::'
+set classify+=' ::*.woff::'
+set classify+=' ::*.woff2::'
+set classify+=' ::*.xhtml::'
+set classify+=' ::*.xls::'
+set classify+=' ::*.xlsx::'
+set classify+=' ::*.xml::'
+set classify+=' ::*.xul::'
+set classify+=' ::*.xz::'
+set classify+=' ::*.yaml::'
+set classify+=' ::*.yml::'
+set classify+=' ::*.zip::'
+set classify+=' ::*.zsh::'
+set classify+=' ::*.zsh-theme::'
+set classify+=' ::*.zshrc::'
+set classify+=' ::*.zst::'
+
