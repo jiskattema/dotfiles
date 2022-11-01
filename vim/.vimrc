@@ -19,7 +19,7 @@ set background=dark            " Dark background by default
 set backspace=indent,eol,start
 set belloff=all                " Bells are annoying
 set breakindent                " Wrap long lines *with* indentation
-set breakindentopt=shift:2
+set breakindentopt=shift:2,min:5,sbr
 "set clipboard=unnamed,unnamedplus
 set colorcolumn=81,82          " Highlight 81 and 82 columns                                                          
 set conceallevel=0             " Always show text normally
@@ -442,8 +442,6 @@ call quickui#menu#install('&Plugins', [
    \ [ "Ma&git\t\\g", 'execute "normal \\g"', 'Open Magit window (commit)' ],
    \ [ "Agi&t\t\\t", 'execute "normal \\t"', 'Open Agit window (log)' ],
    \ ['--','', '' ],
-   \ [ "&Clear keywords\t\\ca", 'call clearmatches()', 'Set keywords using \\#' ],
-   \ ['--', '', ''],
    \ ['Text stat&istics', 'call StylePrg()', 'runs GNU style on the current buffer' ],
    \ ['&Limelight', 'Limelight!!', 'Toggle limelight' ],
    \ ['&Unicoder', 'Unicoder', 'Use abbreviations to insert unicode characters'],
