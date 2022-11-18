@@ -3,6 +3,8 @@
 use str
 use github.com/muesli/elvish-libs/git
 
+var carapace_table = $nil
+
 # Editor
 
 ## use a smallish part of the screen for completion and history
@@ -43,6 +45,21 @@ set edit:insert:binding[Ctrl-l] = $edit:clear~
 set edit:insert:binding[Ctrl-/] = $edit:location:start~
 set edit:insert:binding[Ctrl-n] = $edit:navigation:start~
 set edit:insert:binding['Ctrl-['] = $edit:command:start~
+set edit:insert:binding['S-Tab'] = {
+  if $carapace_table {
+    # Use previously setup carapace table
+    set edit:completion:arg-completer = carapace_table
+  } else {
+    # Setup carapace for completion candidates
+    eval (carapace _carapace elvish | slurp)
+    set carapace_table = $edit:completion:arg-completer
+  }
+  $edit:completion:start~
+
+  # Remove all carapace bindings
+  # This way we fall back on the default filecompleter, no matter what.
+  set edit:completion:arg-completer = ( make-map [] )
+}
 
 ## command more : vi-like mode for insert
 set edit:command:binding['Enter'] = $edit:smart-enter~
@@ -82,9 +99,6 @@ set paths = [ $E:GOROOT/bin $E:GOPATH/bin $@paths ]
 set E:LD_LIBRARY_PATH = "/home/jiska/.local/lib:"$E:LD_LIBRARY_PATH
 set E:MANPATH = "/home/jiska/.local/share/man:"$E:MANPATH
 set paths = [ /home/jiska/.cargo/bin $@paths ]
-
-# Completion candidates
-eval (carapace _carapace elvish | slurp)
 
 # Completion matching
 set edit:completion:matcher[argument] = {|seed| edit:match-prefix $seed &ignore-case=$true }
