@@ -236,7 +236,7 @@ noremap <Leader><Leader> :call quickui#menu#open()<cr>
 
 " Navigate the jumplist with <M-i> instead of <C-i> with is Tab.
 " I've configured my terminal to send <M-i> for when i press <C-i>
-noremap i <C-i>
+nnoremap i <C-i>
 
 " Open a terminal with C-z (elvish terminal doesnt do backgrounding anyways)
 noremap  :execute "terminal ++close " . $GOPATH . "/bin/elvish"<CR>
