@@ -28,7 +28,7 @@ set edit:rprompt = {
 }
 
 # Aliasses
-set edit:command-abbr['ll'] = 'exa --color-scale --icons'
+fn ll { exa --color-scale --icons }
 
 fn from-yaml { yj -yj | from-json }
 fn from-toml { yj -tj | from-json }
