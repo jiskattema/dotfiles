@@ -4,6 +4,7 @@ use str
 use github.com/muesli/elvish-libs/git
 
 var carapace_table = $nil
+var insert_last_word_index = 0
 
 # Editor
 
@@ -45,10 +46,24 @@ set edit:insert:binding[Ctrl-l] = $edit:clear~
 set edit:insert:binding[Ctrl-/] = $edit:location:start~
 set edit:insert:binding[Ctrl-n] = $edit:navigation:start~
 set edit:insert:binding['Ctrl-['] = $edit:command:start~
+set edit:insert:binding[' '] = { set insert_last_word_index = 0 ; $edit:insert-at-dot~ ' ' }
+set edit:insert:binding['Alt-.'] = {
+  if (> $insert_last_word_index 0) {
+    $edit:kill-word-left~
+  }
+
+  var hist = [ ( $edit:command-history~ &cmd-only &newest-first ) ]
+  var full_cmd = $hist[ $insert_last_word_index ]
+  set insert_last_word_index = ( + $insert_last_word_index 1 )
+
+  var add = [( $edit:wordify~ $full_cmd )][ -1 ]
+  $edit:insert-at-dot~ $add
+}
+set edit:before-readline = [ $@edit:before-readline { set insert_last_word_index = 0 } ]
 set edit:insert:binding['S-Tab'] = {
   if $carapace_table {
     # Use previously setup carapace table
-    set edit:completion:arg-completer = carapace_table
+    set edit:completion:arg-completer = $carapace_table
   } else {
     # Setup carapace for completion candidates
     eval (carapace _carapace elvish | slurp)
