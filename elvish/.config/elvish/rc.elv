@@ -36,7 +36,7 @@ fn from-hcl { yj -cj | from-json }
 fn to-yaml { to-json | yj -jy }
 fn to-toml { to-json | yj -jt }
 fn to-hcl  { to-json | yj -jc }
-
+fn history { each {|item| put $item[cmd]} [($edit:command-history~)] }
 
 # Keybindings
 
