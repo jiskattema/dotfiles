@@ -35,19 +35,20 @@ set history=200                " Keep 200 changes of undo history
 set infercase                  " Smart casing when completing
 set ignorecase                 " Search in case-insensitively
 set noincsearch                " Dont go to search results immediately
-set laststatus=0               " Dont need a statusline
+set laststatus=1               " Dont need a statusline for one window
 set cmdheight=2                " More room for the status line
 set matchtime=5                " blink matching brackets for 5 tenths of a second
 set matchpairs=(:),{:},[:]
 set mouse=""                   " No mouse support in the terminal
 set mousehide                  " Hide mouse when typing text
-set nobackup                   " No backup files
+set nobackup                   " Backup files
 set noexrc                     " Disable reading of working directory vimrc files
 set hlsearch                   " Highlight search results by default
 set noshowmatch                " No jumping jumping cursors when matching pairs
 set showmode                   " No to showing mode in bottom-left corner
 set showcmd                    " Show keypresses in bottom-right
-set noswapfile                 " No backup files
+set swapfile                   " Use a swapfile for unsaved changes
+set dir=~/.vim/swap,.          " Store swapfiles here
 set wrapscan                   " Don't wrap searches around
 set nonumber                   " No line numbers
 set path=.,**/*                " Recursively search subdirectories
@@ -55,7 +56,7 @@ set wildignore+=**/env/**      " But dont look in virtualenvs, git repos, or npm
 set wildignore+=**/.git/**
 set wildignore+=**/node_modules/**
 set pumheight=20               " Height of complete list
-set norelativenumber           " No relative numbers
+set relativenumber             " Relative numbers
 set noruler                    " No ruler with column, row, percentage
 set shiftwidth=2               " Default indentation amount
 set shortmess=finxToOcImrwsS   " So dont use SlstWAqF
@@ -86,7 +87,7 @@ set listchars=eol:$,tab:>-,trail:-
 set nocursorline
 set cursorlineopt=both         " line number and buffer line
 set keywordprg=:DictPrg
-
+set splitkeep=screen
 " bug fix where elvish shell needs a space around the redirect, and bash accepts
 " both. Fixes netrw-gx command
 set shellredir=\ \>\ 
@@ -246,7 +247,8 @@ noremap  :execute "terminal ++close " . $GOPATH . "/bin/elvish"<CR>
 inoremap <expr> <C-K> col('.')>strlen(getline('.'))?"\<Lt>C-K>":"\<Lt>C-O>d$"
 
 " Close the preview window from insert mode
-inoremap <C-g><C-g> <Esc>:pclose<CR>gi
+inoremap <C-g><C-g> <C-o>:pclose<CR>
+nnoremap <C-g><C-g> :pclose<CR>
 
 " :terminal bindings
 command! -range -bar SendToTerm call s:send_to_term(join(getline(<line1>, <line2>), "\n"))
@@ -317,26 +319,37 @@ let g:signify_disable_by_default = 0
 
 " ALE
 let g:ale_disable_lsp = 1
-let g:ale_set_signs = 0
+let g:ale_set_signs = 1
+let g:ale_virtualtext_cursor = 0
+let g:ale_set_highlights = 0
 
 " vim-lsc
 let g:lsc_auto_map = {'defaults': v:true, 'NextReference': '', 'PreviousReference': ''}
 let g:lsc_reference_highlights = v:false
+let g:lsc_hover_popup = v:false
 let g:lsc_server_commands = {
   \ 'python': 'pylsp',
   \ 'go': $GOPATH . '/bin/gopls',
   \ 'elvish': $GOPATH . '/bin/elvish -lsp',
   \ }
 
+" vim-lsp
+let lspServers = [
+    \ #{
+    \    filetype: ['python'],
+    \    path: '/home/jiska/Code/exantic/env/bin/pylsp',
+    \    args: []
+    \  }
+    \ ]
+
 " vim-indentwise
 let g:indentwise_equal_indent_skips_contiguous = 0
 
 " emmet
-let g:user_emmet_leader_key = '<C-\>,'
 
 " vsnip
-let g:vsnip_snippet_dir = '~/.vim/bundle/friendly-snippets/snippets'
-let g:vsnip_snippet_dirs = ['~/.vim/bundle/friendly-snippets/snippets/python']
+"let g:vsnip_snippet_dir = '~/.vim/bundle/friendly-snippets/snippets'
+"let g:vsnip_snippet_dirs = ['~/.vim/bundle/friendly-snippets/snippets/python']
 
 " vim readline in inputmode
 " Disable META mappings because they break i_<Esc> timeouts for me
@@ -434,6 +447,7 @@ let g:quickui_color_scheme = 'papercol_dark'
 " items containing tips, tips will display in the cmdline
 call quickui#menu#install('&Plugins', [
    \ [ "&ALE toggle\t\\a", 'ALEToggle', 'Toggle automatic linting' ],
+   \ [ "ALE Fix\t\\=", ],
    \ ['--', '', '' ],
    \ [ "&Signify toggle\t\\s", 'SignifyToggle', 'Show linechanges in the gutter' ],
    \ [ "&Diff file\t\\d", 'SignifyDiff', 'Show diff in diff mode' ],
@@ -446,6 +460,8 @@ call quickui#menu#install('&Plugins', [
    \ ['&Limelight', 'Limelight!!', 'Toggle limelight' ],
    \ ['&Unicoder', 'Unicoder', 'Use abbreviations to insert unicode characters'],
    \ ['Show &Marks', 'ShowMarksToggle', 'Highlight marks'],
+   \ ['Tag&bar', 'TagbarToggle', 'Toggle tagbar' ],
+   \ ['&Emmet', 'packadd emmet-vim', 'Enable emmet'],
    \ ])
 
 " script inside %{...} will be evaluated and expanded in the string
@@ -468,6 +484,14 @@ call quickui#menu#install("&Options", [
    \ [ "\Auto format\tyof", "if &fo =~ 't' | set fo-=t | else | set fo+=t | endif"],
    \ [ "All options", 'options' ],
    \ ])
+
+call quickui#menu#install("&Extra", [
+      \ [ "Complete snippets\t<C-x><C-x>" ],
+      \ [ "Expand snippet\t<C-l>" ],
+      \ [ "Jump in snippet\t<Tab> <S-Tab>" ],
+      \ [ "--" ],
+      \ [ "Where am I?\t<Leader><?>" ]
+      \ ])
 
 " register HELP menu with weight 10000
 call quickui#menu#install('H&elp', [
