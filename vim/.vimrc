@@ -218,6 +218,11 @@ nmap <Leader>s :SignifyToggle<CR>
 nmap <Leader>b :TagbarToggle<CR>
 nmap <Leader>= :ALEFix <Tab><C-n>
 
+nnoremap <buffer> [R <Cmd>ALEFirst<CR>
+nnoremap <buffer> [r <Cmd>ALEPrevious<CR>
+nnoremap <buffer> ]r <Cmd>ALENext<CR>
+nnoremap <buffer> ]R <Cmd>ALELast<CR>
+
 nmap <silent>  :ls<CR>
 nmap <silent> \| :ls<CR>
 nmap <silent> <C-_> :call quickui#tools#list_buffer('e')<CR>
@@ -329,18 +334,46 @@ let g:lsc_reference_highlights = v:false
 let g:lsc_hover_popup = v:false
 let g:lsc_server_commands = {
   \ 'python': 'pylsp',
-  \ 'go': $GOPATH . '/bin/gopls',
-  \ 'elvish': $GOPATH . '/bin/elvish -lsp',
+  \ 'go': 'gopls',
+  \ 'elvish': 'elvish -lsp',
   \ }
 
 " vim-lsp
-let lspServers = [
-    \ #{
-    \    filetype: ['python'],
-    \    path: '/home/jiska/Code/exantic/env/bin/pylsp',
-    \    args: []
-    \  }
-    \ ]
+packadd lsp
+call LspAddServer([#{
+\    name: 'golang',
+\    filetype: ['go', 'gomod'],
+\    path: $GOPATH . 'gopls',
+\    args: ['serve'],
+\    syncInit: v:true
+\  },
+\  #{
+\    name: 'python',
+\    filetype: ['python'],
+\    path: 'pylsp',
+\    args: []
+\  }])
+
+call LspOptionsSet(#{
+\   aleSupport: v:false,
+\   completionMatcher: 'case'
+\   })
+
+nnoremap <buffer> gd <Cmd>LspGotoDefinition<CR>
+nnoremap <buffer> <C-W>gd <Cmd>topleft LspGotoDefinition<CR>
+
+nnoremap <buffer> gi <Cmd>LspGotoImpl<CR>
+nnoremap <buffer> gt <Cmd>LspGotoTypeDef<CR>
+
+nnoremap <buffer> [D <Cmd>LspDiagFirst<CR>
+nnoremap <buffer> [d <Cmd>LspDiagPrev<CR>
+nnoremap <buffer> ]d <Cmd>LspDiagNext<CR>
+nnoremap <buffer> ]D <Cmd>LspDiagLast<CR>
+
+nnoremap <buffer> d? <Cmd>LspDiagHere<CR>
+nnoremap <buffer> d/ <Cmd>LspDiagShow<CR>
+
+autocmd BufWinEnter quickfix nnoremap - <Cmd>lolder<CR>
 
 " vim-indentwise
 let g:indentwise_equal_indent_skips_contiguous = 0
@@ -495,7 +528,6 @@ call quickui#menu#install("&Extra", [
 
 " register HELP menu with weight 10000
 call quickui#menu#install('H&elp', [
-   \ ["LS&C bindings", 'help lsc-default-map', ''],
    \ ["&Cheatsheet", 'help index', ''],
    \ ['T&ips', 'help tips', ''],
    \ ['--',''],
