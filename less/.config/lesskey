@@ -1,0 +1,4 @@
+#commands
+w toggle-option S
+h left-scroll
+l right-scroll
