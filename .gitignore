@@ -2,4 +2,7 @@ README.sync_email
 vim/.vim/.netrwhist
 vim/.vim/spell/
 vim/.vim/thesaurus/
+vim/.vim/backup/
+vim/.vim/swap/
+vim/.vim/undo/
 w3m/.w3m/history
