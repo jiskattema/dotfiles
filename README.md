@@ -1,20 +1,25 @@
 # dotfiles
 Personal preferences and configuration
 
+Easily installed using [GNU stow](https://www.gnu.org/software/stow/).
+To install the config files from the ```less``` directory to you home dir use:
+```bash
+stow -t ~ less
+```
+
+## OS
+[Fedora](https://fedoraproject.org/) linux with a [Gnome](https://www.gnome.org/) desktop ;)
+
 ## Terminal configuration
 
-My bashrc, inputrc, and screenrc files.
-
-## Vim (Editor configuration)
-
-My vimrc and some helper scripts to generate tag files:
-  * markdown2ctags from https://github.com/jszakmeister/markdown2ctags
-  * rst2ctags.py from https://github.com/jszakmeister/rst2ctags.git
+My alacritty, tmux, elvish configurations.
+Also (now unused), my bashrc, inputrc, and screenrc files.
 
 ## Utilities
 
 Some standard tools:
-  * toprc
+* top (toprc)
+* less (lesskeys)
 
 ## SD Card
 ```bash
@@ -26,6 +31,7 @@ watch -d grep -e Dirty: -e Writeback: /proc/meminfo
 This is a list of key bindings that I find useful, but keep forgetting. (this list assumes you are using all of the configuration above)
 
 Normal mode:
+
 * Open menu bar '<Leader><Leader>'
 * Open the file browser window '-' (vim-vinegar / netrw)
 * Open the git window '<Leader>g' (jreybert/vimagit)
@@ -43,6 +49,7 @@ Normal mode:
 
 
 Insert Mode:
+
 * Increase / decrease indentation of current line with '<C-t>' and '<C-d>'
 * Exit insert mode for a single normal mode command '<C-o>'
 * XML template expansion '<C-y>,' (mattn/emmet-vim) also does snippets and
@@ -51,24 +58,28 @@ Insert Mode:
 
 
 Visual Mode:
+
 * Select block with the same indentation 'ii'
 * Go to the other end of the selection o and O
 * Select in all in/around () {} <> [] <tag></tag> ` '' "" with ia followed by bB<['"`t
 
 
 Diff mode:
+
 * Go to next/previous '[]c' (also when current file is in a git repo)
 * Put chunk dp
 * Get (obtain) chunk do 
 
 
 Ex mode(':'):
+
 * show key name: <C-k> <key>
 * show where a variable was last set: verbose set <variable>
 * search in completion <C-d>
 
 
 Completing:
+
 * Some vim built-in completers: dictionary (K), thesaurus (T), keyword (I), tags (]), files (F), omni (O)
 * next / previous entry <C-n>, <C-p>
 * Cancel <C-e>, Accept <C-y>
@@ -76,6 +87,7 @@ Completing:
 
 
 Netrw file browser:
+
 * '-' go to directory containing current file
 * 'gn' set directory as the tree root
 * 'gh' show or hide dotfiles
@@ -85,10 +97,12 @@ Netrw file browser:
 
 # Office productivity setup
 
-Make an App password for Office365 https://account.activedirectory.windowsazure.com/AppPasswords.aspx
-Make an App password for GMail
+For work, I'm using Office365 in Firefox ; Teams works better in chromium.
+Excel, Word, and Powerpoint run in a VM.
 
-Setup dovecot for a local IMAP server, providing offline email, and easier backup.
+To use email in a terminal:
+* Make an App password for [Office365](https://account.activedirectory.windowsazure.com/AppPasswords.aspx). Make an App password for GMail
+* Setup dovecot for a local IMAP server using ```.Maildir``` storage, providing offline email, and easier backup.
 
 ## Email
 
@@ -100,15 +114,14 @@ smtp.office365.com:587 with STARTLS
 
 aerc knows the default server settings for GMail.
 
-
 ## Calendar and Contacts
 
-Use davmail to connect to the Office365 for Business server.
-Use vdirsync to sync calendars and contacts to a local store.
+Too much hassle to get it syncing and working correctly.
 
-calcurse calender viewer
-khadr contact book
-
+* Use davmail to connect to the Office365 for Business server.
+* Use vdirsync to sync calendars and contacts to a local store.
+* calcurse calender viewer
+* khadr contact book
 
 # Git
 
@@ -149,35 +162,40 @@ bat -l md
 
 ## actually in use
 
-cmus     - music
-jq       - query (grep) json
-mdn      - markdown pager using pandoc/w3m 
-ncdu     - disc usage analyzer
-tmux     - terminal multiplexer
-exa      - ls alternative
+| Program | Description |
+|---------|-------------|
+| [alacritty](https://alacritty.org/)            |  terminal emulator |
+| [tmux](https://github.com/tmux/tmux/wiki)      |  terminal multiplexer |
+| [elvish](https://elv.sh/)                      |  bash alternative (shell) |
+| [vim](https://www.vim.org/)                    |  editor |
+| [vifm](https://vifm.info/)                     |  file manager |
+| [cmus](https://cmus.github.io/)                |  music |
+| [ncdu](https://dev.yorhel.nl/ncdu)             |  disc usage analyzer |
+| [exa](https://the.exa.website/)                |  ls alternative |
+| less                                           |  pager |
+| [btm](https://github.com/ClementTsang/bottom)  |  system monitor |
 
 ## used somewhat
 
-vifm     - file browser
-aerc     - email
-hxselect - query XML / HTML
-sc-im    - spread sheet
-w3m      - terminal webbrowser
+| Program  | Description |
+|----------|-------------|
+| [vimiv](https://karlch.github.io/vimiv/) | image viewer |
+| [aerc](https://aerc-mail.org/) | email |
+| jq       | query (grep) json |
+| w3m      | terminal webbrowser |
 
 ## could be useful
 
-bat      - cat replacement
-btop     - system monitor
-calcurse - calendar
-feh      - image viewer
-fzf      - fuzzy file finder
-googler  - search using Google
-pspg     - pager for tabular data
-toilet   - big text using ascii art
-
+| Program  | Description |
+|----------|-------------|
+| calcurse | calendar |
+| fzf      | fuzzy file finder |
+| googler  | search using Google |
+| sc-im    | spread sheet |
+| pspg     | pager for tabular data |
+| hxselect | query XML / HTML |
 
 # Resources
 
 [Bash arrays tips and tricks](https://www.shell-tips.com/bash/arrays/)
-
-
+[Basic Markdown syntax](https://www.markdownguide.org/basic-syntax/)
