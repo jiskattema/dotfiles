@@ -170,7 +170,7 @@ filextype <text/*> vim %"c
 "
 fileviewer *[^/] pygmentize -O style=monokai -f console256 -g %"c
 
-filetype * xdg-open
+filetype * xdg-open %"c
 
 " ------------------------------------------------------------------------------
 
