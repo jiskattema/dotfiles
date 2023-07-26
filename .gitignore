@@ -6,3 +6,10 @@ vim/.vim/backup/
 vim/.vim/swap/
 vim/.vim/undo/
 w3m/.w3m/history
+elvish/.config/elvish/db
+elvish/.config/elvish/lib
+vifm/.config/vifm/scripts/README
+vifm/.config/vifm/vifm-help.txt
+vifm/.config/vifm/vifminfo.json
+vim/.vim/pack/jiska/opt
+vim/.vim/pack
