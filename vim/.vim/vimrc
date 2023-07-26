@@ -53,6 +53,7 @@ set wrapscan                   " Don't wrap searches around
 set nonumber                   " No line numbers
 set path=.,**/*                " Recursively search subdirectories
 set wildignore+=**/env/**      " But dont look in virtualenvs, git repos, or npm directories
+set wildignore+=**/venv/**
 set wildignore+=**/.git/**
 set wildignore+=**/node_modules/**
 set pumheight=20               " Height of complete list
@@ -195,23 +196,10 @@ function NetrwNewNamedFile()
   call inputrestore()
   execute "NetrwKeepj e ".fnameescape(b:netrw_curdir."/".fname)
 endfunction
-
-function! s:complete_snippets() abort
-  let word_to_complete = matchstr(strpart(getline('.'), 0, col('.') - 1), '\S\+$')
-  let candidates = vsnip#get_complete_items(bufnr('%'))
-  let candidates = filter(candidates, 'stridx(v:val.word, word_to_complete)>=0')
-  let from_where = col('.') - len(word_to_complete)
-  if !empty(candidates)
-    call complete(from_where, candidates)
-  endif
-  return ''
-endfunction 
 " }}}
 
 "{{{ Mappings
 nmap <Leader>a :ALEToggle<CR>
-nmap <Leader>g :MagitOnly<CR>
-nmap <Leader>t :Agit<CR>
 nmap <Leader>d :SignifyDiff!<CR>
 nmap <Leader>h :SignifyHunkDiff<CR>
 nmap <Leader>s :SignifyToggle<CR>
@@ -265,17 +253,11 @@ nmap yrr <Plug>(send-to-term-line)
 nmap yr <Plug>(send-to-term)
 xmap R <Plug>(send-to-term)
 
-" vsnip: Expand or jump
-imap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
-smap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
-
-" vsnip: Jump forward or backward
+"" vsnip: Jump forward or backward
 imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
 smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
 imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
 smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
-
-inoremap <silent> <C-x><C-x> <C-r>=<SID>complete_snippets()<cr>
 
 " vorg
 nmap <F12> :set ft=vorg<CR>
@@ -355,23 +337,46 @@ call LspAddServer([#{
 \  }])
 
 call LspOptionsSet(#{
-\   aleSupport: v:false,
-\   completionMatcher: 'case'
+\   completionMatcher: 'case',
+\   showDiagOnStatusLine: v:true,
+\   hoverInPreview: v:true,
+\   diagSignWarningText: '> ',
+\   diagSignInfoText: '- ',
+\   diagSignHintText: '+ ',
+\   diagSignErrorText: '>>',
+\   ultisnipsSupport: v:false,
+\   vsnipSupport: v:true,
+\   snippetSupport: v:true,
 \   })
 
-nnoremap <buffer> gd <Cmd>LspGotoDefinition<CR>
-nnoremap <buffer> <C-W>gd <Cmd>topleft LspGotoDefinition<CR>
+nnoremap <C-L>d <Cmd>LspGotoDefinition<CR>
+nnoremap <C-L>i <Cmd>LspGotoImpl<CR>
+nnoremap <C-L>t <Cmd>LspGotoTypeDef<CR>
 
-nnoremap <buffer> gi <Cmd>LspGotoImpl<CR>
-nnoremap <buffer> gt <Cmd>LspGotoTypeDef<CR>
+nnoremap <C-L>D <Cmd>topleft LspPeekDefinition<CR>
+nnoremap <C-L>I <Cmd>topleft LspPeekImpl<CR>
+nnoremap <C-L>T <Cmd>topleft LspPeekTypeDef<CR>
 
-nnoremap <buffer> [D <Cmd>LspDiagFirst<CR>
-nnoremap <buffer> [d <Cmd>LspDiagPrev<CR>
-nnoremap <buffer> ]d <Cmd>LspDiagNext<CR>
-nnoremap <buffer> ]D <Cmd>LspDiagLast<CR>
+nnoremap <C-L>s <Cmd>LspDocumentSymbol<CR>
+nnoremap <C-L>r <Cmd>LspShowReferences<CR>
 
-nnoremap <buffer> d? <Cmd>LspDiagHere<CR>
-nnoremap <buffer> d/ <Cmd>LspDiagShow<CR>
+nnoremap <C-L><C-L> <Cmd>call LspOptionsSet(#{hoverInPreview: v:false})<bar>LspHover<CR>
+nnoremap <C-L>l <Cmd>call LspOptionsSet(#{hoverInPreview: v:false})<bar>LspHover<CR>
+nnoremap <C-L>L <Cmd>call LspOptionsSet(#{hoverInPreview: v:true})<bar>LspHover<CR>
+
+nnoremap [V <Cmd>LspDiagFirst<CR>
+nnoremap [v <Cmd>LspDiagPrev<CR>
+nnoremap ]v <Cmd>LspDiagNext<CR>
+nnoremap ]V <Cmd>LspDiagLast<CR>
+
+nnoremap <C-L>? <Cmd>LspDiagHere<CR>
+nnoremap <C-L>/ <Cmd>LspDiagShow<CR>
+
+nnoremap <silent> <PageUp> <C-w>P<C-y><C-w>W
+nnoremap <silent> <PageDown> <C-w>P<C-e><C-w>W
+
+
+autocmd User LspAttached setlocal tagfunc=lsp#lsp#TagFunc
 
 autocmd BufWinEnter quickfix nnoremap - <Cmd>lolder<CR>
 
@@ -485,9 +490,6 @@ call quickui#menu#install('&Plugins', [
    \ [ "&Signify toggle\t\\s", 'SignifyToggle', 'Show linechanges in the gutter' ],
    \ [ "&Diff file\t\\d", 'SignifyDiff', 'Show diff in diff mode' ],
    \ [ "Diff &hunk\t\\h", 'SignifyHunkDiff', 'Show diff in a popup' ],
-   \ ['--',''],
-   \ [ "Ma&git\t\\g", 'execute "normal \\g"', 'Open Magit window (commit)' ],
-   \ [ "Agi&t\t\\t", 'execute "normal \\t"', 'Open Agit window (log)' ],
    \ ['--','', '' ],
    \ ['Text stat&istics', 'call StylePrg()', 'runs GNU style on the current buffer' ],
    \ ['&Limelight', 'Limelight!!', 'Toggle limelight' ],
@@ -518,12 +520,14 @@ call quickui#menu#install("&Options", [
    \ [ "All options", 'options' ],
    \ ])
 
-call quickui#menu#install("&Extra", [
-      \ [ "Complete snippets\t<C-x><C-x>" ],
-      \ [ "Expand snippet\t<C-l>" ],
-      \ [ "Jump in snippet\t<Tab> <S-Tab>" ],
-      \ [ "--" ],
-      \ [ "Where am I?\t<Leader><?>" ]
+call quickui#menu#install("&LSP", [
+      \ [ "Goto definition\t<C-l>d" ],
+      \ [ "Goto implementation\t<C-l>i" ],
+      \ [ "Goto type definition\t<C-l>t" ],
+      \ [ "---" ],
+      \ [ "Find document symbol\t<C-l>s" ],
+      \ [ "Find references\t<C-l>r" ],
+      \ [ "Documentation\t<C-l>l" ],
       \ ])
 
 " register HELP menu with weight 10000

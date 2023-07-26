@@ -28,7 +28,8 @@ set edit:rprompt = {
 }
 
 # Aliasses
-fn ll { exa --color-scale --icons }
+set edit:abbr['exaa'] = 'exa --color always --icons --sort changed -l'
+fn ll { exa --color always --icons }
 
 fn from-yaml { yj -yj | from-json }
 fn from-toml { yj -tj | from-json }
@@ -105,10 +106,10 @@ set edit:history:binding[Ctrl-n] = $edit:history:down~  # dont enter navigation 
 
 # Environment
 
-## Go
-set E:GOROOT = $E:HOME/Code/go/goroot
-set E:GOPATH = $E:HOME/Code/go/gopath
-set paths = [ $E:GOROOT/bin $E:GOPATH/bin $@paths ]
+# ## Go
+# set E:GOROOT = /usr/lib/golang
+# set E:GOPATH = $E:HOME/Code/go/gopath
+# set paths = [ $E:GOROOT/bin $E:GOPATH/bin $@paths ]
 
 ## Paths
 set E:LD_LIBRARY_PATH = "/home/jiska/.local/lib:"$E:LD_LIBRARY_PATH

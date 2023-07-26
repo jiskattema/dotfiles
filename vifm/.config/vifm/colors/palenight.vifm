@@ -27,3 +27,9 @@ highlight Device	cterm=bold,standout	ctermfg=000	ctermbg=011
 highlight Fifo		cterm=none	ctermfg=003	ctermbg=default
 highlight Socket	cterm=bold	ctermfg=005	ctermbg=default
 
+highlight CmpMismatch  cterm=bold ctermfg=red     ctermbg=default
+highlight CmpUnmatched cterm=bold ctermfg=green   ctermbg=default
+highlight CmpBlank     cterm=none ctermfg=default ctermbg=default
+
+highlight OtherLine cterm=italic ctermfg=default ctermbg=default
+
