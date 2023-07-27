@@ -12,19 +12,46 @@ stow -t ~ less
 
 ## Terminal configuration
 
-My alacritty, tmux, elvish configurations.
-Also (now unused), my bashrc, inputrc, and screenrc files.
+My alacritty (terminal emulator), tmux (multiplexer), elvish (shell) configurations.
+Also (now unused), my bashrc, readline (inputrc), and screenrc files.
 
-## Utilities
+# Terminal / ncursus based tools
 
-Some standard tools:
-* top (toprc)
-* less (lesskeys)
+## actually in use
 
-## SD Card
-```bash
-watch -d grep -e Dirty: -e Writeback: /proc/meminfo
-```
+| Program | Description |
+|---------|-------------|
+| [alacritty](https://alacritty.org/)            |  terminal emulator |
+| [tmux](https://github.com/tmux/tmux/wiki)      |  terminal multiplexer |
+| [elvish](https://elv.sh/)                      |  bash alternative (shell) |
+| [vim](https://www.vim.org/)                    |  editor |
+| [vifm](https://vifm.info/)                     |  file manager |
+| [cmus](https://cmus.github.io/)                |  music |
+| [ncdu](https://dev.yorhel.nl/ncdu)             |  disc usage analyzer |
+| [exa](https://the.exa.website/)                |  ls alternative |
+| less                                           |  pager |
+| [btm](https://github.com/ClementTsang/bottom)  |  system monitor |
+
+## used somewhat
+
+| Program  | Description |
+|----------|-------------|
+| [vimiv](https://karlch.github.io/vimiv/) | image viewer |
+| [aerc](https://aerc-mail.org/) | email |
+| jq       | query (grep) json |
+| w3m      | terminal webbrowser |
+
+## could be useful
+
+| Program  | Description |
+|----------|-------------|
+| calcurse | calendar |
+| fzf      | fuzzy file finder |
+| googler  | search using Google |
+| sc-im    | spread sheet |
+| pspg     | pager for tabular data |
+| hxselect | query XML / HTML |
+
 
 # Vim cheat-sheet
 
@@ -34,7 +61,6 @@ Normal mode:
 
 * Open menu bar '<Leader><Leader>'
 * Open the file browser window '-' (vim-vinegar / netrw)
-* Open the git window '<Leader>g' (jreybert/vimagit)
 * Go to the next/previous location <C-o>, <C-i> (built-in jump list)
 * Go to the next/previous change in the file 'g;' and 'g,' (built-in changes list)
 * Go to the start/end of the last selection "'<" and "'>"
@@ -94,6 +120,37 @@ Netrw file browser:
 * 'v' / 'o' open file in split buffer
 * '%' edit new file at the displayed location
 
+# Pagers, Pipes, and Colors
+First of all, make sure your terminal and configuration allow the use of fancy
+colors. The ```rainbow.sh``` script should print a colorful line with a rainbow
+like color gradient.
+
+When used in pipes, color often is lost.
+This because programs detect they connected to a pipe instead of a TTY, and do
+not produce any colors.  Depending on the program, you force colorized output:
+
+```
+grep --color=always
+git grep --color=always
+ls --color=always
+exa --color=always
+jq -C
+```
+
+Secondly, colors are lost and the output is garbled.  Assuming the terminal
+supports color, this happens because final step in the pipe does not pass on the
+escape sequences in raw format.
+You can force less to do that using:
+```
+less -R
+```
+
+Less has some other useful features:
+
+* turn on/off line wrapping with ```w```
+* only show files matching a regexp with ```&```, and for __not__ the matching
+  the regexp start it with ```!```.
+
 
 # Office productivity setup
 
@@ -123,79 +180,19 @@ Too much hassle to get it syncing and working correctly.
 * calcurse calender viewer
 * khadr contact book
 
-# Git
+## SD Card
 
+GNOME used to be optimistic when copying to SD cards; to see if an operation is
+actually finished, use:
 
+```bash
+watch -d grep -e Dirty: -e Writeback: /proc/meminfo
 ```
-git log --graph --pretty=format:'%h - %d %s (%cr) <%an>' | vim -R -c 'set filetype=git nowrap' -
-```
-
-
-# Pagers, Pipes, and Colors
-
-When used in pipes, color often is lost.
-This because programs detect they connected to a pipe instead of a TTY, and do
-not produce any colors.  Depending on the program, you force colorized output:
-```
-grep --color=always
-git grep --color=always
-jq -C
-```
-
-Secondly, colors are lost and the output is garbled.  Assuming the terminal
-supports color, this happens because final step in the pipe does not pass on the
-escape sequences in raw format.
-You can force less to do that using:
-```
-less -R
-```
-
-Finally, some pagers add colors themselves.  The color scheme is based on an
-argument, because due to the pipe there is no filename, no extentions and hence
-no filetype.
-```
-bat -l md
-```
-
-
-# terminal / ncursus tools
-
-## actually in use
-
-| Program | Description |
-|---------|-------------|
-| [alacritty](https://alacritty.org/)            |  terminal emulator |
-| [tmux](https://github.com/tmux/tmux/wiki)      |  terminal multiplexer |
-| [elvish](https://elv.sh/)                      |  bash alternative (shell) |
-| [vim](https://www.vim.org/)                    |  editor |
-| [vifm](https://vifm.info/)                     |  file manager |
-| [cmus](https://cmus.github.io/)                |  music |
-| [ncdu](https://dev.yorhel.nl/ncdu)             |  disc usage analyzer |
-| [exa](https://the.exa.website/)                |  ls alternative |
-| less                                           |  pager |
-| [btm](https://github.com/ClementTsang/bottom)  |  system monitor |
-
-## used somewhat
-
-| Program  | Description |
-|----------|-------------|
-| [vimiv](https://karlch.github.io/vimiv/) | image viewer |
-| [aerc](https://aerc-mail.org/) | email |
-| jq       | query (grep) json |
-| w3m      | terminal webbrowser |
-
-## could be useful
-
-| Program  | Description |
-|----------|-------------|
-| calcurse | calendar |
-| fzf      | fuzzy file finder |
-| googler  | search using Google |
-| sc-im    | spread sheet |
-| pspg     | pager for tabular data |
-| hxselect | query XML / HTML |
 
 # Resources
 
-[Bash arrays tips and tricks](https://www.shell-tips.com/bash/arrays/)
-[Basic Markdown syntax](https://www.markdownguide.org/basic-syntax/)
+Manpages are not always the quickest way to find information; I found the following FAQs
+and tutorials to be useful:
+
+- [Bash arrays tips and tricks](https://www.shell-tips.com/bash/arrays/)
+- [Basic Markdown syntax](https://www.markdownguide.org/basic-syntax/)
