@@ -212,12 +212,26 @@ nnoremap yd :!echo %d | wl-copy<cr>
 nnoremap yf :!echo %c:p | wl-copy<cr>
 
 set nowrap
+" use '-' to go up one directory ; this matches my NetRW binding
 nnoremap - gh
-colorscheme palenight
-only
+
+" use '~' to go home
 nnoremap ~ 'h
+
+colorscheme palenight
+
+" start with one window
+only
+
+" work-around as, <C-i> is a tab, i've configured my terminal to send <M-i> when i press control-i.
 nnoremap <M-i> :histnext<cr>
+
+" Quit with Q
 nnoremap Q :quit!<cr>
+
+" scroll the other window by a line (mostly the 'view' window) using page up/down
+nnoremap <PageUp> <C-w><C-w>k<C-w><C-w>
+nnoremap <PageDown> <C-w><C-w>j<C-w><C-w>
 
 " :mark mark /full/directory/path [filename]
 
