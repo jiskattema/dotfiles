@@ -26,6 +26,12 @@ set wildmenu
 " Display completions in a form of popup with descriptions of the matches
 set wildstyle=popup
 
+" Ruler shows total, selected, and filtered count
+set rulerformat='%l/%S %[+%x %]'
+
+" Dont show '.' and '..' directories
+set dotdirs=
+
 " Display suggestions in normal, visual and view modes for keys, marks and
 " registers (at most 5 files).  In other view, when available.
 set suggestoptions=normal,visual,view,otherpane,keys,marks,registers
