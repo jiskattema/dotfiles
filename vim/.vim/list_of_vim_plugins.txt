@@ -1,0 +1,89 @@
+pack/jiska/opt/TempKeyword/.git/config
+	url = https://github.com/BlueCatMe/TempKeyword.git
+pack/jiska/opt/Vundle.vim/.git/config
+	url = https://github.com/VundleVim/Vundle.vim.git
+pack/jiska/opt/editorconfig-vim/.git/config
+	url = https://github.com/editorconfig/editorconfig-vim.git
+pack/jiska/opt/emmet-vim/.git/config
+	url = https://github.com/mattn/emmet-vim.git
+	url = https://github.com/mattn/emmet-vim
+pack/jiska/opt/gnugo.vim/.git/config
+	url = https://github.com/AndrewRadev/gnugo.vim.git
+pack/jiska/opt/new-moon.vim/.git/config
+	url = git@github.com:jiskattema/new-moon.vim.git
+pack/jiska/opt/papercolor-theme/.git/config
+	url = https://github.com/NLKNguyen/papercolor-theme.git
+pack/jiska/opt/vim-doge/.git/config
+	url = https://github.com/kkoomen/vim-doge.git
+pack/jiska/opt/vim-easy-align/.git/config
+	url = https://github.com/junegunn/vim-easy-align.git
+pack/jiska/opt/vim-gutentags/.git/config
+	url = https://github.com/ludovicchabant/vim-gutentags.git
+pack/jiska/opt/vim-lsc/.git/config
+	url = https://github.com/natebosch/vim-lsc.git
+pack/jiska/opt/vim-ninja-feet/.git/config
+	url = https://github.com/tommcdo/vim-ninja-feet.git
+pack/jiska/opt/vim-searchindex/.git/config
+	url = https://github.com/google/vim-searchindex.git
+pack/jiska/start/ale/.git/config
+	url = https://github.com/dense-analysis/ale.git
+pack/jiska/start/elvish.vim/.git/config
+	url = https://github.com/dmix/elvish.vim.git
+pack/jiska/start/friendly-snippets/.git/config
+	url = https://github.com/rafamadriz/friendly-snippets.git
+pack/jiska/start/limelight.vim/.git/config
+	url = https://github.com/junegunn/limelight.vim.git
+pack/jiska/start/lsp/.git/config
+	url = https://github.com/yegappan/lsp.git
+pack/jiska/start/tagbar/.git/config
+	url = https://github.com/preservim/tagbar.git
+pack/jiska/start/textobj-word-column.vim/.git/config
+	url = https://github.com/coderifous/textobj-word-column.vim.git
+pack/jiska/start/undotree/.git/config
+	url = https://github.com/mbbill/undotree.git
+pack/jiska/start/vim-characterize/.git/config
+	url = https://github.com/tpope/vim-characterize.git
+pack/jiska/start/vim-commentary/.git/config
+	url = https://github.com/tpope/vim-commentary.git
+pack/jiska/start/vim-fakeclip/.git/config
+	url = https://github.com/kana/vim-fakeclip.git
+pack/jiska/start/vim-highlighter/.git/config
+	url = https://github.com/azabiong/vim-highlighter.git
+pack/jiska/start/vim-indent-object/.git/config
+	url = https://github.com/michaeljsmith/vim-indent-object.git
+pack/jiska/start/vim-indentwise/.git/config
+	url = https://github.com/jeetsukumaran/vim-indentwise.git
+pack/jiska/start/vim-matchup/.git/config
+	url = https://github.com/andymass/vim-matchup.git
+pack/jiska/start/vim-mkdir/.git/config
+	url = https://github.com/pbrisbin/vim-mkdir.git
+pack/jiska/start/vim-quickui/.git/config
+	url = https://github.com/skywind3000/vim-quickui.git
+pack/jiska/start/vim-repeat/.git/config
+	url = https://github.com/tpope/vim-repeat.git
+pack/jiska/start/vim-rsi/.git/config
+	url = https://github.com/tpope/vim-rsi.git
+pack/jiska/start/vim-search/.git/config
+	url = https://github.com/lacygoill/vim-search.git
+pack/jiska/start/vim-showmarks/.git/config
+	url = git@github.com:jiskattema/vim-showmarks.git
+pack/jiska/start/vim-signify/.git/config
+	url = https://github.com/mhinz/vim-signify.git
+pack/jiska/start/vim-speeddating/.git/config
+	url = https://github.com/tpope/vim-speeddating.git
+pack/jiska/start/vim-surround/.git/config
+	url = https://github.com/tpope/vim-surround.git
+pack/jiska/start/vim-unicoder/.git/config
+	url = git@github.com:jiskattema/vim-unicoder.git
+pack/jiska/start/vim-unimpaired/.git/config
+	url = https://github.com/tpope/vim-unimpaired.git
+pack/jiska/start/vim-vinegar/.git/config
+	url = https://github.com/tpope/vim-vinegar.git
+pack/jiska/start/vim-vorg/.git/config
+	url = git@github.com:jiskattema/vim-vorg-md.git
+pack/jiska/start/vim-vsnip/.git/config
+	url = https://github.com/hrsh7th/vim-vsnip.git
+pack/jiska/start/vim-vsnip-integ/.git/config
+	url = https://github.com/hrsh7th/vim-vsnip-integ.git
+pack/jiska/start/vim-zimwiki-syntax/.git/config
+	url = https://github.com/joanrivera/vim-zimwiki-syntax.git
