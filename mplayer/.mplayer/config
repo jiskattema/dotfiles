@@ -1,0 +1,4 @@
+# Write your default config options here!
+
+# OSD progress bar vertical alignment
+progbar-align=90
