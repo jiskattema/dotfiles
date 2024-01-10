@@ -342,6 +342,13 @@ call LspAddServer([#{
 \    filetype: ['python'],
 \    path: 'pylsp',
 \    args: []
+\  },
+\  #{
+\    name: 'Languagetool',
+\    filetype: ['text', 'markdown'],
+\    path: '/home/jiska/Code/ltex-ls/ltex-ls-16.0.0/bin/ltex-ls',
+\    args: ['--log-file=/home/jiska/'],
+\    syncInit: v:true
 \  }])
 
 call LspOptionsSet(#{
