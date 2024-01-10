@@ -302,6 +302,15 @@ let g:showmarks_textupper="unicode"
 " Hilight lower & upper marks
 let showmarks_hlline_lower = 1
 let showmarks_hlline_upper = 1 
+
+" imitate Readline / vim-rsi
+" but make original <C-A> available
+inoremap        <C-A> <C-O>^
+inoremap <expr> <C-E> pumvisible()?"\<Lt>C-E>":"\<Lt>End>"
+inoremap        <C-B> <Left>
+inoremap        <C-F> <Right>
+inoremap   <C-X><C-A> <C-A>
+
 " }}}
 
 "{{{ Configure plugins
@@ -401,10 +410,6 @@ let g:indentwise_equal_indent_skips_contiguous = 0
 " vsnip
 "let g:vsnip_snippet_dir = '~/.vim/bundle/friendly-snippets/snippets'
 "let g:vsnip_snippet_dirs = ['~/.vim/bundle/friendly-snippets/snippets/python']
-
-" vim readline in inputmode
-" Disable META mappings because they break i_<Esc> timeouts for me
-let g:rsi_no_meta = 1
 
 let g:gutentags_define_advanced_commands = 1
 
