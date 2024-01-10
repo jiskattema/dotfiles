@@ -248,7 +248,6 @@ vmap <Enter> <Plug>(EasyAlign)
 
 nnoremap Q :q<CR>
 
-nnoremap <expr> gb '`[' . strpart(getregtype(), 0, 1) . '`]'
 
 " hit leader twice to open menu
 noremap <Leader><Leader> :call quickui#menu#open()<cr>
