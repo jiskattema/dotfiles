@@ -330,16 +330,6 @@ let g:netrw_list_hide='\(^\|\s\s\)\zs\.\S\+'
 " Signify
 let g:signify_disable_by_default = 0
 
-" vim-lsc
-let g:lsc_auto_map = {'defaults': v:true, 'NextReference': '', 'PreviousReference': ''}
-let g:lsc_reference_highlights = v:false
-let g:lsc_hover_popup = v:false
-let g:lsc_server_commands = {
-  \ 'python': 'pylsp',
-  \ 'go': 'gopls',
-  \ 'elvish': 'elvish -lsp',
-  \ }
-
 " vim-lsp
 packadd lsp
 call LspAddServer([#{
@@ -402,12 +392,6 @@ autocmd BufWinEnter quickfix nnoremap - <Cmd>lolder<CR>
 
 " vim-indentwise
 let g:indentwise_equal_indent_skips_contiguous = 0
-
-" emmet
-
-" vsnip
-"let g:vsnip_snippet_dir = '~/.vim/bundle/friendly-snippets/snippets'
-"let g:vsnip_snippet_dirs = ['~/.vim/bundle/friendly-snippets/snippets/python']
 
 let g:gutentags_define_advanced_commands = 1
 
