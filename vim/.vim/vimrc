@@ -228,10 +228,9 @@ nmap <Leader>h :SignifyHunkDiff<CR>
 nmap <Leader>s :SignifyToggle<CR>
 nmap <Leader>b :TagbarToggle<CR>
 
-
-nmap <silent>  :ls<CR>
+nmap <silent>  :Vifm<CR>
 nmap <silent> \| :ls<CR>
-nmap <silent> <C-_> :call quickui#tools#list_buffer('e')<CR>
+nmap <silent> <C-_> :ls<CR>
 
 nmap yoe :set invruler<CR>
 nmap yof :if &fo =~ 'a' \| set fo-=at \| else \| set fo+=at \| endif<CR>
@@ -239,8 +238,7 @@ nmap <silent> <S-CR> za
 
 vmap <Enter> <Plug>(EasyAlign)
 
-nnoremap Q :q<CR>
-
+nnoremap Q :bdel<CR>
 
 " hit leader twice to open menu
 noremap <Leader><Leader> :call quickui#menu#open()<cr>
@@ -291,7 +289,7 @@ let g:showmarks_enable = 0
 let showmarks_include = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 " Ignore help, quickfix, non-modifiable buffers
-let showmarks_ignore_type = "hqm"
+let showmarks_ignore_type = "h"
 
 let g:showmarks_textlower="unicode"
 let g:showmarks_textupper="unicode"
@@ -325,6 +323,7 @@ let g:netrw_preview = 1
 let g:netrw_list_hide='\(^\|\s\s\)\zs\.\S\+'
 "let g:netrw_liststyle = 3
 "let g:netrw_list_hide.=netrw_gitignore#Hide()
+nnoremap <BS> :edit .<CR>
 
 " Signify
 let g:signify_disable_by_default = 0
