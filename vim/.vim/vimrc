@@ -224,17 +224,11 @@ endfunction
 " }}}
 
 "{{{ Mappings
-nmap <Leader>a :ALEToggle<CR>
 nmap <Leader>d :SignifyDiff!<CR>
 nmap <Leader>h :SignifyHunkDiff<CR>
 nmap <Leader>s :SignifyToggle<CR>
 nmap <Leader>b :TagbarToggle<CR>
-nmap <Leader>= :ALEFix <Tab><C-n>
 
-nnoremap <buffer> [R <Cmd>ALEFirst<CR>
-nnoremap <buffer> [r <Cmd>ALEPrevious<CR>
-nnoremap <buffer> ]r <Cmd>ALENext<CR>
-nnoremap <buffer> ]R <Cmd>ALELast<CR>
 
 nmap <silent>  :ls<CR>
 nmap <silent> \| :ls<CR>
@@ -328,12 +322,6 @@ let g:netrw_list_hide='\(^\|\s\s\)\zs\.\S\+'
 
 " Signify
 let g:signify_disable_by_default = 0
-
-" ALE
-let g:ale_disable_lsp = 1
-let g:ale_set_signs = 1
-let g:ale_virtualtext_cursor = 0
-let g:ale_set_highlights = 0
 
 " vim-lsc
 let g:lsc_auto_map = {'defaults': v:true, 'NextReference': '', 'PreviousReference': ''}
@@ -509,9 +497,6 @@ let g:quickui_color_scheme = 'papercol_dark'
 
 " items containing tips, tips will display in the cmdline
 call quickui#menu#install('&Plugins', [
-   \ [ "&ALE toggle\t\\a", 'ALEToggle', 'Toggle automatic linting' ],
-   \ [ "ALE Fix\t\\=", ],
-   \ ['--', '', '' ],
    \ [ "&Signify toggle\t\\s", 'SignifyToggle', 'Show linechanges in the gutter' ],
    \ [ "&Diff file\t\\d", 'SignifyDiff', 'Show diff in diff mode' ],
    \ [ "Diff &hunk\t\\h", 'SignifyHunkDiff', 'Show diff in a popup' ],
