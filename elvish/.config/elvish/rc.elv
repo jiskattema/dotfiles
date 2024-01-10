@@ -12,19 +12,34 @@ var insert_last_word_index = 0
 set edit:max-height = 10
 
 ## prompt
-set edit:rprompt = {
-  var info = ( git:status )
-  if (!=s $info[branch-name] '') {
-    put $info[branch-name] ' '
-  }
+# 
+set edit:prompt = {
   if (!=s $E:VIRTUAL_ENV '') {
      var env_root = (str:trim-suffix $E:VIRTUAL_ENV '/env')
      if (str:has-prefix $pwd $env_root) {
-       put '  '
+       put (styled ' Π ' green dim)
      } else {
-       put '  '
+       put (styled ' Π ' red)
      }
-   } 
+   } else {
+     put (styled ' » ' dim)
+   }
+}
+
+set edit:rprompt = {
+  fn trunc { |s &width=30|
+    if (> (count $s) $width) {
+      put '…'$s[-$width..]  
+    } else {
+    put $s
+    }
+  }
+
+  put (styled ' '(trunc (tilde-abbr $pwd))' ' italic dim)
+  var info = ( git:status )
+  if (!=s $info[branch-name] '') {
+    put '  ' $info[branch-name] ' '
+  }
 }
 
 # Aliasses
