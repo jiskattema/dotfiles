@@ -161,7 +161,7 @@ command -nargs=? G call GitGrep(<f-args>)
 function Vifm()
   " Get a list of filenames from Vifm
   let tmp = tempname()
-  silent execute('!vifm --choose-files ' . tmp)
+  silent execute('silent !vifm --choose-files ' . tmp)
   let mylist = readfile(tmp)
   call delete(tmp)
 
@@ -181,7 +181,6 @@ function Vifm()
   endif
 endfunction
 command Vifm call Vifm()
-nmap - :Vifm<CR>
 
 function! s:op(type, ...)
   let [sel, rv, rt] = [&selection, @@, getregtype('"')]
