@@ -81,7 +81,7 @@ set viminfofile=.git/viminfo
 set wildcharm=<Tab>            " Defines the trigger for 'wildmenu' in mappings
 set wildmenu                   " Nice command completions
 set wildmode=longest:full
-set wildoptions=tagfile
+set wildoptions=
 set nowrap                     " Do not wrap long lines
 set cryptmethod=blowfish2
 set listchars=eol:$,tab:>-,trail:-
@@ -272,10 +272,8 @@ nmap yr <Plug>(send-to-term)
 xmap R <Plug>(send-to-term)
 
 "" vsnip: Jump forward or backward
-imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
-smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
-imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
-smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+inoremap <expr>   <Tab> pumvisible() ? "\<C-n>" : vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)' : '<Tab>'
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)' : '<S-Tab>'
 
 " vorg
 nmap <F12> :set ft=vorg<CR>
