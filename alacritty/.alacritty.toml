@@ -1,0 +1,67 @@
+[colors.bright]
+black = "0x777C85"
+blue = "0x6AB0F3"
+cyan = "0x76D4D6"
+green = "0x76D4D6"
+magenta = "0xE1A6F2"
+red = "0xF2777A"
+white = "0xFFFFFF"
+yellow = "0xFFEEA6"
+
+[colors.normal]
+black = "0x2D2D2D"
+blue = "0x6AB0F3"
+cyan = "0x76D4D6"
+green = "0x92D192"
+magenta = "0xE1A6F2"
+red = "0xF2777A"
+white = "0xB3B9C5"
+yellow = "0xFFD479"
+
+[colors.primary]
+background = "0x2D2D2D"
+foreground = "0xB3B9C5"
+
+[font]
+size = 19.0
+
+[font.normal]
+family = "Blex Mono Nerd Font"
+
+[[keyboard.bindings]]
+chars = "\u001B[13;2u"
+key = "Return"
+mods = "Shift"
+
+[[keyboard.bindings]]
+action = "ToggleFullscreen"
+key = "Return"
+mods = "Control"
+
+[[keyboard.bindings]]
+chars = "\u001B[105;5u"
+key = "I"
+mods = "Control"
+
+[[keyboard.bindings]]
+chars = "\u001B[106;5u"
+key = "J"
+mods = "Control"
+
+[[keyboard.bindings]]
+chars = "\u001B[109;5u"
+key = "M"
+mods = "Control"
+
+[mouse]
+hide_when_typing = true
+
+[scrolling]
+history = 0
+multiplier = 0
+
+[selection]
+save_to_clipboard = true
+
+[window]
+decorations = "none"
