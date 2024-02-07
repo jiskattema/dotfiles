@@ -31,6 +31,7 @@ Also (now unused), my bashrc, readline (inputrc), and screenrc files.
 | [exa](https://the.exa.website/)                |  ls alternative |
 | less                                           |  pager |
 | [btm](https://github.com/ClementTsang/bottom)  |  system monitor |
+| qalc | calculator and unit conversion |
 
 ## used somewhat
 
