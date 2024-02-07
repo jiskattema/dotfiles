@@ -177,7 +177,7 @@ function Vifm()
     endfor
 
     " Start editing the first file
-    first
+    first!
   endif
 endfunction
 command Vifm call Vifm()
@@ -220,6 +220,26 @@ function NetrwNewNamedFile()
   call inputrestore()
   execute "NetrwKeepj e ".fnameescape(b:netrw_curdir."/".fname)
 endfunction
+
+" from https://github.com/biosugar0/vim-popyank
+function PopupToPreview()
+    let popup = popup_list()
+    if len(popup)  == 0
+        return ""
+    endif
+    let p = popup[0]
+    let winID = winbufnr(p)
+    let pBuffer = getbufline(winID,1,"$")
+    call popup_clear()
+    if len(pBuffer)  != 0
+        let tmp = tempname()
+        call writefile(pBuffer, tmp)
+        exec "pedit " . tmp
+        call delete(tmp)
+    endif
+endfunction
+command PopupToPreview call PopupToPreview()
+imap <C-L> <C-O>:PopupToPreview<CR>
 " }}}
 
 "{{{ Mappings
@@ -228,9 +248,16 @@ nmap <Leader>h :SignifyHunkDiff<CR>
 nmap <Leader>s :SignifyToggle<CR>
 nmap <Leader>b :TagbarToggle<CR>
 
+nmap <Leader>1 :normal 1gt<CR>
+nmap <Leader>2 :normal 2gt<CR>
+nmap <Leader>3 :normal 3gt<CR>
+nmap <Leader>4 :normal 4gt<CR>
+nmap <Leader>5 :normal 5gt<CR>
+
 nmap <silent>  :Vifm<CR>
-nmap <silent> \| :ls<CR>
-nmap <silent> <C-_> :ls<CR>
+nmap <silent> \| :edit .<CR>
+"nmap <silent> <C-_> :ls<CR>
+nmap <silent> <C-_> :Bufselect<CR>
 
 nmap yoe :set invruler<CR>
 nmap yof :if &fo =~ 'a' \| set fo-=at \| else \| set fo+=at \| endif<CR>
@@ -238,7 +265,7 @@ nmap <silent> <S-CR> za
 
 vmap <Enter> <Plug>(EasyAlign)
 
-nnoremap Q :bdel<CR>
+nnoremap Q :q<CR>
 
 " hit leader twice to open menu
 noremap <Leader><Leader> :call quickui#menu#open()<cr>
@@ -323,7 +350,6 @@ let g:netrw_preview = 1
 let g:netrw_list_hide='\(^\|\s\s\)\zs\.\S\+'
 "let g:netrw_liststyle = 3
 "let g:netrw_list_hide.=netrw_gitignore#Hide()
-nnoremap <BS> :edit .<CR>
 
 " Signify
 let g:signify_disable_by_default = 0
@@ -347,7 +373,7 @@ call LspAddServer([#{
 \    name: 'Languagetool',
 \    filetype: ['text', 'markdown'],
 \    path: '/home/jiska/Code/ltex-ls/ltex-ls-16.0.0/bin/ltex-ls',
-\    args: ['--log-file=/home/jiska/'],
+\    args: [],
 \    syncInit: v:true
 \  }])
 
@@ -387,8 +413,10 @@ nnoremap ]V <Cmd>LspDiagLast<CR>
 nnoremap <C-L>? <Cmd>LspDiagHere<CR>
 nnoremap <C-L>/ <Cmd>LspDiagShow<CR>
 
-nnoremap <silent> <PageUp> <C-w>P<C-y><C-w>W
-nnoremap <silent> <PageDown> <C-w>P<C-e><C-w>W
+nnoremap <silent> <pageup> <c-w>p<c-y><c-w>w
+nnoremap <silent> <pagedown> <c-w>p<c-e><c-w>w
+inoremap <silent> <pageup> <C-[><c-w>p<c-y><c-w>wgi
+inoremap <silent> <pagedown> <C-[><c-w>p<c-e><c-w>wgi
 
 
 autocmd User LspAttached setlocal tagfunc=lsp#lsp#TagFunc
@@ -479,6 +507,8 @@ augroup send_to_term
         \   let t:send_to_term = +expand('<abuf>') |
         \ endif
 augroup END
+
+autocmd BufEnter * if &previewwindow | set wrap | endif
 " }}}
 
 "{{{ Quick menu

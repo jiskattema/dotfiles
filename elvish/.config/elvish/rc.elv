@@ -61,6 +61,7 @@ use readline-binding
 set edit:insert:binding[Ctrl-l] = $edit:clear~
 set edit:insert:binding[Ctrl-/] = $edit:location:start~
 set edit:insert:binding[Ctrl-n] = $edit:navigation:start~
+set edit:insert:binding[Ctrl-o] = $edit:command:start~
 set edit:insert:binding['Ctrl-['] = $edit:command:start~
 set edit:insert:binding[' '] = { set insert_last_word_index = 0 ; $edit:insert-at-dot~ ' ' }
 set edit:insert:binding['Alt-.'] = {
@@ -92,12 +93,13 @@ set edit:insert:binding['S-Tab'] = {
   set edit:completion:arg-completer = ( make-map [] )
 }
 
-## command more : vi-like mode for insert
+## command mode : vi-like mode for insert
 set edit:command:binding['Enter'] = $edit:smart-enter~
 set edit:command:binding[a] = { $edit:move-dot-right~ ; $edit:close-mode~ }
 set edit:command:binding[A] = { $edit:move-dot-eol~ ; $edit:close-mode~ }
+set edit:command:binding[c] = { $edit:kill-word-right~ ; $edit:close-mode~ }
 
-## completion mode Tab
+## completion mode
 set edit:completion:binding = ( $edit:binding-table~ [
   &Ctrl-p=$edit:completion:up~
   &Ctrl-n=$edit:completion:down~
@@ -105,16 +107,19 @@ set edit:completion:binding = ( $edit:binding-table~ [
   &Ctrl-l=$edit:completion:right~
   &Tab=   $edit:completion:down-cycle~
   &S-Tab= $edit:completion:up-cycle~
-  &' '=   $edit:completion:accept~
-  &Enter= { $edit:completion:accept~ ; $edit:smart-enter~ }
-  &Ctrl-y={ $edit:completion:accept~ ; $edit:completion:start~ }
+  &' '=   { $edit:completion:accept~ ; $edit:insert-at-dot~ ' '}
+  &Ctrl-y={ $edit:completion:accept~ ; $edit:insert-at-dot~ ' '; $edit:completion:start~ }
 ])
 
 ## navigation mode Ctrl-n
+set edit:navigation:width-ratio = [ 1 10 1 ]
+
 set edit:navigation:binding[Ctrl-h] = $edit:navigation:left~
 set edit:navigation:binding[Ctrl-l] = $edit:navigation:right~
 set edit:navigation:binding[Ctrl-y] = { $edit:navigation:insert-selected~ ; $edit:navigation:down~ }
 set edit:navigation:binding[Alt-h] = $edit:navigation:trigger-shown-hidden~
+set edit:navigation:binding[PageUp] = $edit:navigation:file-preview-up~
+set edit:navigation:binding[PageDown] = $edit:navigation:file-preview-down~
 
 ## history mode Ctrl-r
 set edit:history:binding[Ctrl-n] = $edit:history:down~  # dont enter navigation mode from history

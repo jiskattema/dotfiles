@@ -1,6 +1,8 @@
 " vim: filetype=vifm :
-
 set cpoptions-=t
+
+" Use sh as shell, elvish + vifm combination has a bug in quoting spaces
+set shell=/usr/bin/sh
 
 " Command used to edit files in various contexts.
 set vicmd=vim
@@ -162,31 +164,21 @@ fileviewer {*.docx},
 filextype <text/*> vim %"c
 
 " Syntax highlighting in preview
-"
-" Explicitly set highlight type for some extensions
-"
-" 256-color terminal
-" fileviewer *.[ch],*.[ch]pp highlight -O xterm256 -s dante --syntax c %"c
-" fileviewer Makefile,Makefile.* highlight -O xterm256 -s dante --syntax make %"c
-"
-" 16-color terminal
-" fileviewer *.c,*.h highlight -O ansi -s dante %"c
-"
-" Or leave it for automatic detection
-"
-fileviewer *[^/] pygmentize -O style=monokai -f console256 -g %"c
+fileviewer *[^/] highlight -O truecolor --style zenburn %"c
 
-filetype {*.jpg,*.jpeg,*.png,*.gif},<image/*> vimiv -f %"c 2> /dev/null
+filetype {*.jpg,*.jpeg,*.png,*.gif},<image/*> vimiv %"c 2> /dev/null
 filextype {*.avi,*.mp4,*.wmv,*.dat,*.3gp,*.ogv,*.mkv,*.mpg,*.mpeg,*.vob,
            \*.fl[icv],*.m2v,*.mov,*.webm,*.ts,*.mts,*.m4v,*.r[am],*.qt,*.divx,
            \*.as[fx]},
            \<video/*>
-           \ mplayer -fs %"c
+           \ xdg-open %"c
+"           \ mplayer -fs %"c
 filetype * xdg-open %"c
 
 " Directory previewing
 "fileviewer */,.*/ tree -L 2 -I .git %"c
 fileviewer */,.*/ eza --tree --level 3 --icons --color always %"c
+
 " ------------------------------------------------------------------------------
 
 " What should be saved automatically between vifm sessions.  Drop "savedirs"
@@ -194,6 +186,8 @@ fileviewer */,.*/ eza --tree --level 3 --icons --color always %"c
 set vifminfo=dhistory,chistory,state,tui,shistory,
     \phistory,fhistory,dirstack,registers,bookmarks,bmarks
 
+" Select from current directory using vimiv
+command SelectVimiv :select !vimiv %"f 2> /dev/null
 
 " Start shell in selected directy, or on directory of selected file
 "nnoremap s :!screen -t %d<cr>
@@ -211,12 +205,13 @@ nnoremap W :vsplit<cr>:view<cr>
 
 " Yank current directory path into the clipboard
 nnoremap yd :!echo %d | wl-copy<cr>
+
 " Yank current file path into the clipboard
 nnoremap yf :!echo %c:p | wl-copy<cr>
 
 set nowrap
-" use '-' to go up one directory ; this matches my NetRW binding
-nnoremap - gh
+" use backspace to go up one directory ; this matches my NetRW binding
+nnoremap <BS> gh
 
 " use '~' to go home
 nnoremap ~ 'h
@@ -243,6 +238,7 @@ mark h ~
 mark d ~/Downloads
 mark l ~/Documents/Zim NLeSC
 mark c ~/Code
+mark m /var/run/media/jiska
 
 " ------------------------------------------------------------------------------
 
@@ -562,3 +558,4 @@ set classify+=' ::*.zsh::'
 set classify+=' ::*.zsh-theme::'
 set classify+=' ::*.zshrc::'
 set classify+=' ::*.zst::'
+
