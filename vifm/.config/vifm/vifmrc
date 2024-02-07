@@ -184,6 +184,9 @@ filextype {*.avi,*.mp4,*.wmv,*.dat,*.3gp,*.ogv,*.mkv,*.mpg,*.mpeg,*.vob,
            \ mplayer -fs %"c
 filetype * xdg-open %"c
 
+" Directory previewing
+"fileviewer */,.*/ tree -L 2 -I .git %"c
+fileviewer */,.*/ eza --tree --level 3 --icons --color always %"c
 " ------------------------------------------------------------------------------
 
 " What should be saved automatically between vifm sessions.  Drop "savedirs"
@@ -559,4 +562,3 @@ set classify+=' ::*.zsh::'
 set classify+=' ::*.zsh-theme::'
 set classify+=' ::*.zshrc::'
 set classify+=' ::*.zst::'
-

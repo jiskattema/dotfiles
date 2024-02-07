@@ -28,7 +28,7 @@ Also (now unused), my bashrc, readline (inputrc), and screenrc files.
 | [vifm](https://vifm.info/)                     |  file manager |
 | [cmus](https://cmus.github.io/)                |  music |
 | [ncdu](https://dev.yorhel.nl/ncdu)             |  disc usage analyzer |
-| [exa](https://the.exa.website/)                |  ls alternative |
+| [eza](https://github.com/eza-community/eza)    |  ls alternative |
 | less                                           |  pager |
 | [btm](https://github.com/ClementTsang/bottom)  |  system monitor |
 | qalc | calculator and unit conversion |
@@ -134,7 +134,7 @@ not produce any colors.  Depending on the program, you force colorized output:
 grep --color=always
 git grep --color=always
 ls --color=always
-exa --color=always
+eza --color=always
 jq -C
 ```
 

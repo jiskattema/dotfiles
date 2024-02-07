@@ -43,8 +43,8 @@ set edit:rprompt = {
 }
 
 # Aliasses
-set edit:abbr['exaa'] = 'exa --color always --icons --sort changed -l'
-fn ll { exa --color always --icons }
+set edit:abbr['sll'] = 'eza --color always --icons -l --sort none'
+fn sl { |@rest| eza --color always --icons $@rest }
 
 fn from-yaml { yj -yj | from-json }
 fn from-toml { yj -tj | from-json }
