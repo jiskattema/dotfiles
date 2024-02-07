@@ -13,3 +13,5 @@ vifm/.config/vifm/vifm-help.txt
 vifm/.config/vifm/vifminfo.json
 vim/.vim/pack/jiska/opt
 vim/.vim/pack
+_skip/LOG_imapsync
+_skip
