@@ -58,6 +58,7 @@ fn history { each {|item| put $item[cmd]} [($edit:command-history~)] }
 
 ## insert mode : use readline with some modifications
 use readline-binding
+set edit:insert:binding[Ctrl-u] = { eza --icons }
 set edit:insert:binding[Ctrl-l] = $edit:clear~
 set edit:insert:binding[Ctrl-/] = $edit:location:start~
 set edit:insert:binding[Ctrl-n] = $edit:navigation:start~
@@ -107,8 +108,7 @@ set edit:completion:binding = ( $edit:binding-table~ [
   &Ctrl-l=$edit:completion:right~
   &Tab=   $edit:completion:down-cycle~
   &S-Tab= $edit:completion:up-cycle~
-  &' '=   { $edit:completion:accept~ ; $edit:insert-at-dot~ ' '}
-  &Ctrl-y={ $edit:completion:accept~ ; $edit:insert-at-dot~ ' '; $edit:completion:start~ }
+  &Ctrl-y={ $edit:completion:accept~ ; $edit:completion:start~ }
 ])
 
 ## navigation mode Ctrl-n
@@ -153,3 +153,6 @@ fn venv { |&p=env|
   set paths = [ $pabs/bin $@paths ]
   set-env VIRTUAL_ENV $pabs
 }
+
+set edit:abbr['~dd'] = ( date +%Y%m%d )
+set edit:abbr['~Dd'] = ( date +%Y-%m-%d )
