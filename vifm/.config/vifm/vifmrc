@@ -216,6 +216,8 @@ nnoremap <BS> gh
 " use '~' to go home
 nnoremap ~ 'h
 
+map R :rename<CR>
+
 colorscheme palenight
 
 " start with one window
