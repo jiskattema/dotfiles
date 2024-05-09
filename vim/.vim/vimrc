@@ -265,6 +265,8 @@ nmap <silent> <S-CR> za
 
 vmap <Enter> <Plug>(EasyAlign)
 
+nmap <Ins> yop
+
 nnoremap Q :q<CR>
 
 " hit leader twice to open menu
