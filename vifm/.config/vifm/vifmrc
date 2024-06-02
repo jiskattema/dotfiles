@@ -72,7 +72,7 @@ fileviewer {*.avi,*.mp4,*.wmv,*.dat,*.3gp,*.ogv,*.mkv,*.mpg,*.mpeg,*.vob,
 fileviewer {*.html,*.htm},<text/html> w3m
 fileviewer {*.o},<application/x-object> nm %f | less
 fileviewer {*.[1-8]},<text/troff> man ./%c
-fileviewer {*.jpg,*.jpeg,*.png,*.gif},<image/*> catimg -t -w 80 %"c
+fileviewer {*.jpg,*.jpeg,*.png,*.gif},<image/*> catimg -r 2 -w 100 %"c
 fileviewer {*.bmp,*.xpm},<image/*> identify %f
 
 " MD5
@@ -191,17 +191,12 @@ command SelectVimiv :select !vimiv %"f 2> /dev/null
 
 " Start shell in selected directy, or on directory of selected file
 "nnoremap s :!screen -t %d<cr>
-nnoremap s :if filetype('.') == 'dir' | execute '!tmux new-window -c %"c'  | elseif filetype('.') == 'reg' | execute '!tmux new-window -c %"d' | endif<cr>
+nnoremap \s :if filetype('.') == 'dir' | execute '!tmux new-window -c %"c'  | elseif filetype('.') == 'reg' | execute '!tmux new-window -c %"d' | endif<cr>
+
+nnoremap \v :view<CR>
 
 " Display sorting dialog
-nnoremap S :sort<cr>
-
-" Toggle visibility of preview window
-nnoremap w :view<cr>
-vnoremap w :view<cr>gv
-
-nnoremap W :vsplit<cr>:view<cr>
-
+nnoremap \S :sort<cr>
 
 " Yank current directory path into the clipboard
 nnoremap yd :!echo %d | wl-copy<cr>
@@ -216,7 +211,9 @@ nnoremap <BS> gh
 " use '~' to go home
 nnoremap ~ 'h
 
-map R :rename<CR>
+nnoremap \R :rename<CR>
+nnoremap \M :move -skip<CR>
+nnoremap \C :copy -skip<CR>
 
 colorscheme palenight
 
