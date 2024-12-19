@@ -60,8 +60,9 @@ fn history { each {|item| put $item[cmd]} [($edit:command-history~)] }
 use readline-binding
 set edit:insert:binding[Ctrl-u] = { eza --icons }
 set edit:insert:binding[Ctrl-l] = $edit:clear~
-set edit:insert:binding[Ctrl-/] = $edit:location:start~
+set edit:insert:binding[Ctrl-f] = $edit:location:start~
 set edit:insert:binding[Ctrl-n] = $edit:navigation:start~
+set edit:insert:binding[Ctrl-p] = $edit:history:start~
 set edit:insert:binding[Ctrl-o] = $edit:command:start~
 set edit:insert:binding['Ctrl-['] = $edit:command:start~
 set edit:insert:binding[' '] = { set insert_last_word_index = 0 ; $edit:insert-at-dot~ ' ' }

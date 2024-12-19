@@ -21,7 +21,7 @@ set belloff=all                " Bells are annoying
 set breakindent                " Wrap long lines *with* indentation
 set breakindentopt=shift:2,min:5,sbr
 "set clipboard=unnamed,unnamedplus
-set colorcolumn=81,82          " Highlight 81 and 82 columns                                                          
+set colorcolumn=81,82          " Highlight 81 and 82 columns
 set conceallevel=0             " Always show text normally
 set complete=.,w,b,u,t         " Sources for term and line completions
 set completeopt=menu,menuone,noinsert,noselect
@@ -52,10 +52,10 @@ set dir=~/.vim/swap,.          " Store swapfiles here
 set wrapscan                   " Don't wrap searches around
 set nonumber                   " No line numbers
 set path=.,**/*                " Recursively search subdirectories
-set wildignore+=**/env/**      " But dont look in virtualenvs, git repos, or npm directories
+set wildignore+=**/env/**      " But dont look in virtualenvs
 set wildignore+=**/venv/**
-set wildignore+=**/.git/**
-set wildignore+=**/node_modules/**
+set wildignore+=**/.git/**     "     ...git repos
+set wildignore+=**/node_modules/** " ...npm directories
 set pumheight=20               " Height of complete list
 set relativenumber             " Relative numbers
 set noruler                    " No ruler with column, row, percentage
@@ -254,10 +254,9 @@ nmap <Leader>3 :normal 3gt<CR>
 nmap <Leader>4 :normal 4gt<CR>
 nmap <Leader>5 :normal 5gt<CR>
 
-nmap <silent>  :Vifm<CR>
-nmap <silent> \| :edit .<CR>
+nmap <silent> <Leader>- :Vifm<CR>
+nmap <silent> - :Bufselect<CR>
 "nmap <silent> <C-_> :ls<CR>
-nmap <silent> <C-_> :Bufselect<CR>
 
 nmap yoe :set invruler<CR>
 nmap yof :if &fo =~ 'a' \| set fo-=at \| else \| set fo+=at \| endif<CR>
@@ -334,7 +333,6 @@ inoremap <expr> <C-E> pumvisible()?"\<Lt>C-E>":"\<Lt>End>"
 inoremap        <C-B> <Left>
 inoremap        <C-F> <Right>
 inoremap   <C-X><C-A> <C-A>
-
 " }}}
 
 "{{{ Configure plugins
@@ -369,6 +367,12 @@ call LspAddServer([#{
 \    name: 'python',
 \    filetype: ['python'],
 \    path: 'pylsp',
+\    args: []
+\  },
+\  #{
+\    name: 'shell',
+\    filetype: ['sh'],
+\    path: '/home/jiska/.local/bin/bash-lsp.sh',
 \    args: []
 \  },
 \  #{
@@ -423,7 +427,8 @@ inoremap <silent> <pagedown> <C-[><c-w>p<c-e><c-w>wgi
 
 autocmd User LspAttached setlocal tagfunc=lsp#lsp#TagFunc
 
-autocmd BufWinEnter quickfix nnoremap - <Cmd>lolder<CR>
+autocmd BufWinEnter quickfix nnoremap <buffer> - <Cmd>colder<CR>
+autocmd BufWinEnter quickfix nnoremap <buffer> - <Cmd>lolder<CR>
 
 " vim-indentwise
 let g:indentwise_equal_indent_skips_contiguous = 0
@@ -590,4 +595,6 @@ execute "set <xDown>=\<Esc>[@;*B"
 execute "set <xRight>=\<Esc>[@;*C"
 execute "set <xLeft>=\<Esc>[@;*D"
 
+" Try using Kitty keyboard protocol
+set kpc=alacritty:kitty
 " vim: fdm=marker foldlevel=0 fileencoding=utf-8
