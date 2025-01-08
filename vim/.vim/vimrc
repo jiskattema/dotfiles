@@ -408,6 +408,12 @@ var tagbar_type_vorg = {
 # }}}
 
 # {{{ Autocommands
+
+augroup tmux_clipboard
+  autocmd!
+  autocmd TextYankPost * call system("tmux load-buffer -", @")
+augroup END
+
 # TODO: how to tell if the window contains a quickfix and location list?
 augroup QuickFixHistory
   autocmd!
