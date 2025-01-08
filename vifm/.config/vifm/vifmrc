@@ -204,6 +204,11 @@ nnoremap yd :!echo %d | wl-copy<cr>
 " Yank current file path into the clipboard
 nnoremap yf :!echo %c:p | wl-copy<cr>
 
+" Leader-l More informative columns
+nnoremap \L :set viewcolumns=-{name}..,6{size},11{perms}<CR>
+nnoremap \l :set viewcolumns=<CR>
+" Leader space to set the directory of the other pane to that of the current pane
+nmap \<Space> <Space>:cd %"C<CR><Space>
 set nowrap
 " use backspace to go up one directory ; this matches my NetRW binding
 nnoremap <BS> gh
@@ -557,4 +562,3 @@ set classify+=' ::*.zsh::'
 set classify+=' ::*.zsh-theme::'
 set classify+=' ::*.zshrc::'
 set classify+=' ::*.zst::'
-
