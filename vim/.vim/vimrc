@@ -411,7 +411,7 @@ var tagbar_type_vorg = {
 
 augroup tmux_clipboard
   autocmd!
-  autocmd TextYankPost * call system("tmux load-buffer -", @")
+  autocmd TextYankPost * if len(@") > 3 | call system("tmux load-buffer -", @") | endif
 augroup END
 
 # TODO: how to tell if the window contains a quickfix and location list?

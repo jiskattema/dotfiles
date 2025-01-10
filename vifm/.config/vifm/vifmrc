@@ -198,10 +198,10 @@ nnoremap \v :view<CR>
 nnoremap \s :sort<cr>
 
 " Yank current directory path into the clipboard
-nnoremap yd :!echo %d | wl-copy<cr>
+nnoremap yd :!echo -n %d | tmux load-buffer -<cr>
 
 " Yank current file path into the clipboard
-nnoremap yf :!echo %c:p | wl-copy<cr>
+nnoremap yf :!echo -n %c:p | tmux load-buffer -<cr>
 
 " Leader-l More informative columns
 nnoremap \L :set viewcolumns=-{name}..,6{size},11{perms}<CR>
