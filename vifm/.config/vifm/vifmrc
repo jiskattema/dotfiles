@@ -190,13 +190,12 @@ set vifminfo=dhistory,chistory,state,tui,shistory,
 command SelectVimiv :select !vimiv %"f 2> /dev/null
 
 " Start shell in selected directy, or on directory of selected file
-"nnoremap s :!screen -t %d<cr>
-nnoremap \s :if filetype('.') == 'dir' | execute '!tmux new-window -c %"c'  | elseif filetype('.') == 'reg' | execute '!tmux new-window -c %"d' | endif<cr>
+"nnoremap \s :if filetype('.') == 'dir' | execute '!tmux new-window -c %"c'  | elseif filetype('.') == 'reg' | execute '!tmux new-window -c %"d' | endif<cr>
 
 nnoremap \v :view<CR>
 
 " Display sorting dialog
-nnoremap \S :sort<cr>
+nnoremap \s :sort<cr>
 
 " Yank current directory path into the clipboard
 nnoremap yd :!echo %d | wl-copy<cr>
