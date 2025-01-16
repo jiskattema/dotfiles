@@ -198,11 +198,39 @@ nnoremap \v :view<CR>
 " Display sorting dialog
 nnoremap \S :sort<cr>
 
-" Yank current directory path into the clipboard
-nnoremap yd :!echo -n %d | tmux load-buffer -<cr>
+" This pane
+"" full path, quaoted path, relative to cdw, relative to home
+nnoremap %c  :!echo -n %c:p | tmux load-buffer -<cr>
+nnoremap %"c :!echo -n '%"c:p' | tmux load-buffer -<cr>
+nnoremap %.c :!echo -n %c   | tmux load-buffer -<cr>
+nnoremap %~c :!echo -n %c:~ | tmux load-buffer -<cr>
 
-" Yank current file path into the clipboard
-nnoremap yf :!echo -n %c:p | tmux load-buffer -<cr>
+nnoremap %d  :!echo -n %d:p | tmux load-buffer -<cr>
+nnoremap %"d :!echo -n '%"d:p' | tmux load-buffer -<cr>
+nnoremap %.d :!echo -n %d   | tmux load-buffer -<cr>
+nnoremap %~d :!echo -n %d:~ | tmux load-buffer -<cr>
+
+nnoremap %f  :!echo -n %f:p | tmux load-buffer -<cr>
+nnoremap %"f :!echo -n '%"f:p' | tmux load-buffer -<cr>
+nnoremap %.f :!echo -n %f   | tmux load-buffer -<cr>
+nnoremap %~f :!echo -n %f:~ | tmux load-buffer -<cr>
+
+" Other pane
+"" full path, quaoted path, relative to cdw, relative to home
+nnoremap %C  :!echo -n %C:p | tmux load-buffer -<cr>
+nnoremap %"C :!echo -n '%"C:p' | tmux load-buffer -<cr>
+nnoremap %.C :!echo -n %C   | tmux load-buffer -<cr>
+nnoremap %~C :!echo -n %C:~ | tmux load-buffer -<cr>
+
+nnoremap %D  :!echo -n %D:p | tmux load-buffer -<cr>
+nnoremap %"D :!echo -n '%"D:p' | tmux load-buffer -<cr>
+nnoremap %.D :!echo -n %D   | tmux load-buffer -<cr>
+nnoremap %~D :!echo -n %D:~ | tmux load-buffer -<cr>
+
+nnoremap %F  :!echo -n %F:p | tmux load-buffer -<cr>
+nnoremap %"F :!echo -n '%"F:p' | tmux load-buffer -<cr>
+nnoremap %.F :!echo -n %F   | tmux load-buffer -<cr>
+nnoremap %~F :!echo -n %F:~ | tmux load-buffer -<cr>
 
 " Leader-l More informative columns
 nnoremap \L :set viewcolumns=-{name}..,6{size},11{perms}<CR>
