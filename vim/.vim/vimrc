@@ -61,10 +61,10 @@ set pumheight=20               # Height of complete list
 set relativenumber             # Relative numbers
 set noruler                    # No ruler with column, row, percentage
 set shiftwidth=2               # Default indentation amount
-set shortmess=finxToOcImrwsS   # So dont use SlstWAqF
+set shortmess=finxToOcImrw     #
 set showmatch                  # show matching brackets
 set signcolumn=number          # Render signs in the number column
-set showbreak=… 
+set showbreak=…
 set smartcase                  # Case-smart searching
 set smarttab                   # Tab at the start of line inserts blanks
 set showtabline=0              # We dont need a tab line
