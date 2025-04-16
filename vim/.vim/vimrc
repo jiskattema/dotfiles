@@ -64,7 +64,7 @@ set shiftwidth=2               # Default indentation amount
 set shortmess=finxToOcImrwsS   # So dont use SlstWAqF
 set showmatch                  # show matching brackets
 set signcolumn=number          # Render signs in the number column
-set showbreak=∙
+set showbreak=… 
 set smartcase                  # Case-smart searching
 set smarttab                   # Tab at the start of line inserts blanks
 set showtabline=0              # We dont need a tab line
@@ -251,6 +251,10 @@ var vcoptions = {
     sortByLength: false,
     showKind: true,
     recency: true,
+    tmux: {
+      enable: true,
+      priority: 20
+    }
     # dictionary: {
     #     enable: true,
     #     priority: 11,
