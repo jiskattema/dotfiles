@@ -60,10 +60,11 @@ fn history { each {|item| put $item[cmd]} [($edit:command-history~)] }
 use readline-binding
 set edit:insert:binding[Ctrl-u] = { eza --icons }
 set edit:insert:binding[Ctrl-l] = $edit:clear~
-set edit:insert:binding[Ctrl-f] = $edit:location:start~
 set edit:insert:binding[Ctrl-n] = $edit:navigation:start~
 set edit:insert:binding[Ctrl-p] = $edit:history:start~
-set edit:insert:binding[Ctrl-o] = $edit:command:start~
+set edit:insert:binding[Ctrl-o] = $edit:location:start~
+set edit:insert:binding[Ctrl-w] = $edit:kill-small-word-left~
+set edit:insert:binding[Alt-w] = $edit:kill-word-left~
 set edit:insert:binding['Ctrl-['] = $edit:command:start~
 set edit:insert:binding[' '] = { set insert_last_word_index = 0 ; $edit:insert-at-dot~ ' ' }
 set edit:insert:binding['Alt-.'] = {
@@ -100,6 +101,7 @@ set edit:command:binding['Enter'] = $edit:smart-enter~
 set edit:command:binding[a] = { $edit:move-dot-right~ ; $edit:close-mode~ }
 set edit:command:binding[A] = { $edit:move-dot-eol~ ; $edit:close-mode~ }
 set edit:command:binding[c] = { $edit:kill-word-right~ ; $edit:close-mode~ }
+set edit:command:binding['#'] = { $edit:move-dot-sol~ ; $edit:insert-at-dot~ '# ' ; $edit:smart-enter~ }
 
 ## completion mode
 set edit:completion:binding = ( $edit:binding-table~ [
