@@ -29,3 +29,25 @@ vim-zimwiki-syntax https://github.com/joanrivera/vim-zimwiki-syntax.git
 vimagit https://github.com/jreybert/vimagit.git
 vim-showmarks git@github.com:jiskattema/vim-showmarks.git
 vim-unicoder git@github.com:jiskattema/vim-unicoder.git
+bufselect
+elvish.vim
+friendly-snippets
+limelight.vim
+lsp
+ngram-complete.vim
+tagbar
+vim-characterize
+vim-commentary
+vimcomplete
+vim-highlighter
+vim-indent-object
+vim-indentwise
+vim-matchup
+vim-quickui
+vim-signify
+vim-speeddating
+vim-surround
+vim-unicoder
+vim-unimpaired
+vim-vsnip
+vim-vsnip-integ
