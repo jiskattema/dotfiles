@@ -14,14 +14,11 @@ set spelllang=en,nl            # default to English and Dutch
 set thesaurus+=/home/jiska/.vim/thesaurus/english.txt
 
 set autoindent                 # Indented text
-set noautoread                 # Pick up external changes to files
-set noautowrite                # Write files when navigating with :next/:previous
 set background=dark            # Dark background by default
 set backspace=indent,eol,start
 set belloff=all                # Bells are annoying
 set breakindent                # Wrap long lines *with* indentation
 set breakindentopt=shift:2,min:5,sbr
-# set clipboard=unnamed,unnamedplus
 set colorcolumn=81,82          # Highlight 81 and 82 columns
 set conceallevel=0             # Always show text normally
 set complete=.,w,b,u,t         # Sources for term and line completions
@@ -35,23 +32,17 @@ set formatoptions=qjnlro       # Format options
 set history=200                # Keep 200 changes of undo history
 set infercase                  # Smart casing when completing
 set ignorecase                 # Search in case-insensitively
+set smartcase                  # Case-smart searching
 set noincsearch                # Dont go to search results immediately
 set laststatus=1               # Dont need a statusline for one window
 set cmdheight=3                # More room for the status line
 set matchtime=5                # blink matching brackets for 5 tenths of a second
 set matchpairs=(:),{:},[:]
-# set mouse=""                   # No mouse support in the terminal
-set mousehide                  # Hide mouse when typing text
 set nobackup                   # Backup files
 set noexrc                     # Disable reading of working directory vimrc files
 set hlsearch                   # Highlight search results by default
-set noshowmatch                # No jumping jumping cursors when matching pairs
-set showmode                   # No to showing mode in bottom-left corner
 set showcmd                    # Show keypresses in bottom-right
-set swapfile                   # Use a swapfile for unsaved changes
 set dir=~/.vim/swap,.          # Store swapfiles here
-set wrapscan                   # Don't wrap searches around
-set nonumber                   # No line numbers
 set path=.,**/*                # Recursively search subdirectories
 set wildignore+=**/env/**      # But dont look in virtualenvs
 set wildignore+=**/venv/**
@@ -65,7 +56,6 @@ set shortmess=finxToOcImrw     #
 set showmatch                  # show matching brackets
 set signcolumn=number          # Render signs in the number column
 set showbreak=…
-set smartcase                  # Case-smart searching
 set smarttab                   # Tab at the start of line inserts blanks
 set showtabline=0              # We dont need a tab line
 set spelloptions=camel         # When spell checking, assume word boundaries include 'CamelCasing'.
@@ -86,7 +76,6 @@ set wildoptions=
 set nowrap                     # Do not wrap long lines
 set cryptmethod=blowfish2
 set listchars=eol:$,tab:>-,trail:-
-set nocursorline
 set cursorlineopt=both         # line number and buffer line
 set keywordprg=:DictPrg
 set splitkeep=screen
@@ -223,7 +212,9 @@ nnoremap <C-g><C-g> :pclose<CR>
 
 # vsnip: Jump forward or backward
 inoremap <expr>   <Tab> pumvisible() ? "\<C-n>" : vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)' : '<Tab>'
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)' : '<S-Tab>'
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : vsnip#jumpable(-1)  ? '<Plug>(snip-jump-prev)' : '<S-Tab>'
+imap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
+smap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
 
 # matchup
 nmap <Leader>? :MatchupWhereAmI?<CR>
@@ -244,24 +235,18 @@ packadd! cfilter
 
 # vimcomplete
 var vcoptions = {
-    alwaysOn: true,
+    alwaysOn: false,
     kindDisplayType: 'text',
     postfixClobber: true,
     postfixHighlight: false,
     sortByLength: false,
     showKind: true,
     recency: true,
-    tmux: {
-      enable: true,
-      priority: 20
-    }
-    # dictionary: {
-    #     enable: true,
-    #     priority: 11,
-    #     properties: {
-    #         text: { sortedDict: true }
-    #     }
-    # }
+    tmux: { enable: true, priority: 5 },
+    vsnip: { enable: false, priority: 9 },
+    abbrev: { enable: true, priority: 10 },
+    # ngram: { enable: true, priority: 50, },
+    dictionary: { enable: true, priority: 11, properties: { text: { sortedDict: true } } }
     }
 autocmd VimEnter * g:VimCompleteOptionsSet(vcoptions)
 
@@ -299,6 +284,27 @@ var signify_disable_by_default = 0
 
 # vim-lsp
 packadd lsp
+call LspOptionsSet({
+      autoComplete: false,
+      omniComplete: true,
+      ignoreMissingServer: true,
+      completionMatcher: 'case',
+      showDiagOnStatusLine: true,
+      showDiagInPopup: false,
+      showSignature: false,
+      echoSignature: true,
+      showInlayHints: false,
+      hoverInPreview: true,
+      diagSignWarningText: '> ',
+      diagSignInfoText: '- ',
+      diagSignHintText: '+ ',
+      diagSignErrorText: '>>',
+      diagVirtualTextAlign: 'above',
+      highlightDiagInline: false,
+      ultisnipsSupport: false,
+      snippetSupport: true,
+      })
+call LspOptionsSet({vsnipSupport: true})
 call LspAddServer([{
         name: 'golang',
         filetype: ['go', 'gomod'],
@@ -327,26 +333,6 @@ call LspAddServer([{
       # }
       ])
 
-call LspOptionsSet({
-      autoComplete: false,
-      ignoreMissingServer: true,
-      completionMatcher: 'case',
-      showDiagOnStatusLine: true,
-      showDiagInPopup: false,
-      showSignature: false,
-      echoSignature: true,
-      showInlayHints: false,
-      hoverInPreview: true,
-      diagSignWarningText: '> ',
-      diagSignInfoText: '- ',
-      diagSignHintText: '+ ',
-      diagSignErrorText: '>>',
-      diagVirtualTextAlign: 'above',
-      highlightDiagInline: false,
-      ultisnipsSupport: false,
-      vsnipSupport: false,
-      snippetSupport: false,
-      })
 
 nnoremap <C-L>D <Cmd>LspGotoDefinition<CR>
 nnoremap <C-L>I <Cmd>LspGotoImpl<CR>

@@ -17,9 +17,9 @@ set edit:prompt = {
   if (!=s $E:VIRTUAL_ENV '') {
      var env_root = (str:trim-suffix $E:VIRTUAL_ENV '/env')
      if (str:has-prefix $pwd $env_root) {
-       put (styled ' Π ' green dim)
+       put (styled ' » ' green)
      } else {
-       put (styled ' Π ' red)
+       put (styled ' » ' red)
      }
    } else {
      put (styled ' » ' dim)
@@ -141,6 +141,9 @@ set paths = [ /home/jiska/.cargo/bin $@paths ]
 
 # Completion matching
 set edit:completion:matcher[argument] = {|seed| edit:match-prefix $seed &ignore-case=$true }
+
+# purge windows from path
+set paths = [ (put $@paths | keep-if { |s| not (str:has-prefix $s '/mnt/c')}) ]
 
 # Virtual python environment (python -m venv)
 fn venv { |&p=env| 
