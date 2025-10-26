@@ -1,5 +1,47 @@
 vim9script
 
+# {{{ Plugin management
+# Install plug with:
+# curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+#
+#   :PlugInstall to install the plugins
+#   :PlugUpdate  to install or update the plugins
+#   :PlugDiff    to review the changes from the last update
+#   :PlugClean   to remove plugins no longer in the list
+call plug#begin()
+Plug 'AndrewRadev/sideways.vim'
+Plug 'andymass/vim-matchup'
+Plug 'azabiong/vim-highlighter'
+Plug 'BlueCatMe/TempKeyword'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'dmix/elvish.vim'
+Plug 'girishji/ngram-complete.vim'
+Plug 'hrsh7th/vim-vsnip'
+Plug 'hrsh7th/vim-vsnip-integ'
+Plug 'jeetsukumaran/vim-indentwise'
+Plug 'jiskattema/new-moon.vim'
+Plug 'jiskattema/vim-unicoder'
+Plug 'junegunn/limelight.vim'
+Plug 'junegunn/vim-easy-align'
+Plug 'kkoomen/vim-doge'
+Plug 'mattn/emmet-vim'
+Plug 'mhinz/vim-signify'
+Plug 'michaeljsmith/vim-indent-object'
+Plug 'NLKNguyen/papercolor-theme'
+Plug 'preservim/tagbar'
+Plug 'rafamadriz/friendly-snippets'
+Plug 'skywind3000/vim-quickui'
+Plug 'tpope/vim-characterize'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-speeddating'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-unimpaired'
+Plug 'vim-scripts/ShowMarks'
+Plug 'yegappan/bufselect'
+Plug 'yegappan/lsp'
+call plug#end()
+# }}}
+
 # {{{ Settings
 var mapleader = "\\"           # Start my key bindings with \
 set nocompatible               # No Vi support
@@ -247,8 +289,7 @@ xmap ia <Plug>SidewaysArgumentTextobjI
 
 
 # vim-lsp
-packadd lsp
-call LspOptionsSet({
+var lspOpts = {
       autoComplete: false,
       omniComplete: true,
       ignoreMissingServer: true,
@@ -268,9 +309,11 @@ call LspOptionsSet({
       ultisnipsSupport: false,
       vsnipSupport: true,
       snippetSupport: true,
-      })
+      }
+autocmd User LspSetup call LspOptionsSet(lspOpts)
 
-call LspAddServer([{
+var lspServers = [
+      {
         name: 'golang',
         filetype: ['go', 'gomod'],
         path: '/usr/bin/gopls',
@@ -296,7 +339,8 @@ call LspAddServer([{
       #   args: [],
       #   syncInit: true
       # }
-      ])
+      ]
+autocmd User LspSetup call LspAddServer(lspServers)
 
 nnoremap <C-L>D <Cmd>LspGotoDefinition<CR>
 nnoremap <C-L>I <Cmd>LspGotoImpl<CR>
