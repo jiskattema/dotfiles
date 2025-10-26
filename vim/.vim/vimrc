@@ -15,7 +15,6 @@ Plug 'azabiong/vim-highlighter'
 Plug 'BlueCatMe/TempKeyword'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'dmix/elvish.vim'
-Plug 'girishji/ngram-complete.vim'
 Plug 'hrsh7th/vim-vsnip'
 Plug 'hrsh7th/vim-vsnip-integ'
 Plug 'jeetsukumaran/vim-indentwise'
@@ -279,8 +278,14 @@ var signify_disable_by_default = 0
 
 
 # Sideways
-nnoremap H :SidewaysLeft<cr>
-nnoremap L :SidewaysRight<cr>
+nnoremap <Esc>h :SidewaysLeft<cr>
+nnoremap <Esc>l :SidewaysRight<cr>
+nnoremap <Esc>j cib
+
+nmap <Esc>m <Plug>SidewaysArgumentInsertFirst
+nmap <Esc>, <Plug>SidewaysArgumentInsertBefore
+nmap <Esc>. <Plug>SidewaysArgumentAppendAfter
+nmap <Esc>/ <Plug>SidewaysArgumentAppendLast
 
 omap aa <Plug>SidewaysArgumentTextobjA
 xmap aa <Plug>SidewaysArgumentTextobjA
@@ -342,27 +347,26 @@ var lspServers = [
       ]
 autocmd User LspSetup call LspAddServer(lspServers)
 
-nnoremap <C-L>D <Cmd>LspGotoDefinition<CR>
-nnoremap <C-L>I <Cmd>LspGotoImpl<CR>
-nnoremap <C-L>T <Cmd>LspGotoTypeDef<CR>
+nnoremap <Esc>D <Cmd>LspGotoDefinition<CR>
+nnoremap <Esc>I <Cmd>LspGotoImpl<CR>
+nnoremap <Esc>T <Cmd>LspGotoTypeDef<CR>
 
-nnoremap <C-L>d <Cmd>topleft LspPeekDefinition<CR>
-nnoremap <C-L>i <Cmd>topleft LspPeekImpl<CR>
-nnoremap <C-L>t <Cmd>topleft LspPeekTypeDef<CR>
+nnoremap <Esc>d <Cmd>topleft LspPeekDefinition<CR>
+nnoremap <Esc>i <Cmd>topleft LspPeekImpl<CR>
+nnoremap <Esc>t <Cmd>topleft LspPeekTypeDef<CR>
 
-nnoremap <C-L>s <Cmd>LspDocumentSymbol<CR>
-nnoremap <C-L>r <Cmd>LspShowReferences<CR>
+nnoremap <Esc>s <Cmd>LspDocumentSymbol<CR>
+nnoremap <Esc>r <Cmd>LspShowReferences<CR>
 
-nnoremap <C-L><C-L> <Cmd>call LspOptionsSet(#{hoverInPreview: v:false})<bar>LspHover<CR>
-nnoremap <C-L>l     <Cmd>call LspOptionsSet(#{hoverInPreview: v:true })<bar>LspHover<CR>
+nnoremap <Esc>o<Esc>o <Cmd>call LspOptionsSet(#{hoverInPreview: v:false})<bar>LspHover<CR>
+nnoremap <Esc>oo      <Cmd>call LspOptionsSet(#{hoverInPreview: v:true })<bar>LspHover<CR>
+
+nnoremap <Esc>e <Cmd>LspDiagShow<CR>
 
 nnoremap [V <Cmd>LspDiagFirst<CR>
 nnoremap [v <Cmd>LspDiagPrev<CR>
 nnoremap ]v <Cmd>LspDiagNext<CR>
 nnoremap ]V <Cmd>LspDiagLast<CR>
-
-nnoremap <C-L>? <Cmd>LspShowSignature<CR>
-nnoremap <C-L>/ <Cmd>LspDiagShow<CR>
 
 autocmd User LspAttached setlocal tagfunc=lsp#lsp#TagFunc
 # }}}
@@ -426,13 +430,15 @@ call quickui#menu#install("&Options", [
    ])
 
 call quickui#menu#install("&LSP", [
-   [ "Goto definition\t<C-l>D" ],
-   [ "Goto implementation\t<C-l>I" ],
-   [ "Goto type definition\t<C-l>T" ],
+   [ "Goto definition\t<M-D>" ],
+   [ "Goto implementation\t<M-I>" ],
+   [ "Goto type definition\t<M-T>" ],
    [ "---" ],
-   [ "Find document symbol\t<C-l>s" ],
-   [ "Find references\t<C-l>r" ],
-   [ "Documentation\t<C-l>l" ],
+   [ "Find document symbol\t<M-s>" ],
+   [ "Find references\t<M-r>" ],
+   [ "Documentation\t<M-o>" ],
+   [ "---" ],
+   [ "Show diag.\t<M-e>" ],
    ])
 
 # register HELP menu with weight 10000
@@ -461,11 +467,6 @@ call quickui#menu#install('H&elp', [
 # Navigate the jumplist with <M-i> instead of <C-i> which is Tab.
 # I've configured my terminal to send <M-i> for when i press <C-i>
 #nnoremap i <C-i>
-
-#nmap <M-,> <Plug>SidewaysArgumentInsertBefore
-#nmap <M-.> <Plug>SidewaysArgumentAppendAfter
-#nmap <M-m> <Plug>SidewaysArgumentInsertFirst
-#nmap <M-/> <Plug>SidewaysArgumentAppendLast
 
 
 # Try using Kitty keyboard protocol
