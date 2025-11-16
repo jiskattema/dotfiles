@@ -15,6 +15,7 @@ Plug 'azabiong/vim-highlighter'
 Plug 'BlueCatMe/TempKeyword'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'dmix/elvish.vim'
+Plug 'girishji/easyjump.vim'
 Plug 'hrsh7th/vim-vsnip'
 Plug 'hrsh7th/vim-vsnip-integ'
 Plug 'jeetsukumaran/vim-indentwise'
@@ -280,7 +281,6 @@ var signify_disable_by_default = 0
 # Sideways
 nnoremap <Esc>h :SidewaysLeft<cr>
 nnoremap <Esc>l :SidewaysRight<cr>
-nnoremap <Esc>j cib
 
 nmap <Esc>m <Plug>SidewaysArgumentInsertFirst
 nmap <Esc>, <Plug>SidewaysArgumentInsertBefore
@@ -473,4 +473,18 @@ call quickui#menu#install('H&elp', [
 # set kpc=alacritty:kitty
 # }}}
 
+# Easy insertion of emojis with C-K
+execute 'digraph :x 128544'
+execute 'digraph :) 128578'
+execute 'digraph :D 128512'
+execute 'digraph =D 128513'
+execute 'digraph :P 128523'
+execute 'digraph :\| 128528'
+execute 'digraph =\| 128529'
+execute 'digraph :O 128558'
+execute 'digraph :/ 128533'
+execute 'digraph :( 128577'
+execute 'digraph =( 128543'
+execute 'digraph :E 128556'
+execute 'digraph /\ 128591'
 # vim: fdm=marker foldlevel=0 fileencoding=utf-8
