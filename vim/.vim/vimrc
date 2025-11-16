@@ -136,6 +136,12 @@ set hlsearch                   # Highlight search results by default
 set ignorecase                 # Search in case-insensitively
 set smartcase                  # Case-smart searching
 set noincsearch                # Dont go to search results immediately
+
+g:easyjump_default_keymap = false
+nmap F <Plug>EasyjumpJump;
+omap F <Plug>EasyjumpJump;
+vmap F <Plug>EasyjumpJump;
+
 # }}}
 
 # {{{ Paths
