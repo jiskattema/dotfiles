@@ -29,7 +29,7 @@ set wildmenu
 set wildstyle=popup
 
 " Ruler shows total, selected, and filtered count
-set rulerformat='%l/%S %[+%x %]'
+set rulerformat=
 
 " Dont show '.' and '..' directories
 set dotdirs=
@@ -46,8 +46,8 @@ set timeoutlen=10000
 set ignorecase
 set smartcase
 
-" Don't highlight search results automatically
-set nohlsearch
+" highlight search results automatically
+set hlsearch
 
 " Use increment searching (search while typing)
 set incsearch
@@ -61,7 +61,7 @@ if !has('win')
 endif
 
 " Set custom status line look
-set statusline="%A %10u:%-7g %15s %20d %E"
+set statusline="%=%[%E selected%]%[; %x hidden%]"
 
 fileviewer {*.pdf},<application/pdf> pdftotext -nopgbrk %"c -
 fileviewer {*.mp3},<audio/mpeg> mp3info
@@ -193,9 +193,12 @@ set vifminfo=dhistory,chistory,state,tui,shistory,
 command SelectVimiv :select !vimiv %"f 2> /dev/null
 
 " Start shell in selected directy, or on directory of selected file
-"nnoremap \s :if filetype('.') == 'dir' | execute '!tmux new-window -c %"c'  | elseif filetype('.') == 'reg' | execute '!tmux new-window -c %"d' | endif<cr>
+nnoremap <C-t> :if filetype('.') == 'dir' | execute '!tmux new-window -c %"c'  | elseif filetype('.') == 'reg' | execute '!tmux new-window -c %"d' | endif<cr>
 
 nnoremap \v :view<CR>
+
+" Navigation mode
+nnoremap \\ /<c-y>
 
 " Display sorting dialog
 nnoremap \s :sort<cr>
@@ -236,11 +239,12 @@ nnoremap %~F :!echo -n %F:~ | tmux load-buffer -<cr>
 
 
 " Leader-l More informative columns
-nnoremap \L :set viewcolumns=-{name}..,6{size},11{perms}<CR>
+nnoremap \L :set viewcolumns=-{name}..,6{size},6{uname},6{gname},11{perms}<CR>
 nnoremap \l :set viewcolumns=<CR>
 
 " Leader space to set the directory of the other pane to that of the current pane
 nmap \<Space> <Space>:cd %"C<CR><Space>
+
 set nowrap
 " use backspace to go up one directory ; this matches my NetRW binding
 nnoremap <BS> gh
