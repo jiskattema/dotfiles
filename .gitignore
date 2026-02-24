@@ -15,5 +15,7 @@ vim/.vim/pack/jiska/opt
 vim/.vim/pack
 _skip/LOG_imapsync
 _skip
+vim/.vim/autoload/
 vim/.vim/autoload/plug.vim
 vim/.vim/plugged
+vim/.vim/plugged/

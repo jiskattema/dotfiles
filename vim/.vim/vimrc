@@ -9,6 +9,7 @@ vim9script
 #   :PlugDiff    to review the changes from the last update
 #   :PlugClean   to remove plugins no longer in the list
 call plug#begin()
+Plug 'arp242/jumpy.vim'
 Plug 'AndrewRadev/sideways.vim'
 Plug 'andymass/vim-matchup'
 Plug 'azabiong/vim-highlighter'
