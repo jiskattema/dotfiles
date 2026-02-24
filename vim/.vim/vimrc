@@ -118,7 +118,7 @@ set keywordprg=:DictPrg
 # }}}
 
 # {{{ Completion
-set autocomplete
+#set autocomplete
 set complete=.,w,b,t
 set completeopt=menu,menuone,noinsert,noselect,popup
 set pumheight=20               # Height of complete list
@@ -139,9 +139,12 @@ set smartcase                  # Case-smart searching
 set noincsearch                # Dont go to search results immediately
 
 g:easyjump_default_keymap = false
-nmap F <Plug>EasyjumpJump;
-omap F <Plug>EasyjumpJump;
-vmap F <Plug>EasyjumpJump;
+nmap t <Plug>EasyjumpJump;
+omap t <Plug>EasyjumpJump;
+vmap t <Plug>EasyjumpJump;
+nnoremap T t
+onoremap T t
+vnoremap T t
 
 # }}}
 
