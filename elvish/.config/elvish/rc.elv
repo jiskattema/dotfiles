@@ -147,17 +147,24 @@ set paths = [ (put $@paths | keep-if { |s| not (str:has-prefix $s '/mnt/c')}) ]
 
 # Virtual python environment (python -m venv)
 fn venv { |&p=env| 
-  # convert argument to absolute path
-  var pabs = ( readlink -f $p )
+  # if VIRTUAL_ENV is set, change directory to it
+  # otherwise, act as:
+  #   bash $ . env/bin/activate
+  if ( has-env VIRTUAL_ENV ) {
+    cd ( get-env VIRTUAL_ENV )
+  } else {
+    # convert argument to absolute path
+    var pabs = ( readlink -f $p )
 
-  # remove possible value of PYTHONHOME
-  if (has-env PYTHONHOME) {
-    unset-env PYTHONHOME
+    # remove possible value of PYTHONHOME
+    if (has-env PYTHONHOME) {
+      unset-env PYTHONHOME
+    }
+
+    # prepend to path and set VIRTUAL_ENV
+    set paths = [ $pabs/bin $@paths ]
+    set-env VIRTUAL_ENV $pabs
   }
-
-  # prepend to path and set VIRTUAL_ENV
-  set paths = [ $pabs/bin $@paths ]
-  set-env VIRTUAL_ENV $pabs
 }
 
 set edit:abbr['~dd'] = ( date +%Y%m%d )
